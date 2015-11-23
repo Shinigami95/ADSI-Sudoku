@@ -2,11 +2,12 @@ package packSudoku;
 
 public class Logros {
 	
-	static String codSudoku;
-	static String descripcionLogro;
+	String codSudoku;
+	String codLogro;
+	String descripcionLogro;
 	
-	public Logros(String cod,String descripcion){
-		setCodSudoku(cod);
+	public Logros(String codS,String codL,String descripcion){
+		setCodLogro(codL);
 		setDescripcionLogro(descripcion);
 	}
 	
@@ -14,12 +15,20 @@ public class Logros {
 		return this.codSudoku;
 	}
 	
+	private String getCodLogro(){
+		return this.codLogro;
+	}
+	
 	private String getDescripcionLogro(){
 		return descripcionLogro;
 	}
 	
-	private void setCodSudoku(String cod){
-		this.codSudoku=cod;
+	private void setCodSudoku(String codS){
+		this.codSudoku=codS;
+	}
+	
+	private void setCodLogro(String codL){
+		this.codLogro=codL;
 	}
 	
 	private void setDescripcionLogro(String descripcion){

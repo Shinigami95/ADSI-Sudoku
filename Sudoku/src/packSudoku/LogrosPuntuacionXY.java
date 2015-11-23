@@ -5,8 +5,8 @@ public class LogrosPuntuacionXY extends Logros {
 	int puntuacion;
 	int jugadores;
 	
-	public LogrosPuntuacionXY(int puntos,int jugadores) {
-		super(codSudoku, descripcionLogro);
+	public LogrosPuntuacionXY(String codS,String codL,String descripcion,int puntos,int jugadores) {
+		super(codS,codL, descripcion);
 		setPuntuacion(puntos);
 		setJugadores(jugadores);
 	}
