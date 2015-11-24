@@ -9,7 +9,9 @@ import javax.swing.border.EmptyBorder;
 
 
 
+
 import java.awt.FlowLayout;
+
 
 
 import javax.swing.JTabbedPane;
@@ -22,6 +24,8 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+
+import packSudoku.Logros;
 
 public class VentanaAdminLogros extends JFrame {
 
@@ -754,7 +758,8 @@ public class VentanaAdminLogros extends JFrame {
 	}
 	private JList getList_1() {
 		if (list_1 == null) {
-			String [] hola={"a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a",};
+			Logros log1=new Logros("ss","ss","ss");
+			Logros [] hola={log1,log1,log1,log1,log1,log1,log1,log1,log1,log1,log1,log1,log1,log1,log1,log1};
 			list_1 = new JList(hola);
 		}
 		return list_1;
