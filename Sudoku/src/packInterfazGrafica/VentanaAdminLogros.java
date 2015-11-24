@@ -8,7 +8,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 
+
 import java.awt.FlowLayout;
+
+
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
@@ -18,6 +21,7 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
+import javax.swing.JList;
 
 public class VentanaAdminLogros extends JFrame {
 
@@ -26,12 +30,6 @@ public class VentanaAdminLogros extends JFrame {
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
-	private JScrollPane scrollPane;
-	private JPanel panel_3;
-	private JLabel lblCdigo;
-	private JLabel lblVarCod;
-	private JLabel lblDescripcin;
-	private JLabel lblVarDescrip;
 	private JButton btnEliminar;
 	private JPanel panel_5;
 	private JTabbedPane tabbedPane_1;
@@ -79,6 +77,15 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField textField;
 	private JLabel label_10;
 	private JTextField textField_9;
+	private JList list;
+	private JScrollPane scrollPane;
+	private JPanel panel_4;
+	private JLabel label_11;
+	private JLabel label_12;
+	private JLabel label_13;
+	private JLabel label_14;
+	private JList list_1;
+	private JList list_2;
 
 
 	/**
@@ -107,6 +114,7 @@ public class VentanaAdminLogros extends JFrame {
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 559, 361);
+		setSize(750,500);
 		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -141,7 +149,7 @@ public class VentanaAdminLogros extends JFrame {
 			panel_1.setLayout(new BorderLayout(0, 0));
 			panel_1.add(getPanel_2(), BorderLayout.SOUTH);
 			panel_1.add(getScrollPane(), BorderLayout.WEST);
-			panel_1.add(getPanel_3(), BorderLayout.CENTER);
+			panel_1.add(getPanel_4_1(), BorderLayout.CENTER);
 		}
 		return panel_1;
 	}
@@ -151,72 +159,6 @@ public class VentanaAdminLogros extends JFrame {
 			panel_2.add(getBtnEliminar());
 		}
 		return panel_2;
-	}
-	private JScrollPane getScrollPane() {
-		if (scrollPane == null) {
-			scrollPane = new JScrollPane();
-		}
-		return scrollPane;
-	}
-	private JPanel getPanel_3() {
-		if (panel_3 == null) {
-			panel_3 = new JPanel();
-			GroupLayout gl_panel_3 = new GroupLayout(panel_3);
-			gl_panel_3.setHorizontalGroup(
-				gl_panel_3.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_3.createSequentialGroup()
-						.addGap(18)
-						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_3.createSequentialGroup()
-								.addComponent(getLblCdigo())
-								.addGap(33)
-								.addComponent(getLblVarCod()))
-							.addGroup(gl_panel_3.createSequentialGroup()
-								.addComponent(getLblDescripcin())
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addComponent(getLblVarDescrip())))
-						.addContainerGap(278, Short.MAX_VALUE))
-			);
-			gl_panel_3.setVerticalGroup(
-				gl_panel_3.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_3.createSequentialGroup()
-						.addGap(23)
-						.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getLblCdigo())
-							.addComponent(getLblVarCod()))
-						.addGap(18)
-						.addGroup(gl_panel_3.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getLblDescripcin())
-							.addComponent(getLblVarDescrip()))
-						.addContainerGap(131, Short.MAX_VALUE))
-			);
-			panel_3.setLayout(gl_panel_3);
-		}
-		return panel_3;
-	}
-	private JLabel getLblCdigo() {
-		if (lblCdigo == null) {
-			lblCdigo = new JLabel("C\u00F3digo:");
-		}
-		return lblCdigo;
-	}
-	private JLabel getLblVarCod() {
-		if (lblVarCod == null) {
-			lblVarCod = new JLabel("Var cod");
-		}
-		return lblVarCod;
-	}
-	private JLabel getLblDescripcin() {
-		if (lblDescripcin == null) {
-			lblDescripcin = new JLabel("Descripci\u00F3n:");
-		}
-		return lblDescripcin;
-	}
-	private JLabel getLblVarDescrip() {
-		if (lblVarDescrip == null) {
-			lblVarDescrip = new JLabel("Var descrip");
-		}
-		return lblVarDescrip;
 	}
 	private JButton getBtnEliminar() {
 		if (btnEliminar == null) {
@@ -523,6 +465,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
+			scrollPane_1.setViewportView(getList_2());
 		}
 		return scrollPane_1;
 	}
@@ -739,5 +682,87 @@ public class VentanaAdminLogros extends JFrame {
 			textField_9.setColumns(10);
 		}
 		return textField_9;
+	}
+	private JScrollPane getScrollPane() {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setViewportView(getList_1());
+		}
+		return scrollPane;
+	}
+	private JPanel getPanel_4_1() {
+		if (panel_4 == null) {
+			panel_4 = new JPanel();
+			GroupLayout gl_panel_4 = new GroupLayout(panel_4);
+			gl_panel_4.setHorizontalGroup(
+				gl_panel_4.createParallelGroup(Alignment.LEADING)
+					.addGap(0, 536, Short.MAX_VALUE)
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addGap(18)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_4.createSequentialGroup()
+								.addComponent(getLabel_11_1())
+								.addGap(33)
+								.addComponent(getLabel_12_1()))
+							.addGroup(gl_panel_4.createSequentialGroup()
+								.addComponent(getLabel_13_1())
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(getLabel_14_1())))
+						.addContainerGap(397, Short.MAX_VALUE))
+			);
+			gl_panel_4.setVerticalGroup(
+				gl_panel_4.createParallelGroup(Alignment.LEADING)
+					.addGap(0, 262, Short.MAX_VALUE)
+					.addGroup(gl_panel_4.createSequentialGroup()
+						.addGap(23)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLabel_11_1())
+							.addComponent(getLabel_12_1()))
+						.addGap(18)
+						.addGroup(gl_panel_4.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLabel_13_1())
+							.addComponent(getLabel_14_1()))
+						.addContainerGap(193, Short.MAX_VALUE))
+			);
+			panel_4.setLayout(gl_panel_4);
+		}
+		return panel_4;
+	}
+	private JLabel getLabel_11_1() {
+		if (label_11 == null) {
+			label_11 = new JLabel("C\u00F3digo:");
+		}
+		return label_11;
+	}
+	private JLabel getLabel_12_1() {
+		if (label_12 == null) {
+			label_12 = new JLabel("Var cod");
+		}
+		return label_12;
+	}
+	private JLabel getLabel_13_1() {
+		if (label_13 == null) {
+			label_13 = new JLabel("Descripci\u00F3n:");
+		}
+		return label_13;
+	}
+	private JLabel getLabel_14_1() {
+		if (label_14 == null) {
+			label_14 = new JLabel("Var descrip");
+		}
+		return label_14;
+	}
+	private JList getList_1() {
+		if (list_1 == null) {
+			String [] hola={"a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a","a",};
+			list_1 = new JList(hola);
+		}
+		return list_1;
+	}
+	private JList getList_2() {
+		if (list_2 == null) {
+			list_2 = new JList();
+		}
+		return list_2;
 	}
 }
