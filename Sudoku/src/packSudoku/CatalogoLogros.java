@@ -1,12 +1,12 @@
 package packSudoku;
 
 
-public class GestorLogros {
+public class CatalogoLogros {
 	
 	ListaLogros miListaLogros;
 
 	
-	private GestorLogros(){
+	private CatalogoLogros(){
 		if(miListaLogros==null){
 			miListaLogros=new ListaLogros();
 		}
