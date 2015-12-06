@@ -9,7 +9,7 @@ import packSudoku.excepciones.ExcepcionConectarBD;
 //https://www.youtube.com/watch?v=OyN1Uocw2AU
 public class ConexionBD {
 	private String driver="com.mysql.jdbc.Driver";
-	private String url="jdbc:mysql://galan.ehu.eus/Xmalboniga002_SUDOKU_BD";//TODO No se si esto esta bien
+	private String url="jdbc:mysql://galan.ehu.eus/Xmalboniga002_SUDOKU_BD";//TODO No se conecta y busco el porque
 	private String user="Xmalboniga002";
 	private String pass="mqDNfeYCa";
 	public Connection conexion;
