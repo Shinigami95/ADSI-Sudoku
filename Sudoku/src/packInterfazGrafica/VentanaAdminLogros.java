@@ -10,10 +10,23 @@ import javax.swing.border.EmptyBorder;
 
 
 
+
+
+
+
+
+
+
+
+
 import java.awt.FlowLayout;
 
 
 
+import java.util.ArrayList;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
@@ -25,7 +38,12 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
+import com.mysql.jdbc.ResultSet;
+import com.mysql.jdbc.Statement;
+
+import packSudoku.ConexionBD;
 import packSudoku.Logros;
+import packSudoku.excepciones.ExcepcionConectarBD;
 
 public class VentanaAdminLogros extends JFrame {
 
@@ -90,7 +108,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JLabel label_14;
 	private JList list_1;
 	private JList list_2;
-
+	DefaultListModel l;
 
 	/**
 	 * Launch the application.
@@ -110,12 +128,13 @@ public class VentanaAdminLogros extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ExcepcionConectarBD 
 	 */
-	private VentanaAdminLogros(){
+	private VentanaAdminLogros() throws ExcepcionConectarBD{
 		initialize();
 	}
 	
-	private void initialize() {
+	private void initialize() throws ExcepcionConectarBD {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 559, 361);
 		setSize(800,500);
@@ -129,7 +148,7 @@ public class VentanaAdminLogros extends JFrame {
 
 	}
 
-	private JTabbedPane getTabbedPane() {
+	private JTabbedPane getTabbedPane() throws ExcepcionConectarBD {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.addTab("Eliminar", null, getPanel_1(), null);
@@ -147,7 +166,7 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return panel;
 	}
-	private JPanel getPanel_1() {
+	private JPanel getPanel_1() throws ExcepcionConectarBD {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
 			panel_1.setLayout(new BorderLayout(0, 0));
@@ -692,7 +711,7 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return textField_9;
 	}
-	private JScrollPane getScrollPane() {
+	private JScrollPane getScrollPane() throws ExcepcionConectarBD {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setViewportView(getList_1());
@@ -761,24 +780,38 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return label_14;
 	}
-	private JList getList_1() {
+	//Javier Garcia Escobedo
+	//http://javiergarbedo.es/31-apuntes-java/arrays/326-cargar-un-jlist-con-los-datos-de-un-arraylist
+	private DefaultListModel llenarLista(){
+		try{
+			if(l==null){
+				l=new DefaultListModel();
+			}
+			l.clear();
+			ConexionBD con=new ConexionBD();
+			Statement state= (Statement) con.conexion.createStatement();
+			ResultSet resul=(ResultSet) state.executeQuery("SELECT ID_L FROM LOGRO");
+			int i=0;
+			while(resul.next()){
+				l.add(i, resul.getString("ID_L"));
+			}
+			state.close();
+			con.conexion.close();}catch(Exception e){
+				JOptionPane.showMessageDialog(this, "No se pudo llenar la lista.");
+			}
+		return l;
+	}
+	private JList getList_1() throws ExcepcionConectarBD {
 		if (list_1 == null) {
-			list_1 = new JList();
+			this.llenarLista();
+			list_1 = new JList(l);
 		}
 		return list_1;
-		/*/Crear un objeto DefaultListModel
-		DefaultListModel listModel = new DefaultListModel();
-		//Recorrer el contenido del ArrayList
-		for(int i=0; i<arrayList.size(); i++) {
-		    //Anadir cada elemento del ArrayList en el modelo de la lista
-		    listModel.add(i, arrayList.get(i));
-		}
-		//Asociar el modelo de lista al JList
-		jList1.setModel(listModel);*/
 	}
 	private JList getList_2() {
 		if (list_2 == null) {
-			list_2 = new JList();
+			this.llenarLista();
+			list_2 = new JList(l);
 		}
 		return list_2;
 	}
