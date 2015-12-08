@@ -780,8 +780,10 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return label_14;
 	}
-	//Javier Garcia Escobedo
+	//https://www.youtube.com/watch?v=AXFTgbYsxK8
+	//Kevin Arnold Arias Figueroa
 	//http://javiergarbedo.es/31-apuntes-java/arrays/326-cargar-un-jlist-con-los-datos-de-un-arraylist
+	//Javier Garcia Escobedo
 	private DefaultListModel llenarLista(){
 		try{
 			if(l==null){
