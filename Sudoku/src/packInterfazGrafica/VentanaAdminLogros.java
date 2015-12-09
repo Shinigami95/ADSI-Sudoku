@@ -19,10 +19,12 @@ import javax.swing.border.EmptyBorder;
 
 
 
+
 import java.awt.FlowLayout;
 
 
 
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
@@ -38,7 +40,8 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
-import com.mysql.jdbc.ResultSet;
+
+
 import com.mysql.jdbc.Statement;
 
 import packSudoku.ConexionBD;
@@ -789,17 +792,20 @@ public class VentanaAdminLogros extends JFrame {
 			if(l==null){
 				l=new DefaultListModel();
 			}
+			System.out.println("hola");
 			l.clear();
+			System.out.println("hola");
 			ConexionBD con=new ConexionBD();
-			Statement state= (Statement) con.conexion.createStatement();
-			ResultSet resul=(ResultSet) state.executeQuery("SELECT ID_L FROM LOGRO");
+			ResultSet resul=con.consultaBD("SELECT ID_L FROM LOGRO");
+			System.out.println("hola");
 			int i=0;
 			while(resul.next()){
+				System.out.println("hola");
 				l.add(i, resul.getString("ID_L"));
+				i++;
 			}
-			state.close();
-			con.conexion.close();}catch(Exception e){
-				JOptionPane.showMessageDialog(this, "No se pudo llenar la lista.");
+			}catch(Exception e){
+				e=new ExcepcionConectarBD();
 			}
 		return l;
 	}
@@ -812,7 +818,6 @@ public class VentanaAdminLogros extends JFrame {
 	}
 	private JList getList_2() {
 		if (list_2 == null) {
-			this.llenarLista();
 			list_2 = new JList(l);
 		}
 		return list_2;
