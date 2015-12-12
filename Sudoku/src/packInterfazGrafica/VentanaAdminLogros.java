@@ -6,29 +6,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-import java.awt.FlowLayout;
-
-
-
 import java.sql.ResultSet;
-import java.util.ArrayList;
-
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
@@ -39,17 +18,15 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
-
-
-
-import com.mysql.jdbc.Statement;
-
 import packSudoku.ConexionBD;
-import packSudoku.Logros;
 import packSudoku.excepciones.ExcepcionConectarBD;
 
 public class VentanaAdminLogros extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
@@ -795,7 +772,7 @@ public class VentanaAdminLogros extends JFrame {
 			System.out.println("hola");
 			l.clear();
 			System.out.println("hola");
-			ConexionBD con=new ConexionBD();
+			ConexionBD con= ConexionBD.getConexionBD();
 			ResultSet resul=con.consultaBD("SELECT ID_L FROM LOGRO");
 			System.out.println("hola");
 			int i=0;
