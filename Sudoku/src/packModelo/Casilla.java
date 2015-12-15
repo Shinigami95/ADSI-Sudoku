@@ -1,6 +1,6 @@
 package packModelo;
 
-public class Casilla {
+public class Casilla implements IFazCasilla{
 
 	private char valor;
 	private boolean inicial;
@@ -33,4 +33,8 @@ public class Casilla {
 		}
 	}
 
+	@Override
+	public String toStringValores() {
+		return this.valor+"";
+	}
 }

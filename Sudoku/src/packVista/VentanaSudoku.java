@@ -1,4 +1,4 @@
-package packInterfazGrafica;
+package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -48,7 +48,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private JPanel[][] matrizSecciones;
 	private Controlador controlador = null;
 	private JPanel pan_sudoku;
-	private JButton btnComprobar;
 	private JLabel labelTiempo;
 	private JLabel labelTiempoValor;
 	private JButton btnBorrador;
@@ -180,8 +179,15 @@ public class VentanaSudoku extends JFrame implements Observer{
 	            miPopupMenu.add(menuItem);
 	        }
 	        miPopupMenu.add(new JPopupMenu.Separator());
+	        //Menu quitar valor
 	        menuItem = new JMenuItem("Quitar Valor");
 	        menuItem.setActionCommand("quitarValor");
+	        menuItem.addMouseListener(controlador);
+	        miPopupMenu.add(menuItem);
+	        miPopupMenu.add(new JPopupMenu.Separator());
+	        //Menu comprobar valor
+	        menuItem = new JMenuItem("Comprobar Valor");
+	        menuItem.setActionCommand("comprobarValor");
 	        menuItem.addMouseListener(controlador);
 	        miPopupMenu.add(menuItem);
 	        miPopupMenu.setFocusable(true);
@@ -216,7 +222,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 			pan_botones.add(getLabelTiempoValor());
 			pan_botones.add(getBtnBorrador());
 			pan_botones.add(getBtnAyuda());
-			pan_botones.add(getBtnComprobar());
 			pan_botones.add(getBtnRendirse());
 		}
 		return pan_botones;
@@ -248,17 +253,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 			btnRendirse.setActionCommand("PRESS_btnRendirse");
 		}
 		return btnRendirse;
-	}
-	
-	private JButton getBtnComprobar() {
-		if (btnComprobar == null) {
-			btnComprobar = new JButton("Comprobar");
-			btnComprobar.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			btnComprobar.setToolTipText("Pulsar para saber si no hay filas, columnas o sectores donde se repita un valor.");
-			btnComprobar.addActionListener(getControlador());
-			btnComprobar.setActionCommand("PRESS_btnEsCoherente");
-		}
-		return btnComprobar;
 	}
 	
 	private Controlador getControlador() {
