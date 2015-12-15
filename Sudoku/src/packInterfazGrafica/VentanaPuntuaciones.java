@@ -1,10 +1,11 @@
 package packInterfazGrafica;
 
 import java.awt.*;
+
 import javax.swing.*;
 
-import packSudoku.Jugador;
-import packSudoku.ListaJugadores;
+import packSudokuAntiguo.Jugador;
+import packSudokuAntiguo.ListaJugadores;
 
 import java.awt.event.*;
 import java.util.Iterator;

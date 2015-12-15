@@ -6,6 +6,8 @@ package packSudoku;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import packSudokuAntiguo.ICondicion;
+import packSudokuAntiguo.ListaOrdenadaGenerica;
 import junit.framework.TestCase;
 
 /**
@@ -46,7 +48,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudoku.ListaOrdenadaGenerica#ListaOrdenadaGenerica(java.util.Comparator)}
+     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#ListaOrdenadaGenerica(java.util.Comparator)}
      * .
      */
     public void testListaOrdenadaGenerica()
@@ -57,7 +59,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudoku.ListaOrdenadaGenerica#anadirElemento(java.lang.Object)}
+     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#anadirElemento(java.lang.Object)}
      * .
      */
     public void testAnadirElemento()
@@ -108,7 +110,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudoku.ListaOrdenadaGenerica#existeElementoSatisfaceCondicion(packSudoku.ICondicion)}
+     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#existeElementoSatisfaceCondicion(packSudokuAntiguo.ICondicion)}
      * .
      */
     public void testExisteElementoSatisfaceCondicion()
@@ -168,7 +170,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudoku.ListaOrdenadaGenerica#getIterador()}.
+     * Test method for {@link packSudokuAntiguo.ListaOrdenadaGenerica#getIterador()}.
      */
     public void testGetIterador()
     {
@@ -199,7 +201,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudoku.ListaOrdenadaGenerica#getIterador(packSudoku.ICondicion)}
+     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#getIterador(packSudokuAntiguo.ICondicion)}
      * .
      */
     public void testGetIteradorICondicionOfE()

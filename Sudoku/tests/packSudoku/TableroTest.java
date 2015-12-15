@@ -8,6 +8,9 @@ import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
 import packSudoku.excepciones.ExcepcionValorInicial;
 import packSudoku.excepciones.ExcepcionValorNoValido;
 import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
+import packSudokuAntiguo.Sudoku;
+import packSudokuAntiguo.Tablero;
+import packSudokuAntiguo.TipoArea;
 import junit.framework.TestCase;
 
 /**
@@ -73,7 +76,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#getTablero()}.
+     * Test method for {@link packSudokuAntiguo.Tablero#getTablero()}.
      */
     public void testGetTablero() {
 	tablero = null;
@@ -83,7 +86,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#inicializar(packSudoku.Sudoku)}
+     * Test method for {@link packSudokuAntiguo.Tablero#inicializar(packSudokuAntiguo.Sudoku)}
      * .
      */
     public void testInicializar() {
@@ -141,7 +144,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#setValor(int, int, int)}.
+     * Test method for {@link packSudokuAntiguo.Tablero#setValor(int, int, int)}.
      */
     public void testSetValor() {
 	try {
@@ -237,7 +240,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#quitarValor(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Tablero#quitarValor(int, int)}.
      */
     public void testQuitarValor() {
 	Sudoku sudoku = new Sudoku("Identificador1", 1);
@@ -325,7 +328,7 @@ public class TableroTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudoku.Tablero#hayInconsistencias(packSudoku.TipoArea, int)}.
+     * {@link packSudokuAntiguo.Tablero#hayInconsistencias(packSudokuAntiguo.TipoArea, int)}.
      */
     public void testHayInconsistencias() {
 	try {
@@ -444,7 +447,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#getNumErrores()}.
+     * Test method for {@link packSudokuAntiguo.Tablero#getNumErrores()}.
      */
     public void testGetNumErrores() {
 	try {
@@ -485,7 +488,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#isValorInicial(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Tablero#isValorInicial(int, int)}.
      */
     public void testIsValorInicial() {
 	try {
@@ -539,7 +542,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#isLibre(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Tablero#isLibre(int, int)}.
      */
     public void testIsLibre() {
 	try {
@@ -593,7 +596,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#getNivel()}.
+     * Test method for {@link packSudokuAntiguo.Tablero#getNivel()}.
      */
     public void testGetNivel() {
 	try {
@@ -625,7 +628,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#finalDeJuego()}.
+     * Test method for {@link packSudokuAntiguo.Tablero#finalDeJuego()}.
      */
     public void testFinalDeJuego() {
 	try {
@@ -662,7 +665,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#getValor(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Tablero#getValor(int, int)}.
      */
     public void testGetValor() {
 	Sudoku sudoku = new Sudoku("", 1);
@@ -727,7 +730,7 @@ public class TableroTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Tablero#getIdSudoku()}.
+     * Test method for {@link packSudokuAntiguo.Tablero#getIdSudoku()}.
      */
     public void testGetIdSudoku() {
 	try {

@@ -5,6 +5,7 @@ package packSudoku;
 
 import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
 import packSudoku.excepciones.ExcepcionValorInicial;
+import packSudokuAntiguo.Casilla;
 import junit.framework.TestCase;
 
 // TODO: Auto-generated Javadoc
@@ -30,7 +31,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#Casilla()}.
+     * Test method for {@link packSudokuAntiguo.Casilla#Casilla()}.
      */
     public void testCasilla() {
 	assertNotNull("ERROR CONSTRUCTOR", casilla1);
@@ -44,7 +45,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#setValorInicial(int)}.
+     * Test method for {@link packSudokuAntiguo.Casilla#setValorInicial(int)}.
      */
     public void testSetValorInicial() {
 	try {
@@ -78,7 +79,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#setValor(int)}.
+     * Test method for {@link packSudokuAntiguo.Casilla#setValor(int)}.
      */
     public void testSetValor() {
 	try {
@@ -171,7 +172,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#quitarValor()}.
+     * Test method for {@link packSudokuAntiguo.Casilla#quitarValor()}.
      */
     public void testQuitarValor() {
 	try {
@@ -203,7 +204,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#isLibre()}.
+     * Test method for {@link packSudokuAntiguo.Casilla#isLibre()}.
      */
     public void testIsLibre() {
 	assertTrue(casilla1.isLibre());
@@ -223,7 +224,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#isInicial()}.
+     * Test method for {@link packSudokuAntiguo.Casilla#isInicial()}.
      */
     public void testIsInicial() {
 	assertFalse(casilla1.isInicial());
@@ -244,7 +245,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#getValor()}.
+     * Test method for {@link packSudokuAntiguo.Casilla#getValor()}.
      */
     public void testGetValor() {
 	try {
@@ -327,7 +328,7 @@ public class CasillaTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Casilla#mismoValor(packSudoku.Casilla)}
+     * Test method for {@link packSudokuAntiguo.Casilla#mismoValor(packSudokuAntiguo.Casilla)}
      * .
      */
     public void testMismoValor() {

@@ -4,8 +4,8 @@
 package packPrincipal;
 
 import packInterfazGrafica.*;
-import packSudoku.*;
 import packSudoku.excepciones.ExcepcionNoHayFicheroSudokus;
+import packSudokuAntiguo.*;
 
 public class ProgPrincipal
 {

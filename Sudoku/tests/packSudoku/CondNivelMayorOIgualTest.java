@@ -3,6 +3,8 @@
  */
 package packSudoku;
 
+import packSudokuAntiguo.CondNivelMayorOIgual;
+import packSudokuAntiguo.Sudoku;
 import junit.framework.TestCase;
 
 /**
@@ -34,7 +36,7 @@ public class CondNivelMayorOIgualTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudoku.CondNivelMayorOIgual#CondNivelMayorOIgual(int)}.
+     * Test method for {@link packSudokuAntiguo.CondNivelMayorOIgual#CondNivelMayorOIgual(int)}.
      */
     public void testCondNivelMayorOIgual()
     {
@@ -44,7 +46,7 @@ public class CondNivelMayorOIgualTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudoku.CondNivelMayorOIgual#satisfaceCondicion(packSudoku.Sudoku)}.
+     * Test method for {@link packSudokuAntiguo.CondNivelMayorOIgual#satisfaceCondicion(packSudokuAntiguo.Sudoku)}.
      */
     public void testSatisfaceCondicion()
     {

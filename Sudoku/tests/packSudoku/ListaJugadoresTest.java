@@ -6,6 +6,8 @@ package packSudoku;
 import java.io.File;
 import java.util.Iterator;
 
+import packSudokuAntiguo.Jugador;
+import packSudokuAntiguo.ListaJugadores;
 import junit.framework.TestCase;
 
 /**
@@ -27,7 +29,7 @@ public class ListaJugadoresTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.ListaJugadores#getListaJugadores()}.
+     * Test method for {@link packSudokuAntiguo.ListaJugadores#getListaJugadores()}.
      */
     public void testGetListaJugadores() {
 	assertNotNull(listaJugadores);
@@ -35,7 +37,7 @@ public class ListaJugadoresTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudoku.ListaJugadores#cargar(java.lang.String)}.
+     * {@link packSudokuAntiguo.ListaJugadores#cargar(java.lang.String)}.
      */
     public void testCargar() {
 	listaJugadores.cargar("kk.txt");
@@ -47,7 +49,7 @@ public class ListaJugadoresTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudoku.ListaJugadores#guardar(java.lang.String)}.
+     * {@link packSudokuAntiguo.ListaJugadores#guardar(java.lang.String)}.
      */
     public void testGuardar() {
 	Jugador nuevoJugador = new Jugador("JugadorNuevo");
@@ -63,7 +65,7 @@ public class ListaJugadoresTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudoku.ListaJugadores#anadirJugador(packSudoku.Jugador)}.
+     * {@link packSudokuAntiguo.ListaJugadores#anadirJugador(packSudokuAntiguo.Jugador)}.
      */
     public void testAnadirJugador() {
 	Jugador nuevoJugador = new Jugador("JugadorNuevo");
@@ -73,7 +75,7 @@ public class ListaJugadoresTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.ListaJugadores#getIterador()}.
+     * Test method for {@link packSudokuAntiguo.ListaJugadores#getIterador()}.
      */
     public void testGetIterador() {
 	pruebaIterador();

@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Vector;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -34,11 +35,11 @@ import javax.swing.border.Border;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
-import packSudoku.Tablero;
-import packSudoku.TipoArea;
 import packSudoku.excepciones.ExcepcionCoordenadaNoValida;
 import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
 import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
+import packSudokuAntiguo.Tablero;
+import packSudokuAntiguo.TipoArea;
 
 
 /**

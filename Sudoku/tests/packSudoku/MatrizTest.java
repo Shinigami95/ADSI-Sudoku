@@ -7,6 +7,8 @@ import packSudoku.excepciones.ExcepcionCoordenadaNoValida;
 import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
 import packSudoku.excepciones.ExcepcionValorInicial;
 import packSudoku.excepciones.ExcepcionValorNoValido;
+import packSudokuAntiguo.Matriz;
+import packSudokuAntiguo.TipoArea;
 import junit.framework.TestCase;
 
 /**
@@ -34,7 +36,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#Matriz()}.
+     * Test method for {@link packSudokuAntiguo.Matriz#Matriz()}.
      */
     public void testMatriz() {
 	assertNotNull(matriz1);
@@ -42,7 +44,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#setValorInicial(int, int, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#setValorInicial(int, int, int)}.
      */
     public void testSetValorInicial() {
 	try {
@@ -246,7 +248,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#setValor(int, int, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#setValor(int, int, int)}.
      */
     public void testSetValor() {
 	try {
@@ -417,7 +419,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#quitarValor(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#quitarValor(int, int)}.
      */
     public void testQuitarValor() {
 	try {
@@ -480,7 +482,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#isLibre(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#isLibre(int, int)}.
      */
     public void testIsLibre() {
 	try {
@@ -501,7 +503,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#isInicial(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#isInicial(int, int)}.
      */
     public void testIsInicial() {
 	try {
@@ -546,7 +548,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#getValor(int, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#getValor(int, int)}.
      */
     public void testGetValor() {
 
@@ -654,7 +656,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#hayInconsistencias(char, int)}.
+     * Test method for {@link packSudokuAntiguo.Matriz#hayInconsistencias(char, int)}.
      */
     public void testDescubrirInconsistencias() {
 	try {
@@ -738,7 +740,7 @@ public class MatrizTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudoku.Matriz#getNumErrores(packSudoku.Matriz)}.
+     * {@link packSudokuAntiguo.Matriz#getNumErrores(packSudokuAntiguo.Matriz)}.
      */
     public void testGetNumErrores() {
 	assertEquals(0, matriz1.getNumErrores(matrizSolucion));
@@ -794,7 +796,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.Matriz#isCompleto()}.
+     * Test method for {@link packSudokuAntiguo.Matriz#isCompleto()}.
      */
     public void testIsCompleto() {
 	assertFalse(matriz1.isCompleto());

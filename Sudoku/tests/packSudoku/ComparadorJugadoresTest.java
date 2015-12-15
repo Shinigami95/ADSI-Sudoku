@@ -3,6 +3,8 @@
  */
 package packSudoku;
 
+import packSudokuAntiguo.ComparadorJugadores;
+import packSudokuAntiguo.Jugador;
 import junit.framework.TestCase;
 
 /**
@@ -35,7 +37,7 @@ public class ComparadorJugadoresTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudoku.ComparadorJugadores#compare(packSudoku.Jugador, packSudoku.Jugador)}.
+     * Test method for {@link packSudokuAntiguo.ComparadorJugadores#compare(packSudokuAntiguo.Jugador, packSudokuAntiguo.Jugador)}.
      */
     public void testCompare()
     {

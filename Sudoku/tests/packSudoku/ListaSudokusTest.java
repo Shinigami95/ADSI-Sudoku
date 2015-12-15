@@ -11,7 +11,8 @@ import packSudoku.excepciones.ExcepcionNoHayFicheroSudokus;
 import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
 import packSudoku.excepciones.ExcepcionValorInicial;
 import packSudoku.excepciones.ExcepcionValorNoValido;
-
+import packSudokuAntiguo.ListaSudokus;
+import packSudokuAntiguo.Sudoku;
 import junit.framework.TestCase;
 
 /**
@@ -101,7 +102,7 @@ public class ListaSudokusTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.ListaSudokus#cargar(java.lang.String)}.
+     * Test method for {@link packSudokuAntiguo.ListaSudokus#cargar(java.lang.String)}.
      */
     public void testCargar() {
 	Iterator<Sudoku> iteradorSudokus = listaSudokus.getIterador(1);
@@ -128,7 +129,7 @@ public class ListaSudokusTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudoku.ListaSudokus#getIterador(int)}.
+     * Test method for {@link packSudokuAntiguo.ListaSudokus#getIterador(int)}.
      */
     public void testGetIterador() {
         try {

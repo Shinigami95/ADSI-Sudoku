@@ -1,12 +1,13 @@
 package packInterfazGrafica;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
-import packSudoku.Sesion;
-import packSudoku.Tablero;
 import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
+import packSudokuAntiguo.Sesion;
+import packSudokuAntiguo.Tablero;
 
 import java.awt.event.*;
 import java.util.Observable;
