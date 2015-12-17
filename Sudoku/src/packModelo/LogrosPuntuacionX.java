@@ -1,19 +1,18 @@
 package packModelo;
 
+import packControladores.ConexionBD;
+import packSudoku.excepciones.ExcepcionConectarBD;
+
 public class LogrosPuntuacionX extends Logros{
 	
 	int puntuacion;
 	
-	public LogrosPuntuacionX(String codS,String codL,String descripcion,int puntos){
+	public LogrosPuntuacionX(String codL,String codS,String descripcion,int puntos){
 		super(codS,codL, descripcion);
-		setPuntuacion(puntos);
-	}
-	
-	private int getPuntuacion(){
-		return this.puntuacion;
-	}
-	
-	private void setPuntuacion(int puntos){
 		this.puntuacion=puntos;
+		
+	}
+	public static void logrosPuntuacionX(String codL,int puntos) throws ExcepcionConectarBD{
+		ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO_PTOX(ID_L,PTO) VALUES('"+codL+"','"+puntos+"')");
 	}
 }

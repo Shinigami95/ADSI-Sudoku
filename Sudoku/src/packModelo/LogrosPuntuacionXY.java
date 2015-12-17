@@ -1,32 +1,24 @@
 package packModelo;
 
+import packControladores.ConexionBD;
+import packSudoku.excepciones.ExcepcionConectarBD;
+
 public class LogrosPuntuacionXY extends Logros {
 	
 	int puntuacion;
 	int jugadores;
 	
-	public LogrosPuntuacionXY(String codS,String codL,String descripcion,int puntos,int jugadores) {
+	public LogrosPuntuacionXY(String codL,String codS,String descripcion,int puntos,int jugadores)  {
 		super(codS,codL, descripcion);
-		setPuntuacion(puntos);
-		setJugadores(jugadores);
-	}
-	
-	private int getPuntuacion(){
-		return this.puntuacion;
-	}
-	
-	private void setPuntuacion(int puntos){
 		this.puntuacion=puntos;
-	}
-	
-	private int getJugadores(){
-		return this.jugadores;
-	}
-	
-	private void setJugadores(int jugadores){
 		this.jugadores=jugadores;
+		
 	}
 	
+	public static void logrosPuntuacionXY(String codL,int puntos,int jugadores) throws ExcepcionConectarBD 
+	{
+		ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO_PTOXY(ID_L,PTO,NUM_JUG) VALUES('"+codL+"','"+puntos+"','"+jugadores+"')");
+	}
 }
 
 

@@ -17,28 +17,16 @@ public class ConexionBD {
 	private String user;
 	private String pass;
 	public static ConexionBD miConexion;
+	public static void main(String args[]) throws ExcepcionConectarBD{
+		ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('MIKEL','ALBO')");
+	
+	System.out.println("TERMINO");}
 	
 	private ConexionBD(){
 		driver="com.mysql.jdbc.Driver";
 		url="jdbc:mysql://galan.ehu.eus/Xmalboniga002_SUDOKU_BD";
 		user="Xmalboniga002";
 		pass="mqDNfeYCa";
-	}
-	
-	public static void main(String[] args){
-		System.out.println("Start");
-		try {
-			ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT * FROM LOGRO;");
-			while(result.next()){
-				System.out.println(result.getString("ID_L"));
-			}
-			ConexionBD.getConexionBD().closeResult(result);
-			System.out.println("End");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} catch (ExcepcionConectarBD e) {
-			e.printStackTrace();
-		}
 	}
 	
 	public static ConexionBD getConexionBD(){
@@ -69,6 +57,19 @@ public class ConexionBD {
 			result.getStatement().getConnection().close();
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	public void actualizarBD(String sentencia)throws ExcepcionConectarBD{
+		try{
+			Class.forName(driver);
+			Connection conexion=DriverManager.getConnection(url,user,pass);
+			Statement state=(Statement) conexion.createStatement();
+			conexion.setAutoCommit(false);
+			state.executeQuery(sentencia);
+			conexion.commit();
+			state.getConnection().close();
+		}catch(Exception e){
+			throw new ExcepcionConectarBD();
 		}
 	}
 }

@@ -1,5 +1,8 @@
 package packModelo;
 
+import packControladores.ConexionBD;
+import packSudoku.excepciones.ExcepcionConectarBD;
+
 public class Logros {
 	
 	String codSudoku;
@@ -7,32 +10,26 @@ public class Logros {
 	String descripcionLogro;
 	
 	public Logros(String codS,String codL,String descripcion){
-		setCodLogro(codL);
-		setDescripcionLogro(descripcion);
-	}
-	
-	private String getCodSudoku(){
-		return this.codSudoku;
-	}
-	
-	private String getCodLogro(){
-		return this.codLogro;
-	}
-	
-	private String getDescripcionLogro(){
-		return descripcionLogro;
-	}
-	
-	private void setCodSudoku(String codS){
-		this.codSudoku=codS;
-	}
-	
-	private void setCodLogro(String codL){
 		this.codLogro=codL;
-	}
-	
-	private void setDescripcionLogro(String descripcion){
+		this.codSudoku=codS;
 		this.descripcionLogro=descripcion;
 	}
+	
+	public static void tipoLogro(String codL,String codS,String descripcion,int puntos,int numJug) throws ExcepcionConectarBD{
+		ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+codL+"','"+codS+"','"+descripcion+"')");
+		if(puntos>0){
+			if(numJug>0){
+				LogrosPuntuacionX.logrosPuntuacionX(codL, puntos);
+			}
+			else{
+				LogrosPuntuacionXY.logrosPuntuacionXY(codL, puntos, numJug); 
+			}
+		}
+		else{
+			LogrosResolucion.logrosResolucion(codL, numJug);
+		}
+	}
+
+
 
 }
