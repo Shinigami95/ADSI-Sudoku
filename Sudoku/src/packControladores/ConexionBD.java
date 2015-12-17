@@ -65,10 +65,11 @@ public class ConexionBD {
 			Connection conexion=DriverManager.getConnection(url,user,pass);
 			Statement state=(Statement) conexion.createStatement();
 			conexion.setAutoCommit(false);
-			state.executeQuery(sentencia);
+			state.executeUpdate(sentencia);
 			conexion.commit();
 			state.getConnection().close();
 		}catch(Exception e){
+			System.out.println(e.getMessage());
 			throw new ExcepcionConectarBD();
 		}
 	}
