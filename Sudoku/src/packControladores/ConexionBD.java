@@ -73,11 +73,7 @@ public class ConexionBD {
 
 			state.getConnection().close();
 		}catch(Exception e){
-
 			e.printStackTrace();
-
-			System.out.println(e.getMessage());
-
 			throw new ExcepcionConectarBD();
 		}
 	}
