@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-//import javax.swing.JOptionPane;
 
 import com.mysql.jdbc.Statement;
 
@@ -65,10 +64,20 @@ public class ConexionBD {
 			Class.forName(driver);
 			Connection conexion=DriverManager.getConnection(url,user,pass);
 			Statement state=(Statement) conexion.createStatement();
+
 			state.executeUpdate(sentencia);
+
+			conexion.setAutoCommit(false);
+			state.executeUpdate(sentencia);
+			conexion.commit();
+
 			state.getConnection().close();
 		}catch(Exception e){
+
 			e.printStackTrace();
+
+			System.out.println(e.getMessage());
+
 			throw new ExcepcionConectarBD();
 		}
 	}
