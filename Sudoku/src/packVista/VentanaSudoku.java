@@ -1,6 +1,7 @@
 package packVista;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
@@ -23,6 +24,10 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 
+import packControladores.GestorPartida;
+import packModelo.MatrizPartida;
+import packModelo.Partida;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -31,11 +36,12 @@ import java.awt.event.WindowAdapter;
 import java.util.Observable;
 import java.util.Observer;
 
+import javax.swing.JCheckBox;
 
 public class VentanaSudoku extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
-	private static VentanaSudoku mVJuego;
+	private static VentanaSudoku mVSudoku;
 	private JPanel contentPane;
 	private JPanel pan_titulo;
 	private JLabel lblTitulo;
@@ -44,13 +50,13 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private JButton btnAyuda;
 	private JButton btnRendirse;
 	private JPopupMenu miPopupMenu;
-	private JTextField[][] matrizCasillas;
+	private ComponentCasillaAbstracta[][] matrizCasillas;
 	private JPanel[][] matrizSecciones;
 	private Controlador controlador = null;
 	private JPanel pan_sudoku;
 	private JLabel labelTiempo;
 	private JLabel labelTiempoValor;
-	private JButton btnBorrador;
+	private JCheckBox chckbxBorrador;
 	
 	/**
 	 * Launch 
@@ -76,11 +82,11 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private VentanaSudoku() {
 		initialize();
 	}
-	public static VentanaSudoku getVentanaJuego(){
-		if(mVJuego==null){
-			mVJuego = new VentanaSudoku();
+	public static VentanaSudoku getVentanaSudoku(){
+		if(mVSudoku==null){
+			mVSudoku = new VentanaSudoku();
 		}
-		return mVJuego;
+		return mVSudoku;
 	}
 
 	private void initialize() {
@@ -134,15 +140,15 @@ public class VentanaSudoku extends JFrame implements Observer{
 		return getMatriz_Secciones()[pX][pY];
 	}
 	
-	private JTextField[][] getMatrizCasillas(){
+	private ComponentCasillaAbstracta[][] getMatrizCasillas(){
 		if (matrizCasillas == null) {
-			matrizCasillas = new JTextField[9][9];
+			matrizCasillas = new ComponentCasillaAbstracta[9][9];
 		}
 		return matrizCasillas;
 	}
 	
-	private JTextField getCasillaSud(int pX, int pY){
-		JTextField cAux = getMatrizCasillas()[pX][pY];
+	private ComponentCasillaAbstracta getCasillaSud(int pX, int pY){
+		ComponentCasillaAbstracta cAux = getMatrizCasillas()[pX][pY];
 		if (cAux == null) {
 	/*		cAux = new JTextField();
 			cAux.setToolTipText("("+pX+","+pY+")");
@@ -155,8 +161,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 					
 				}
 			});
-	*/
-			cAux = new JTextField();
 			cAux.setMaximumSize(new Dimension(50, 50));
 	        cAux.setMinimumSize(new Dimension(50, 50));
 	        cAux.setSize(new Dimension(50, 50));
@@ -164,6 +168,8 @@ public class VentanaSudoku extends JFrame implements Observer{
 	        cAux.setFont(new Font("Helvetica", Font.PLAIN, 16));
 	        cAux.setComponentPopupMenu(getMiPopupMenu());
 	        cAux.setFocusable(false);
+	*/
+			cAux = new ComponentCasillaNormal(getMiPopupMenu());
 		}
 		return cAux;
 	}
@@ -220,7 +226,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 			pan_botones.setBackground(Color.WHITE);
 			pan_botones.add(getLabelTiempo());
 			pan_botones.add(getLabelTiempoValor());
-			pan_botones.add(getBtnBorrador());
+			pan_botones.add(getChckbxBorrador());
 			pan_botones.add(getBtnAyuda());
 			pan_botones.add(getBtnRendirse());
 		}
@@ -267,6 +273,10 @@ public class VentanaSudoku extends JFrame implements Observer{
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			// TODO Auto-generated method stub
+			String action = arg0.getActionCommand();
+			if(action.equals("PRESS_chckbxBorrador")){
+				VentanaSudoku.getVentanaSudoku().switchBorrador();
+			}
 		}
 
 		@Override
@@ -287,6 +297,17 @@ public class VentanaSudoku extends JFrame implements Observer{
 		@Override
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
+			JMenuItem menuItem = (JMenuItem) e.getSource();
+		    if (menuItem.getActionCommand().equalsIgnoreCase("asignarValor")){
+		    	
+		    	VentanaSudoku.getVentanaSudoku().setValorCasilla(e);
+		    }
+		    else if(menuItem.getActionCommand().equalsIgnoreCase("quitarValor")){
+		    	VentanaSudoku.getVentanaSudoku().quitarValorCasilla(e);
+		    }
+		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
+		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e);
+		    }
 		}
 
 		@Override
@@ -313,7 +334,54 @@ public class VentanaSudoku extends JFrame implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
+		if(arg0 instanceof Partida){
+			getLabelTiempoValor().setText((String)arg1);
+		}
+		else if(arg0 instanceof MatrizPartida){
+			
+		}
+	}
+
+	public void comprobarValorCasilla(MouseEvent e) {
+		// TODO Auto-generated method stub
 		
+	}
+
+	public void quitarValorCasilla(MouseEvent e) {
+		ComponentCasillaAbstracta aux = (ComponentCasillaAbstracta) this.miPopupMenu.getInvoker();
+		int pX=0, pY=0;
+		for(int i = 0;i<this.getMatrizCasillas().length;i++){
+			for(int j = 0;j<this.getMatrizCasillas()[i].length;j++){
+				if(aux.equals(getMatrizCasillas()[i][j])){
+					pX=i;
+					pY=j;
+				}
+			}
+		}
+		GestorPartida.getGestor().setValor('0', pX, pY);
+	}
+
+	public void setValorCasilla(MouseEvent e) {
+		Component aux = e.getComponent();
+		int pX=0, pY=0;
+		for(int i = 0;i<this.getMatrizCasillas().length;i++){
+			for(int j = 0;j<this.getMatrizCasillas()[i].length;j++){
+				if(aux.equals(getMatrizCasillas()[i][j])){
+					pX=i;
+					pY=j;
+				}
+			}
+		}
+		JMenuItem menuItem = (JMenuItem) e.getComponent();
+        int val = Integer.parseInt(menuItem.getText());
+		GestorPartida.getGestor().setValor('0', pX, pY);
+		
+	}
+
+	public void switchBorrador() {
+		GestorPartida.getGestor().switchBorrador();
+		if(GestorPartida.getGestor().estaActivoBorrador()==true) System.out.println("Borrador Activado");
+		else System.out.println("Borrador Desactivado");
 	}
 
 	private JLabel getLabelTiempo() {
@@ -328,13 +396,12 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 		return labelTiempoValor ;
 	}
-	private JButton getBtnBorrador() {
-		if (btnBorrador == null) {
-			btnBorrador = new JButton("Borrador");
-			btnBorrador.setFont(new Font("Tahoma", Font.PLAIN, 12));
-			btnBorrador.addActionListener(getControlador());
-			btnBorrador.setActionCommand("PRESS_btnBorrardor");
+	private JCheckBox getChckbxBorrador() {
+		if (chckbxBorrador == null) {
+			chckbxBorrador = new JCheckBox("Borrador");
+			chckbxBorrador.addActionListener(getControlador());
+			chckbxBorrador.setActionCommand("PRESS_chckbxBorrador");
 		}
-		return btnBorrador;
+		return chckbxBorrador;
 	}
 }

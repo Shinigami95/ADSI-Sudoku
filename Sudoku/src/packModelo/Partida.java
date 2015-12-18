@@ -1,11 +1,13 @@
 package packModelo;
 
+import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Partida {
+public class Partida extends Observable{
 	private int tiempoSeg, tiempoMin, tiempoHor;
 	private Timer timer;
+	
 	
 	public static void main(String[] args){
 		new Partida(3755);
@@ -35,11 +37,11 @@ public class Partida {
 				tiempoMin=0;
 			}
 		}
-		System.out.println(tiempoHor+":"+tiempoMin+":"+tiempoSeg);
+		this.setChanged();
+		this.notifyObservers(tiempoHor+":"+tiempoMin+":"+tiempoSeg);
 	}
 	
 	private int tiempoASegundos(){
-		//TODO
-		return 0;
+		return tiempoSeg + tiempoMin*60 + tiempoHor*3600;
 	}
 }

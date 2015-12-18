@@ -18,7 +18,7 @@ public class ConexionBD {
 	public static ConexionBD miConexion;
 	
 	public static void main(String args[]) throws ExcepcionConectarBD{
-		ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('MIKEL','ALBO');");
+		ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('JORGE','123456');");
 	}
 	
 	private ConexionBD(){

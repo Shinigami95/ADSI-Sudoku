@@ -21,6 +21,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 import packControladores.GestorPartida;
+import packControladores.GestorSesion;
 import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
 import packSudoku.excepciones.ExcepcionValorNoValido;
 
@@ -245,7 +246,7 @@ public class VentanaJuego extends JFrame implements Observer{
 				}
 			}
 		}
-		this.getLblTitulo().setText("USUARIO: "+GestorPartida.getGestor().getNombreUsuario()+" // SUDOKU: "+GestorPartida.getGestor().getSudokuId());
+		this.getLblTitulo().setText("USUARIO: "+GestorSesion.getGestor().getUserSesion()+" // SUDOKU: "+GestorPartida.getGestor().getSudokuId());
 		GestorPartida.getGestor().addObserver(this);
 	}
 	
@@ -382,7 +383,7 @@ public class VentanaJuego extends JFrame implements Observer{
 			int dialogResponse = JOptionPane.showConfirmDialog(this, "¡Enhorabuena!\n¿Quieres continuar?", "Sudoku finalizado", JOptionPane.YES_NO_OPTION);
 			if(dialogResponse == JOptionPane.YES_OPTION){
 				try{
-					GestorPartida.getGestor().cargarSudParaUs(GestorPartida.getGestor().getDificultad(), GestorPartida.getGestor().getNombreUsuario());
+					GestorPartida.getGestor().cargarSudParaUs(GestorPartida.getGestor().getDificultad(), GestorSesion.getGestor().getUserSesion());
 					VentanaJuego.getVentanaJuego().cargarSudoku();
 				}
 				catch(ExcepcionNoHaySudokuCargado e){
@@ -397,4 +398,5 @@ public class VentanaJuego extends JFrame implements Observer{
 			}
 		}
 	}
+
 }

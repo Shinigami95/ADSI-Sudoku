@@ -608,7 +608,7 @@ public class VentanaTablero extends JDialog implements Observer
 
         JMenuItem menuItem = (JMenuItem) pEvent.getComponent();
         int val = Integer.parseInt(menuItem.getText());
-        // Aldatu behar da
+
         try {
             Tablero.getTablero().setValor(filaInicial + 1, columnaInicial + 1,
                                           val);
