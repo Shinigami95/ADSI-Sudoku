@@ -17,10 +17,10 @@ public class ConexionBD {
 	private String user;
 	private String pass;
 	public static ConexionBD miConexion;
-	public static void main(String args[]) throws ExcepcionConectarBD{
-		ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('MIKEL','ALBO')");
 	
-	System.out.println("TERMINO");}
+	public static void main(String args[]) throws ExcepcionConectarBD{
+		ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('MIKEL','ALBO');");
+	}
 	
 	private ConexionBD(){
 		driver="com.mysql.jdbc.Driver";
@@ -47,6 +47,7 @@ public class ConexionBD {
 			conexion.commit();
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			throw new ExcepcionConectarBD();
 		}
 		return result;
@@ -64,11 +65,10 @@ public class ConexionBD {
 			Class.forName(driver);
 			Connection conexion=DriverManager.getConnection(url,user,pass);
 			Statement state=(Statement) conexion.createStatement();
-			conexion.setAutoCommit(false);
-			state.executeQuery(sentencia);
-			conexion.commit();
+			state.executeUpdate(sentencia);
 			state.getConnection().close();
 		}catch(Exception e){
+			e.printStackTrace();
 			throw new ExcepcionConectarBD();
 		}
 	}
