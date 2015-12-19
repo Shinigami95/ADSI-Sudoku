@@ -1,6 +1,8 @@
 package packModelo;
 
-public class Borrador implements IFazCasilla{
+import java.util.Observer;
+
+public class Borrador extends IFazCasilla{
 	
 	boolean[] lista;
 	
@@ -15,6 +17,8 @@ public class Borrador implements IFazCasilla{
 	public void setValor(char pV) {
 		if(pV>=1 && pV<=9){
 			lista[pV-1] = !lista[pV-1];
+			this.setChanged();
+			this.notifyObservers(this.toStringValores());
 		}
 	}
 
@@ -36,5 +40,10 @@ public class Borrador implements IFazCasilla{
 	@Override
 	public boolean esInicial() {
 		return false;
+	}
+	
+	@Override
+	public void addObserver(Observer pO){
+		super.addObserver(pO);
 	}
 }

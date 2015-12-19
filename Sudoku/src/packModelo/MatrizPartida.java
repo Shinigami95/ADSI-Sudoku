@@ -1,9 +1,8 @@
 package packModelo;
 
-import java.util.Observable;
 import java.util.Observer;
 
-public class MatrizPartida  extends Observable{
+public class MatrizPartida{
 	private IFazCasilla[][] casillas;
 	private static final int MAX_FIL = 9;
 	private static final int MAX_COL = 9;
@@ -19,6 +18,7 @@ public class MatrizPartida  extends Observable{
 				if(cNum=='0') inic = false;
 				else inic = true;
 				casillas[i][j] = new Casilla(cNum,inic);
+System.out.println("("+i+", "+j+") -> "+cNum+" "+inic);
 				sIndex++;
 			}
 		}
@@ -29,8 +29,6 @@ public class MatrizPartida  extends Observable{
 		if(cAux.esInicial()==false){
 			this.crearCasillaSiNoHay(pX, pY);
 			this.casillas[pX][pY].setValor(pV);
-			this.setChanged();
-			this.notifyObservers();
 		}
 	}
 	
@@ -39,8 +37,6 @@ public class MatrizPartida  extends Observable{
 		if(cAux.esInicial()==false){
 			this.crearBorradorSiNoHay(pX, pY);
 			this.casillas[pX][pY].setValor(pV);
-			this.setChanged();
-			this.notifyObservers();
 		}
 	}
 	public char getValor(int pX, int pY) {
@@ -74,8 +70,7 @@ public class MatrizPartida  extends Observable{
 		return s;
 	}
 	
-	@Override
-	public void addObserver(Observer pO){
-		super.addObserver(pO);
+	public void addObserver(Observer pO, int pX, int pY){
+		this.casillas[pX][pY].addObserver(pO);
 	}
 }

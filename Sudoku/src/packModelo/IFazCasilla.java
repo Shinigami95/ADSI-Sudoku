@@ -1,9 +1,19 @@
 package packModelo;
 
-public interface IFazCasilla {
+import java.util.Observable;
+import java.util.Observer;
+
+public abstract class IFazCasilla extends Observable{
 	
-	public void setValor(char pV);
-	public char getValor();
-	public boolean esInicial();
-	public String toStringValores();
+	public abstract void setValor(char pV);
+	public abstract char getValor();
+	public abstract boolean esInicial();
+	public abstract String toStringValores();
+	
+	@Override
+	public void addObserver(Observer pO){
+		super.addObserver(pO);
+		//this.setChanged();
+		//this.notifyObservers(this.toStringValores());
+	}
 }

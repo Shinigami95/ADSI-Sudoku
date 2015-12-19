@@ -1,6 +1,5 @@
 package packVista;
 
-import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import java.awt.Font;
@@ -15,11 +14,10 @@ public class ComponentCasillaBorrador extends ComponentCasillaAbstracta{
 	private static final long serialVersionUID = 1L;
 	private JTextField[] listaTextField;
 	
-	public ComponentCasillaBorrador(JPopupMenu pPopupMenu) {
+	public ComponentCasillaBorrador() {
 		setLayout(new GridLayout(0, 3, 0, 0));
 		listaTextField = new JTextField[9];
 		JTextField textAux;
-		this.setComponentPopupMenu(pPopupMenu);
 		for(int i = 0; i<listaTextField.length; i++){
 			textAux = new JTextField();
 			listaTextField[i] = textAux;

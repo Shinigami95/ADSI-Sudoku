@@ -1,17 +1,21 @@
 package packModelo;
 
 import java.util.Observable;
+import java.util.Observer;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class Partida extends Observable{
 	private int tiempoSeg, tiempoMin, tiempoHor;
+	private int numAyudas, numComprobaciones;
 	private Timer timer;
 	private Sudoku sudoku;
 	private MatrizPartida matrizPartida;
 	
-	private Partida(String pSud, int pT) {
-		matrizPartida = new MatrizPartida(pSud);
+	public Partida(Sudoku pSud, int pT, int pA, int pC) {
+		numAyudas = pA;
+		numComprobaciones = pC;
+		matrizPartida = new MatrizPartida(pSud.toStringMatrizInicial());
 		tiempoHor=pT/3600;
 		tiempoMin=(pT%3600)/60;
 		tiempoSeg=(pT%3600)%60;
@@ -69,5 +73,30 @@ public class Partida extends Observable{
 
 	public char getValorSolucion(int pX, int pY) {
 		return this.sudoku.getValorSolucion(pX, pY);
+	}
+
+	public boolean comprobarSiEstaBien(int pX, int pY) {
+		return this.matrizPartida.getValor(pX, pY) == this.sudoku.getValorSolucion(pX, pY);
+	}
+	
+	public void rellenarCasillaVacia(){
+		int posX = 0;
+		int posY = 0;
+		boolean encontrada=false;
+		for(int i=0;i<9 && !encontrada;i++){
+			for(int j=0;j<9 && !encontrada;j++){
+				if(this.sudoku.getValor(i, j)=='0'){
+					posX=i;
+					posY=j;
+					encontrada=true;
+				}
+			}
+		}
+		char valor = this.sudoku.getValorSolucion(posX, posY);
+		this.sudoku.setValor(valor, posX, posY);
+	}
+	
+	public void addObserver(Observer pO, int pX, int pY){
+		this.matrizPartida.addObserver(pO, pX, pY);
 	}
 }

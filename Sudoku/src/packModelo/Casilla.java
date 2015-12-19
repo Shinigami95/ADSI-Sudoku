@@ -1,15 +1,12 @@
 package packModelo;
 
-public class Casilla implements IFazCasilla{
+import java.util.Observer;
+
+public class Casilla extends IFazCasilla{
 
 	private char valor;
 	private boolean inicial;
 
-	/**
-	 * 
-	 * @param pV
-	 * @param pInic
-	 */
 	public Casilla(char pV, boolean pInic) {
 		this.valor = pV;
 		this.inicial = pInic;
@@ -23,18 +20,22 @@ public class Casilla implements IFazCasilla{
 		return this.valor;
 	}
 
-	/**
-	 * 
-	 * @param pV
-	 */
 	public void setValor(char pV) {
 		if(!this.esInicial()){
 			this.valor = pV;
+			this.setChanged();
+			this.notifyObservers(this.toStringValores());
+			System.out.println("SetValor");
 		}
 	}
 
 	@Override
 	public String toStringValores() {
 		return this.valor+"";
+	}
+	
+	@Override
+	public void addObserver(Observer pO){
+		super.addObserver(pO);
 	}
 }
