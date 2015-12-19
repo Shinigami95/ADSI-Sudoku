@@ -9,20 +9,19 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class ComponentCasillaNormal extends ComponentCasillaAbstracta{
+public class ComponentCasillaInicial  extends ComponentCasillaAbstracta{
 
 	private static final long serialVersionUID = 1L;
 	JTextField text;
 	
-	public ComponentCasillaNormal(JPopupMenu pPopupMenu){
+	public ComponentCasillaInicial(JPopupMenu pPopupMenu){
 		text = new JTextField();
 		text.setMaximumSize(new Dimension(50, 50));
 		text.setMinimumSize(new Dimension(50, 50));
 		text.setSize(new Dimension(50, 50));
 		text.setHorizontalAlignment(JTextField.CENTER);
-		text.setFont(new Font("Helvetica", Font.PLAIN, 16));
+		text.setFont(new Font("Helvetica", Font.BOLD, 16));
 		text.setFocusable(false);
-		text.setComponentPopupMenu(pPopupMenu);
 		this.setBackground(Color.WHITE);
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setLayout(new BorderLayout(0, 0));
@@ -34,5 +33,4 @@ public class ComponentCasillaNormal extends ComponentCasillaAbstracta{
 	public void escribirTexto(String pTexto) {
 		this.text.setText(pTexto);
 	}
-
 }

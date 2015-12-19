@@ -6,5 +6,7 @@ public abstract class ComponentCasillaAbstracta extends JPanel{
 
 	private static final long serialVersionUID = 1L;
 	
+	public abstract void escribirTexto(String pTexto);
+	
 	
 }

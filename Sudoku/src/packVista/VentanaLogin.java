@@ -28,6 +28,7 @@ import packControladores.GestorPartida;
 import packModelo.CatalogoUsuarios;
 import packModelo.Dificultad;
 import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
+import packSudokuAntiguo.VentanaJuego;
 
 public class VentanaLogin extends JFrame{
 

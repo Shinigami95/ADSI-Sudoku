@@ -1,4 +1,4 @@
-package packVista;
+package packSudokuAntiguo;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -22,8 +22,10 @@ import javax.swing.JButton;
 
 import packControladores.GestorPartida;
 import packControladores.GestorSesion;
+import packModelo.Dificultad;
 import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
 import packSudoku.excepciones.ExcepcionValorNoValido;
+import packVista.VentanaLogin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -383,7 +385,7 @@ public class VentanaJuego extends JFrame implements Observer{
 			int dialogResponse = JOptionPane.showConfirmDialog(this, "¡Enhorabuena!\n¿Quieres continuar?", "Sudoku finalizado", JOptionPane.YES_NO_OPTION);
 			if(dialogResponse == JOptionPane.YES_OPTION){
 				try{
-					GestorPartida.getGestor().cargarSudParaUs(GestorPartida.getGestor().getDificultad(), GestorSesion.getGestor().getUserSesion());
+					GestorPartida.getGestor().cargarSudParaUs(Dificultad.FACIL, GestorSesion.getGestor().getUserSesion());
 					VentanaJuego.getVentanaJuego().cargarSudoku();
 				}
 				catch(ExcepcionNoHaySudokuCargado e){
