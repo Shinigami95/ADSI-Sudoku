@@ -75,4 +75,25 @@ public class GestorPartida {
 	public boolean estaActivoBorrador(){
 		return this.borradorActivo;
 	}
+	
+	public boolean comprobarSiEstaBien(int pX, int pY){
+		return this.sudoku.getValor(pX, pY)==this.sudoku.getValorSolucion(pX, pY);
+	}
+	
+	public void rellenarCasillaVacia(){
+		int posX = 0;
+		int posY = 0;
+		boolean encontrada=false;
+		for(int i=0;!encontrada;i++){
+			for(int j=0;j<9 && !encontrada;j++){
+				if(this.sudoku.getValor(i, j)=='0'){
+					posX=i;
+					posY=j;
+					encontrada=true;
+				}
+			}
+		}
+		char valor = this.sudoku.getValorSolucion(posX, posY);
+		this.sudoku.setValor(valor, posX, posY);
+	}
 }
