@@ -23,7 +23,7 @@ public class ComponentCasillaBorrador extends ComponentCasillaGenerica{
 			textAux = new JLabel();
 			listaTextField[i] = textAux;
 			textAux.setHorizontalAlignment(SwingConstants.CENTER);
-			textAux.setFont(new Font("Helvetica", Font.PLAIN, 10));
+			textAux.setFont(new Font("Helvetica", Font.PLAIN, 12));
 			textAux.setForeground(Color.BLUE);
 			this.setBorder(new LineBorder(new Color(0,0,0),1));
 			this.setBackground(Color.WHITE);

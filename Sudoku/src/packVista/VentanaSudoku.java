@@ -363,22 +363,14 @@ System.out.println("PopUp creado");
 	}
 
 	public void quitarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
-		int pX=0, pY=0;
-		for(int i = 0;i<this.getMatrizCasillas().length;i++){
-			for(int j = 0;j<this.getMatrizCasillas()[i].length;j++){
-				if(cas.equals(getMatrizCasillas()[i][j])){
-					pX=i;
-					pY=j;
-				}
-			}
-		}
-		GestorPartida.getGestor().setValor('0', pX, pY);
+		System.out.println("VentSud.quitarValor -> ("+cas.getCorX()+","+cas.getCorY()+")");
+        GestorPartida.getGestor().quitarValor(cas.getCorX(), cas.getCorY());
 	}
 
 	public void setValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		JMenuItem menuItem = (JMenuItem) e.getComponent();
 		char valor= menuItem.getText().charAt(0);
-		System.out.println("VentSud -> ("+cas.getCorX()+","+cas.getCorY()+")");
+		System.out.println("VentSud.setValorCasilla -> ("+cas.getCorX()+","+cas.getCorY()+")");
         GestorPartida.getGestor().setValor(valor, cas.getCorX(), cas.getCorY());
 	}
 

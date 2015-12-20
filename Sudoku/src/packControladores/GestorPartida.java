@@ -46,6 +46,10 @@ public class GestorPartida {
 			this.game.anadirNumero(pV, pX, pY);
 		}
 	}
+	
+	public void quitarValor(int pX, int pY) {
+		this.game.anadirNumero('0', pX, pY);
+	}
 
 	public void cargarSudParaUs(Dificultad pD, String pU) throws ExcepcionNoHaySudokuCargado{
 		//TODO
@@ -92,7 +96,7 @@ public class GestorPartida {
 		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
 		Sudoku sud = new Sudoku(id, solSud, sinRes);
-System.out.println("GestorPartida.cargarSudoku"+sud.toStringMatrizInicial());
+System.out.println("GestorPartida.cargarSudoku: \n -> "+sud.toStringMatrizInicial());
 		this.game = new Partida(sud, 51515, 5, 5);
 	}
 }
