@@ -8,6 +8,7 @@ public class Casilla extends IFazCasilla{
 	private boolean inicial;
 
 	public Casilla(char pV, boolean pInic) {
+		super();
 		this.valor = pV;
 		this.inicial = pInic;
 	}

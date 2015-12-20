@@ -49,13 +49,17 @@ public class MatrizPartida{
 	
 	private void crearCasillaSiNoHay(int pX, int pY){
 		if (casillas[pX][pY] instanceof Borrador){
+			Observer obs = casillas[pX][pY].getObserver();
 			casillas[pX][pY] = new Casilla('0', false);
+			casillas[pX][pY].addObserver(obs);
 		}
 	}
 	
 	private void crearBorradorSiNoHay(int pX, int pY){
 		if (casillas[pX][pY] instanceof Casilla){
+			Observer obs = casillas[pX][pY].getObserver();
 			casillas[pX][pY] = new Borrador();
+			casillas[pX][pY].addObserver(obs);
 		}
 	}
 	

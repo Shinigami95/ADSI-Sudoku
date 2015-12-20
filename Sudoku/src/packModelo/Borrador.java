@@ -7,6 +7,7 @@ public class Borrador extends IFazCasilla{
 	boolean[] lista;
 	
 	public Borrador(){
+		super();
 		lista = new boolean[9];
 		for (int i = 0;i<lista.length;i++){
 			lista[i]=false;
@@ -20,7 +21,7 @@ public class Borrador extends IFazCasilla{
 			lista[i-1] = !lista[i-1];
 			this.setChanged();
 			this.notifyObservers(this.toStringValores());
-			System.out.println("Borrador -> "+this.toStringValores());
+			System.out.println("Borrador.setValor -> "+this.toStringValores());
 		}
 	}
 

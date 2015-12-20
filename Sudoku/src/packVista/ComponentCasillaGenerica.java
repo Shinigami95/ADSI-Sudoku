@@ -45,6 +45,7 @@ public class ComponentCasillaGenerica extends JPanel implements Observer{
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println(o.toString());
 		if(o instanceof Casilla){
 			Casilla cas = (Casilla) o;
 			if(cas.esInicial() && !(mCasilla instanceof ComponentCasillaInicial)){
