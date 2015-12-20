@@ -2,8 +2,6 @@ package packControladores;
 
 import java.util.Observer;
 
-import javax.naming.PartialResultException;
-
 import packModelo.Dificultad;
 import packModelo.Partida;
 import packModelo.Sudoku;
@@ -18,8 +16,10 @@ public class GestorPartida {
 	private GestorPartida() {
 		this.game = null;
 		this.borradorActivo = false;
+		this.cargarSudoku();
+		System.out.println("NUEVO GESTORPARTIDA");
 	}
-
+	
 	public static GestorPartida getGestor() {
 		if(mGestor==null){
 			mGestor = new GestorPartida();
@@ -87,12 +87,12 @@ public class GestorPartida {
 		this.game.rellenarCasillaVacia();
 	}
 
-	public void cargarSudoku() {
+	private void cargarSudoku() {
 		String id = "1111";
 		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
 		Sudoku sud = new Sudoku(id, solSud, sinRes);
-		this.game = new Partida(sud, 0, 5, 5);
-		System.out.println(sud.toStringMatrizInicial());
+System.out.println("GestorPartida.cargarSudoku"+sud.toStringMatrizInicial());
+		this.game = new Partida(sud, 51515, 5, 5);
 	}
 }

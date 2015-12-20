@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-public class ComponentCasillaInicial  extends ComponentCasillaAbstracta{
+public class ComponentCasillaInicial  extends ComponentCasillaGenerica{
 
 	private static final long serialVersionUID = 1L;
 	JLabel text;
@@ -22,9 +22,10 @@ public class ComponentCasillaInicial  extends ComponentCasillaAbstracta{
 		text.setSize(new Dimension(50, 50));
 		text.setHorizontalAlignment(JTextField.CENTER);
 		text.setFont(new Font("Helvetica", Font.BOLD, 16));
+		text.setForeground(Color.BLACK);
 		text.setFocusable(false);
+		text.setText("-");
 		text.setBorder(new LineBorder(new Color(0,0,0),1));
-		this.setBackground(Color.WHITE);
 		this.setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setLayout(new BorderLayout(0, 0));
 		this.setBackground(Color.WHITE);

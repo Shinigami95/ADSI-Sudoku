@@ -25,7 +25,7 @@ public class Casilla extends IFazCasilla{
 			this.valor = pV;
 			this.setChanged();
 			this.notifyObservers(this.toStringValores());
-			System.out.println("SetValor");
+System.out.println("Casilla.setValor: " + pV);
 		}
 	}
 
@@ -37,5 +37,7 @@ public class Casilla extends IFazCasilla{
 	@Override
 	public void addObserver(Observer pO){
 		super.addObserver(pO);
+		this.setChanged();
+		this.notifyObservers(this.toStringValores());
 	}
 }

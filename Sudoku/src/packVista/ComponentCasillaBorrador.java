@@ -9,7 +9,7 @@ import javax.swing.SwingConstants;
 
 import java.awt.Color;
 
-public class ComponentCasillaBorrador extends ComponentCasillaAbstracta{
+public class ComponentCasillaBorrador extends ComponentCasillaGenerica{
 
 	private static final long serialVersionUID = 1L;
 	private JTextField[] listaTextField;
@@ -21,9 +21,9 @@ public class ComponentCasillaBorrador extends ComponentCasillaAbstracta{
 		for(int i = 0; i<listaTextField.length; i++){
 			textAux = new JTextField();
 			listaTextField[i] = textAux;
-			textAux.setForeground(Color.BLUE);
 			textAux.setHorizontalAlignment(SwingConstants.CENTER);
 			textAux.setFont(new Font("Helvetica", Font.PLAIN, 10));
+			textAux.setForeground(Color.BLUE);
 			this.add(textAux);
 			textAux.setColumns(10);	
 		}
@@ -34,5 +34,6 @@ public class ComponentCasillaBorrador extends ComponentCasillaAbstracta{
 		for(int i = 0; i<listaTextField.length; i++){
 			listaTextField[i].setText(pTexto.charAt(i)+"");
 		}
+		System.out.println("Borrador -> Escribir");
 	}
 }

@@ -18,7 +18,6 @@ public class MatrizPartida{
 				if(cNum=='0') inic = false;
 				else inic = true;
 				casillas[i][j] = new Casilla(cNum,inic);
-System.out.println("("+i+", "+j+") -> "+cNum+" "+inic);
 				sIndex++;
 			}
 		}

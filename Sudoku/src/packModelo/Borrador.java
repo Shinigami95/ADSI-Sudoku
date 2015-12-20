@@ -15,10 +15,12 @@ public class Borrador extends IFazCasilla{
 	
 	@Override
 	public void setValor(char pV) {
-		if(pV>=1 && pV<=9){
-			lista[pV-1] = !lista[pV-1];
+		int i = Integer.parseInt(pV+"");
+		if(i>=1 && i<=9){
+			lista[i-1] = !lista[i-1];
 			this.setChanged();
 			this.notifyObservers(this.toStringValores());
+			System.out.println("Borrador -> "+this.toStringValores());
 		}
 	}
 
@@ -26,8 +28,8 @@ public class Borrador extends IFazCasilla{
 	public String toStringValores() {
 		String result = "";
 		for (int i = 0;i<lista.length;i++){
-			if(lista[i]==false) result += " ";
-			else result += Integer.toString(i-1);
+			if(lista[i]==false) result = result+" ";
+			else result = result+(i+1);
 		}
 		return result;
 	}
