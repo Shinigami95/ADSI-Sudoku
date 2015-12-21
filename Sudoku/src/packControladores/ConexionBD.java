@@ -64,13 +64,9 @@ public class ConexionBD {
 			Class.forName(driver);
 			Connection conexion=DriverManager.getConnection(url,user,pass);
 			Statement state=(Statement) conexion.createStatement();
-
-			state.executeUpdate(sentencia);
-
 			conexion.setAutoCommit(false);
 			state.executeUpdate(sentencia);
 			conexion.commit();
-
 			state.getConnection().close();
 		}catch(Exception e){
 			e.printStackTrace();

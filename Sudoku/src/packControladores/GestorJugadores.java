@@ -21,13 +21,16 @@ public class GestorJugadores {
 	}
 	
 	public static void main(String args[]) throws ExcepcionConectarBD{
-		getGestorJugadores().comprobarRespuesta("MIKEL3", "ADIOS");
+		getGestorJugadores().registrarJugador("PRUEB", "FACIL", "1", "2");
+		//ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('PRUEB5','Q')");
+		//System.out.println(getGestorJugadores().identificarUsuario("PRUEBA3", "FACIL"));
 	}
 	
-	public void addJugador(String pNombre, String pPass, String pPregunta, String pRespuesta) throws ExcepcionConectarBD{
+	//problema no introduce en jugador, devuelve duplicate key
+	public void registrarJugador(String pNombre, String pPass, String pPregunta, String pRespuesta) throws ExcepcionConectarBD{
 		if(!buscarJugador(pNombre)){
 			ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO VALUES('"+pNombre+"','"+pPass+"','"+pPregunta+"','"+pRespuesta+"')");
-			ConexionBD.getConexionBD().actualizarBD("INSERT INTO JUGADOR VALUES('"+pNombre+"',0)");
+			ConexionBD.getConexionBD().actualizarBD("INSERT INTO JUGADOR(NOMBRE) VALUES('"+pNombre+"')");
 		}
 	}
 	
@@ -45,9 +48,31 @@ public class GestorJugadores {
 		return esta;
 	}
 	
-	public String identificarJugador(String pNombre, String pPass){
-		//TODO
-		return "0";
+	//PRE: siempre un usuario es o jugador o admin
+	/*POST: incorrecta= no existe jugador o pass incorrecta
+	 * 		jugador = tipo sesion jugador
+	 * 		admin = tipo sesion administrador 
+	 */
+	public String identificarUsuario(String pNombre, String pPass) throws ExcepcionConectarBD{
+		String tipoSesion = "incorrecta";
+		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"' AND CONTR='"+pPass+"'");
+		try{
+			if(result.next()){
+				ConexionBD.getConexionBD().closeResult(result);
+				ResultSet result2=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM JUGADOR WHERE NOMBRE='"+pNombre+"'");
+				if(result2.next()){
+					tipoSesion="jugador";
+				}
+				else{
+					tipoSesion="admin";
+				}
+				System.out.println(result2.getString("NOMBRE"));
+			}
+		}
+		catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return tipoSesion;
 	}
 	
 	public String buscarPreguntaJugador(String pNombre) throws ExcepcionConectarBD{
