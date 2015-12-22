@@ -11,8 +11,10 @@ public class Partida extends Observable{
 	private Timer timer;
 	private Sudoku sudoku;
 	private MatrizPartida matrizPartida;
+	private boolean pausado;
 	
 	public Partida(Sudoku pSud, int pT, int pA, int pC) {
+		pausado = false;
 		numAyudas = pA;
 		numComprobaciones = pC;
 		matrizPartida = new MatrizPartida(pSud.toStringMatrizInicial());
@@ -30,17 +32,20 @@ public class Partida extends Observable{
 	}
 	
 	private void updateSeconds(){
-		tiempoSeg++;
-		if(tiempoSeg==60){
-			tiempoMin++;
-			tiempoSeg=0;
-			if(tiempoMin==60){
-				tiempoHor++;
-				tiempoMin=0;
+		if(!this.pausado){	
+			tiempoSeg++;
+			if(tiempoSeg==60){
+				tiempoMin++;
+				tiempoSeg=0;
+				if(tiempoMin==60){
+					tiempoHor++;
+					tiempoMin=0;
+				}
 			}
+			this.setChanged();
+			this.notifyObservers(tiempoHor+":"+tiempoMin+":"+tiempoSeg);
+	
 		}
-		this.setChanged();
-		this.notifyObservers(tiempoHor+":"+tiempoMin+":"+tiempoSeg);
 	}
 	
 	private int tiempoASegundos(){
@@ -98,5 +103,15 @@ public class Partida extends Observable{
 	
 	public void addObserver(Observer pO, int pX, int pY){
 		this.matrizPartida.addObserver(pO, pX, pY);
+	}
+
+	public void pausar() {
+		// TODO Auto-generated method stub
+		this.pausado = true;
+	}
+
+	public void reanudar() {
+		// TODO Auto-generated method stub
+		this.pausado = false;
 	}
 }

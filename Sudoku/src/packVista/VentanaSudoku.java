@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
@@ -263,6 +264,15 @@ System.out.println("PopUp creado");
 		return btnRendirse;
 	}
 	
+	private JButton getBtnParar() {
+		if (btnParar == null) {
+			btnParar = new JButton("Parar");
+			btnParar.addActionListener(getControlador());
+			btnParar.setActionCommand("PRESS_btnParar");
+		}
+		return btnParar;
+	}
+	
 	private JLabel getLabelTiempo() {
 		if (labelTiempo == null) {
 			labelTiempo = new JLabel("Tiempo");
@@ -301,6 +311,8 @@ System.out.println("PopUp creado");
 			String action = arg0.getActionCommand();
 			if(action.equals("PRESS_chckbxBorrador")){
 				VentanaSudoku.getVentanaSudoku().switchBorrador();
+			} else if(action.equals("PRESS_btnParar")){
+				VentanaSudoku.getVentanaSudoku().pausar();
 			}
 		}
 
@@ -386,14 +398,14 @@ System.out.println("PopUp creado");
 		if(GestorPartida.getGestor().estaActivoBorrador()==true) System.out.println("Borrador Activado");
 		else System.out.println("Borrador Desactivado");
 	}
-	private JButton getBtnParar() {
-		if (btnParar == null) {
-			btnParar = new JButton("Parar");
-			btnParar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-		}
-		return btnParar;
+	
+	public void pausar() {
+		// TODO Auto-generated method stub
+		GestorPartida.getGestor().pausar();
+		this.setVisible(false);
+		JOptionPane.showMessageDialog(this, "PAUSA");
+		this.setVisible(true);
+		GestorPartida.getGestor().reanudar();
 	}
+
 }

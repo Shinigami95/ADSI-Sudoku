@@ -97,6 +97,16 @@ public class GestorPartida {
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
 		Sudoku sud = new Sudoku(id, solSud, sinRes);
 System.out.println("GestorPartida.cargarSudoku: \n -> "+sud.toStringMatrizInicial());
-		this.game = new Partida(sud, 51515, 5, 5);
+		this.game = new Partida(sud, 0, 5, 5);
+	}
+
+	public void pausar() {
+		// TODO Auto-generated method stub
+		this.game.pausar();
+	}
+
+	public void reanudar() {
+		// TODO Auto-generated method stub
+		this.game.reanudar();
 	}
 }
