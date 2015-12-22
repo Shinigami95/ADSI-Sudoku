@@ -3,12 +3,12 @@
  */
 package packSudoku;
 
-import packSudoku.excepciones.ExcepcionCoordenadaNoValida;
-import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
-import packSudoku.excepciones.ExcepcionValorInicial;
-import packSudoku.excepciones.ExcepcionValorNoValido;
-import packSudokuAntiguo.Matriz;
-import packSudokuAntiguo.TipoArea;
+import ANTpackSudokuAntiguo.Matriz;
+import ANTpackSudokuAntiguo.TipoArea;
+import packExcepciones.ExcepcionCoordenadaNoValida;
+import packExcepciones.ExcepcionNoHayValorEnCasilla;
+import packExcepciones.ExcepcionValorInicial;
+import packExcepciones.ExcepcionValorNoValido;
 import junit.framework.TestCase;
 
 /**
@@ -36,7 +36,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#Matriz()}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#Matriz()}.
      */
     public void testMatriz() {
 	assertNotNull(matriz1);
@@ -44,7 +44,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#setValorInicial(int, int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#setValorInicial(int, int, int)}.
      */
     public void testSetValorInicial() {
 	try {
@@ -248,7 +248,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#setValor(int, int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#setValor(int, int, int)}.
      */
     public void testSetValor() {
 	try {
@@ -419,7 +419,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#quitarValor(int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#quitarValor(int, int)}.
      */
     public void testQuitarValor() {
 	try {
@@ -482,7 +482,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#isLibre(int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#isLibre(int, int)}.
      */
     public void testIsLibre() {
 	try {
@@ -503,7 +503,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#isInicial(int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#isInicial(int, int)}.
      */
     public void testIsInicial() {
 	try {
@@ -548,7 +548,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#getValor(int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#getValor(int, int)}.
      */
     public void testGetValor() {
 
@@ -656,7 +656,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#hayInconsistencias(char, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#hayInconsistencias(char, int)}.
      */
     public void testDescubrirInconsistencias() {
 	try {
@@ -740,7 +740,7 @@ public class MatrizTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudokuAntiguo.Matriz#getNumErrores(packSudokuAntiguo.Matriz)}.
+     * {@link ANTpackSudokuAntiguo.Matriz#getNumErrores(ANTpackSudokuAntiguo.Matriz)}.
      */
     public void testGetNumErrores() {
 	assertEquals(0, matriz1.getNumErrores(matrizSolucion));
@@ -796,7 +796,7 @@ public class MatrizTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Matriz#isCompleto()}.
+     * Test method for {@link ANTpackSudokuAntiguo.Matriz#isCompleto()}.
      */
     public void testIsCompleto() {
 	assertFalse(matriz1.isCompleto());

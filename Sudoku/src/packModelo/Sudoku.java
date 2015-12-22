@@ -6,81 +6,51 @@ public class Sudoku{
 
 	private String id;
 	private MatrizSudoku solucion;
-	private MatrizSudoku matriz;
+	private MatrizSudoku inicial;
 
-	/**
-	 * 
-	 * @param pID
-	 * @param pSolucion
-	 * @param pSinRes
-	 */
 	public Sudoku(String pID, String pSolucion, String pSinRes) {
 		this.id = pID;
 		this.solucion = new MatrizSudoku(pSolucion);
-		this.matriz = new MatrizSudoku(pSinRes);
+		this.inicial = new MatrizSudoku(pSinRes);
 	}
 
 	public boolean estaPerfecto() {
-		return this.matriz.equalsValues(this.solucion);
+		return this.solucion.equalsValues(this.inicial);
 	}
 	
 	public boolean esCorrecto() {
-		return this.matriz.esCorrecto();
+		return this.inicial.esCorrecto();
 	}
 
 	public boolean compararConSolucion() {
-		return this.solucion.contiene(matriz);
+		return this.solucion.contiene(inicial);
 	}
 
-	/**
-	 * 
-	 * @param pV
-	 * @param pX
-	 * @param pY
-	 */
 	public void setValor(char pV, int pX, int pY) {
-		this.matriz.setValor(pV, pX, pY);
+		this.inicial.setValor(pV, pX, pY);
 	}
 
-	/**
-	 * 
-	 * @param pX
-	 * @param pY
-	 */
 	public char getValor(int pX, int pY) {
-		return this.matriz.getValor(pX, pY);
+		return this.inicial.getValor(pX, pY);
 	}
 	
-	/**
-	 * 
-	 * @param pX
-	 * @param pY
-	 */
 	public char getValorSolucion(int pX, int pY) {
-		return this.solucion.getValor(pX, pY);
+		return this.inicial.getValor(pX, pY);
 	}
 	
 	public String getId() {
 		return this.id;
 	}
 	
-	/**
-	 * 
-	 * @param pId
-	 */
 	public boolean tieneId(String pId) {
 		return this.id.equals(pId);
 	}
 	
 	public Sudoku clone(){
-		return new Sudoku(this.id,this.solucion.toString(),this.matriz.toString());
+		return new Sudoku(this.id,this.solucion.toString(),this.inicial.toString());
 	}
-	
-	/**
-	 * 
-	 * @param pO
-	 */
-	public void addObserver(Observer pO){
-		this.matriz.addObserver(pO);
+
+	public String toStringMatrizInicial() {
+		return this.inicial.toStringValores();
 	}
 }

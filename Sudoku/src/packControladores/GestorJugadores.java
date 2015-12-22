@@ -3,7 +3,7 @@ package packControladores;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import packSudoku.excepciones.ExcepcionConectarBD;
+import packExcepciones.ExcepcionConectarBD;
 
 public class GestorJugadores {
 

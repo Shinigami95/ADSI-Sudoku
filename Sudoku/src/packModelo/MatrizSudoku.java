@@ -3,7 +3,7 @@ package packModelo;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MatrizSudoku extends Observable {
+public class MatrizSudoku{
 
 	private Casilla[][] casillas;
 	private static final int MAX_FIL = 9;
@@ -171,8 +171,6 @@ public class MatrizSudoku extends Observable {
 		Casilla cAux = this.casillas[pX][pY];
 		if(cAux.getValor()!=pV){
 			cAux.setValor(pV);
-			this.setChanged();
-			this.notifyObservers();
 		}
 	}
 	
@@ -199,7 +197,7 @@ public class MatrizSudoku extends Observable {
 		return true;
 	}
 	
-	public String toString(){
+	public String toStringValores(){
 		String s = "";
 		for(int i = 0; i<MAX_FIL;i++){
 			for(int j = 0; j<MAX_COL;j++){
@@ -207,14 +205,5 @@ public class MatrizSudoku extends Observable {
 			}
 		}
 		return s;
-	}
-	
-	/**
-	 * 
-	 * @param pO
-	 */
-	@Override
-	public void addObserver(Observer pO){
-		super.addObserver(pO);
 	}
 }

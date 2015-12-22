@@ -3,12 +3,12 @@
  */
 package packSudoku;
 
-import packSudoku.excepciones.ExcepcionCoordenadaNoValida;
-import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
-import packSudoku.excepciones.ExcepcionValorInicial;
-import packSudoku.excepciones.ExcepcionValorNoValido;
-import packSudokuAntiguo.Matriz;
-import packSudokuAntiguo.Sudoku;
+import ANTpackSudokuAntiguo.Matriz;
+import ANTpackSudokuAntiguo.Sudoku;
+import packExcepciones.ExcepcionCoordenadaNoValida;
+import packExcepciones.ExcepcionNoHayValorEnCasilla;
+import packExcepciones.ExcepcionValorInicial;
+import packExcepciones.ExcepcionValorNoValido;
 import junit.framework.TestCase;
 
 /**
@@ -31,7 +31,7 @@ public class SudokuTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Sudoku#Sudoku(java.lang.String, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Sudoku#Sudoku(java.lang.String, int)}.
      */
     public void testSudoku() {
 	assertNotNull(sudoku1);
@@ -48,7 +48,7 @@ public class SudokuTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Sudoku#getDificultad()}.
+     * Test method for {@link ANTpackSudokuAntiguo.Sudoku#getDificultad()}.
      */
     public void testGetDificultad() {
 	assertEquals(1, sudoku1.getDificultad());
@@ -57,7 +57,7 @@ public class SudokuTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Sudoku#getIdentificador()}.
+     * Test method for {@link ANTpackSudokuAntiguo.Sudoku#getIdentificador()}.
      */
     public void testGetIdentificador() {
 	assertEquals("Sudoku1", sudoku1.getIdentificador());
@@ -131,7 +131,7 @@ public class SudokuTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Sudoku#setValorInicial(int, int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Sudoku#setValorInicial(int, int, int)}.
      */
     public void testSetValorInicial() {
 	try {
@@ -215,7 +215,7 @@ public class SudokuTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Sudoku#setValor(int, int, int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Sudoku#setValor(int, int, int)}.
      */
     public void testSetValor() {
 	try {
@@ -276,7 +276,7 @@ public class SudokuTest extends TestCase {
 
     /**
      * Test method for
-     * {@link packSudokuAntiguo.Sudoku#getNumErrores(packSudokuAntiguo.Matriz)}.
+     * {@link ANTpackSudokuAntiguo.Sudoku#getNumErrores(ANTpackSudokuAntiguo.Matriz)}.
      */
     public void testGetNumErrores() {
 	int[][] datos1 = new int[][] { { 9, 4, 1, 5, 8, 2, 3, 7, 6 },

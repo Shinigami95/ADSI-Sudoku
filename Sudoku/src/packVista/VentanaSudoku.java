@@ -1,16 +1,15 @@
 package packVista;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.event.PopupMenuEvent;
@@ -25,7 +24,6 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 import packControladores.GestorPartida;
-import packModelo.MatrizPartida;
 import packModelo.Partida;
 
 import java.awt.event.ActionEvent;
@@ -50,13 +48,14 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private JButton btnAyuda;
 	private JButton btnRendirse;
 	private JPopupMenu miPopupMenu;
-	private ComponentCasillaAbstracta[][] matrizCasillas;
+	private ComponentCasillaGenerica[][] matrizCasillas;
 	private JPanel[][] matrizSecciones;
 	private Controlador controlador = null;
 	private JPanel pan_sudoku;
 	private JLabel labelTiempo;
 	private JLabel labelTiempoValor;
 	private JCheckBox chckbxBorrador;
+	private JButton btnParar;
 	
 	/**
 	 * Launch 
@@ -67,8 +66,9 @@ public class VentanaSudoku extends JFrame implements Observer{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaSudoku frame = new VentanaSudoku();
+					VentanaSudoku frame = VentanaSudoku.getVentanaSudoku();
 					frame.setVisible(true);
+					frame.repaint();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -81,7 +81,21 @@ public class VentanaSudoku extends JFrame implements Observer{
 	 */
 	private VentanaSudoku() {
 		initialize();
+		cargarSudoku();
 	}
+	
+	private void cargarSudoku() {
+		System.out.println("Cargando");
+		GestorPartida.getGestor().addObserver(this);
+		
+		for(int i=0; i<this.getMatrizCasillas().length;i++){
+			for(int j=0; j<this.getMatrizCasillas()[i].length;j++){
+				GestorPartida.getGestor().addObserver(this.getCasillaSud(i, j),i,j);
+			}
+		}
+		System.out.println("Observando");
+	}
+
 	public static VentanaSudoku getVentanaSudoku(){
 		if(mVSudoku==null){
 			mVSudoku = new VentanaSudoku();
@@ -91,6 +105,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 	private void initialize() {
 		setBounds(100, 100, 650, 650);
+		setMinimumSize(new Dimension(450, 450));
 		setTitle("Sudoku - Juego");
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -140,38 +155,18 @@ public class VentanaSudoku extends JFrame implements Observer{
 		return getMatriz_Secciones()[pX][pY];
 	}
 	
-	private ComponentCasillaAbstracta[][] getMatrizCasillas(){
+	private ComponentCasillaGenerica[][] getMatrizCasillas(){
 		if (matrizCasillas == null) {
-			matrizCasillas = new ComponentCasillaAbstracta[9][9];
+			matrizCasillas = new ComponentCasillaGenerica[9][9];
 		}
 		return matrizCasillas;
 	}
 	
-	private ComponentCasillaAbstracta getCasillaSud(int pX, int pY){
-		ComponentCasillaAbstracta cAux = getMatrizCasillas()[pX][pY];
-		if (cAux == null) {
-	/*		cAux = new JTextField();
-			cAux.setToolTipText("("+pX+","+pY+")");
-			cAux.setBackground(Color.WHITE);
-			cAux.setHorizontalAlignment(SwingConstants.CENTER);
-			cAux.setFont(new Font("Tahoma", Font.PLAIN, 24));
-			cAux.addFocusListener(new FocusAdapter() {
-				@Override
-				public void focusLost(FocusEvent arg0) {
-					
-				}
-			});
-			cAux.setMaximumSize(new Dimension(50, 50));
-	        cAux.setMinimumSize(new Dimension(50, 50));
-	        cAux.setSize(new Dimension(50, 50));
-	        cAux.setHorizontalAlignment(JTextField.CENTER);
-	        cAux.setFont(new Font("Helvetica", Font.PLAIN, 16));
-	        cAux.setComponentPopupMenu(getMiPopupMenu());
-	        cAux.setFocusable(false);
-	*/
-			cAux = new ComponentCasillaNormal(getMiPopupMenu());
+	private ComponentCasillaGenerica getCasillaSud(int pX, int pY){
+		if (getMatrizCasillas()[pX][pY] == null) {
+			getMatrizCasillas()[pX][pY] = new ComponentCasillaGenerica(getMiPopupMenu(),pX,pY);
 		}
-		return cAux;
+		return getMatrizCasillas()[pX][pY];
 	}
 	
 	private JPopupMenu getMiPopupMenu() {
@@ -181,23 +176,24 @@ public class VentanaSudoku extends JFrame implements Observer{
 	        for (int i = 1; i <= 9; i++) {
 	            menuItem = new JMenuItem("" + i + "");
 	            menuItem.setActionCommand("asignarValor");
-	            menuItem.addMouseListener(controlador);
+	            menuItem.addMouseListener(this.getControlador());
 	            miPopupMenu.add(menuItem);
 	        }
 	        miPopupMenu.add(new JPopupMenu.Separator());
 	        //Menu quitar valor
 	        menuItem = new JMenuItem("Quitar Valor");
 	        menuItem.setActionCommand("quitarValor");
-	        menuItem.addMouseListener(controlador);
+	        menuItem.addMouseListener(this.getControlador());
 	        miPopupMenu.add(menuItem);
 	        miPopupMenu.add(new JPopupMenu.Separator());
 	        //Menu comprobar valor
 	        menuItem = new JMenuItem("Comprobar Valor");
 	        menuItem.setActionCommand("comprobarValor");
-	        menuItem.addMouseListener(controlador);
+	        menuItem.addMouseListener(this.getControlador());
 	        miPopupMenu.add(menuItem);
 	        miPopupMenu.setFocusable(true);
-	        miPopupMenu.addPopupMenuListener(controlador);
+	        miPopupMenu.addPopupMenuListener(this.getControlador());
+System.out.println("PopUp creado");
 		}
 		return miPopupMenu;
     }
@@ -212,26 +208,31 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 		return pan_titulo;
 	}
+	
 	private JLabel getLblTitulo() {
 		if (lblTitulo == null) {
 			lblTitulo = new JLabel("SUDOKU: ");
+			lblTitulo.setForeground(Color.BLACK);
 			lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 			lblTitulo.setBackground(Color.WHITE);
 		}
 		return lblTitulo;
 	}
+	
 	private JPanel getPan_botones() {
 		if (pan_botones == null) {
 			pan_botones = new JPanel();
 			pan_botones.setBackground(Color.WHITE);
-			pan_botones.add(getLabelTiempo());
-			pan_botones.add(getLabelTiempoValor());
 			pan_botones.add(getChckbxBorrador());
 			pan_botones.add(getBtnAyuda());
 			pan_botones.add(getBtnRendirse());
+			pan_botones.add(getLabelTiempo());
+			pan_botones.add(getLabelTiempoValor());
+			pan_botones.add(getBtnParar());
 		}
 		return pan_botones;
 	}
+	
 	private JLabel getLblIdSud() {
 		if (lblIdSud == null) {
 			lblIdSud = new JLabel("");
@@ -240,6 +241,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 		return lblIdSud;
 	}
+	
 	private JButton getBtnAyuda() {
 		if (btnAyuda == null) {
 			btnAyuda = new JButton("Ayuda");
@@ -250,6 +252,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 		return btnAyuda;
 	}
+	
 	private JButton getBtnRendirse() {
 		if (btnRendirse == null) {
 			btnRendirse = new JButton("Rendirse");
@@ -259,6 +262,38 @@ public class VentanaSudoku extends JFrame implements Observer{
 			btnRendirse.setActionCommand("PRESS_btnRendirse");
 		}
 		return btnRendirse;
+	}
+	
+	private JButton getBtnParar() {
+		if (btnParar == null) {
+			btnParar = new JButton("Parar");
+			btnParar.addActionListener(getControlador());
+			btnParar.setActionCommand("PRESS_btnParar");
+		}
+		return btnParar;
+	}
+	
+	private JLabel getLabelTiempo() {
+		if (labelTiempo == null) {
+			labelTiempo = new JLabel("Tiempo");
+		}
+		return labelTiempo;
+	}
+	
+	private JLabel getLabelTiempoValor() {
+		if (labelTiempoValor == null) {
+			labelTiempoValor = new JLabel("<Tiempo>");
+		}
+		return labelTiempoValor ;
+	}
+	
+	private JCheckBox getChckbxBorrador() {
+		if (chckbxBorrador == null) {
+			chckbxBorrador = new JCheckBox("Borrador");
+			chckbxBorrador.addActionListener(getControlador());
+			chckbxBorrador.setActionCommand("PRESS_chckbxBorrador");
+		}
+		return chckbxBorrador;
 	}
 	
 	private Controlador getControlador() {
@@ -276,6 +311,8 @@ public class VentanaSudoku extends JFrame implements Observer{
 			String action = arg0.getActionCommand();
 			if(action.equals("PRESS_chckbxBorrador")){
 				VentanaSudoku.getVentanaSudoku().switchBorrador();
+			} else if(action.equals("PRESS_btnParar")){
+				VentanaSudoku.getVentanaSudoku().pausar();
 			}
 		}
 
@@ -298,15 +335,15 @@ public class VentanaSudoku extends JFrame implements Observer{
 		public void mousePressed(MouseEvent e) {
 			// TODO Auto-generated method stub
 			JMenuItem menuItem = (JMenuItem) e.getSource();
-		    if (menuItem.getActionCommand().equalsIgnoreCase("asignarValor")){
-		    	
-		    	VentanaSudoku.getVentanaSudoku().setValorCasilla(e);
+			ComponentCasillaGenerica cas = (ComponentCasillaGenerica)getMiPopupMenu().getInvoker();
+		    if (menuItem.getActionCommand().equalsIgnoreCase("asignarValor")){    	
+		    	VentanaSudoku.getVentanaSudoku().setValorCasilla(e, cas);
 		    }
 		    else if(menuItem.getActionCommand().equalsIgnoreCase("quitarValor")){
-		    	VentanaSudoku.getVentanaSudoku().quitarValorCasilla(e);
+		    	VentanaSudoku.getVentanaSudoku().quitarValorCasilla(e, cas);
 		    }
 		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
-		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e);
+		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e, cas);
 		    }
 		}
 
@@ -337,45 +374,23 @@ public class VentanaSudoku extends JFrame implements Observer{
 		if(arg0 instanceof Partida){
 			getLabelTiempoValor().setText((String)arg1);
 		}
-		else if(arg0 instanceof MatrizPartida){
-			
-		}
 	}
 
-	public void comprobarValorCasilla(MouseEvent e) {
+	public void comprobarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	public void quitarValorCasilla(MouseEvent e) {
-		ComponentCasillaAbstracta aux = (ComponentCasillaAbstracta) this.miPopupMenu.getInvoker();
-		int pX=0, pY=0;
-		for(int i = 0;i<this.getMatrizCasillas().length;i++){
-			for(int j = 0;j<this.getMatrizCasillas()[i].length;j++){
-				if(aux.equals(getMatrizCasillas()[i][j])){
-					pX=i;
-					pY=j;
-				}
-			}
-		}
-		GestorPartida.getGestor().setValor('0', pX, pY);
+	public void quitarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
+		System.out.println("VentSud.quitarValor -> ("+cas.getCorX()+","+cas.getCorY()+")");
+        GestorPartida.getGestor().quitarValor(cas.getCorX(), cas.getCorY());
 	}
 
-	public void setValorCasilla(MouseEvent e) {
-		Component aux = e.getComponent();
-		int pX=0, pY=0;
-		for(int i = 0;i<this.getMatrizCasillas().length;i++){
-			for(int j = 0;j<this.getMatrizCasillas()[i].length;j++){
-				if(aux.equals(getMatrizCasillas()[i][j])){
-					pX=i;
-					pY=j;
-				}
-			}
-		}
+	public void setValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		JMenuItem menuItem = (JMenuItem) e.getComponent();
-        int val = Integer.parseInt(menuItem.getText());
-		GestorPartida.getGestor().setValor('0', pX, pY);
-		
+		char valor= menuItem.getText().charAt(0);
+		System.out.println("VentSud.setValorCasilla -> ("+cas.getCorX()+","+cas.getCorY()+")");
+        GestorPartida.getGestor().setValor(valor, cas.getCorX(), cas.getCorY());
 	}
 
 	public void switchBorrador() {
@@ -383,25 +398,14 @@ public class VentanaSudoku extends JFrame implements Observer{
 		if(GestorPartida.getGestor().estaActivoBorrador()==true) System.out.println("Borrador Activado");
 		else System.out.println("Borrador Desactivado");
 	}
+	
+	public void pausar() {
+		// TODO Auto-generated method stub
+		GestorPartida.getGestor().pausar();
+		this.setVisible(false);
+		JOptionPane.showMessageDialog(this, "PAUSA");
+		this.setVisible(true);
+		GestorPartida.getGestor().reanudar();
+	}
 
-	private JLabel getLabelTiempo() {
-		if (labelTiempo == null) {
-			labelTiempo = new JLabel("Tiempo");
-		}
-		return labelTiempo;
-	}
-	private JLabel getLabelTiempoValor() {
-		if (labelTiempoValor == null) {
-			labelTiempoValor = new JLabel("<Tiempo>");
-		}
-		return labelTiempoValor ;
-	}
-	private JCheckBox getChckbxBorrador() {
-		if (chckbxBorrador == null) {
-			chckbxBorrador = new JCheckBox("Borrador");
-			chckbxBorrador.addActionListener(getControlador());
-			chckbxBorrador.setActionCommand("PRESS_chckbxBorrador");
-		}
-		return chckbxBorrador;
-	}
 }

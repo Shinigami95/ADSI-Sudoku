@@ -2,25 +2,24 @@ package packControladores;
 
 import java.util.Observer;
 
+import packExcepciones.ExcepcionNoHaySudokuCargado;
 import packModelo.Dificultad;
 import packModelo.Partida;
 import packModelo.Sudoku;
-import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
 
 public class GestorPartida {
 
 	private static GestorPartida mGestor;
 	private Partida game;
-	private Sudoku sudoku;
-	private Dificultad nivel;
 	private boolean borradorActivo;
 
 	private GestorPartida() {
-		this.sudoku = null;
 		this.game = null;
 		this.borradorActivo = false;
+		this.cargarSudoku();
+		System.out.println("NUEVO GESTORPARTIDA");
 	}
-
+	
 	public static GestorPartida getGestor() {
 		if(mGestor==null){
 			mGestor = new GestorPartida();
@@ -29,23 +28,27 @@ public class GestorPartida {
 	}
 
 	public boolean estaPerfectoSudoku(){
-		return this.sudoku.estaPerfecto();
+		return this.game.estaPerfecto();
 	}
 	
 	public boolean esCorrectoSudoku() {
-		return this.sudoku.esCorrecto();
+		return this.game.esCorrecto();
 	}
 
 	public String getSudokuId(){
-		return this.sudoku.getId();
-	}
-	
-	public Dificultad getDificultad(){
-		return this.nivel;
+		return this.game.getId();
 	}
 	
 	public void setValor(char pV, int pX, int pY) {
-		this.sudoku.setValor(pV, pX, pY);
+		if(borradorActivo){
+			this.game.anadirBorrador(pV, pX, pY);
+		} else{
+			this.game.anadirNumero(pV, pX, pY);
+		}
+	}
+	
+	public void quitarValor(int pX, int pY) {
+		this.game.anadirNumero('0', pX, pY);
 	}
 
 	public void cargarSudParaUs(Dificultad pD, String pU) throws ExcepcionNoHaySudokuCargado{
@@ -57,15 +60,19 @@ public class GestorPartida {
 	}
 	
 	public char getValorCasillaSudoku(int pX, int pY){
-		return this.sudoku.getValor(pX, pY);
+		return this.game.getValor(pX, pY);
 	}
 	
 	public char getValorCasillaSudokuSolucion(int pX, int pY){
-		return this.sudoku.getValorSolucion(pX, pY);
+		return this.game.getValorSolucion(pX, pY);
 	}
 	
 	public void addObserver(Observer pO){
 		this.game.addObserver(pO);
+	}
+	
+	public void addObserver(Observer pO, int pX, int pY){
+		this.game.addObserver(pO, pX, pY);
 	}
 	
 	public void switchBorrador(){
@@ -75,25 +82,27 @@ public class GestorPartida {
 	public boolean estaActivoBorrador(){
 		return this.borradorActivo;
 	}
-	
-	public boolean comprobarSiEstaBien(int pX, int pY){
-		return this.sudoku.getValor(pX, pY)==this.sudoku.getValorSolucion(pX, pY);
-	}
-	
+
 	public void rellenarCasillaVacia(){
-		int posX = 0;
-		int posY = 0;
-		boolean encontrada=false;
-		for(int i=0;!encontrada;i++){
-			for(int j=0;j<9 && !encontrada;j++){
-				if(this.sudoku.getValor(i, j)=='0'){
-					posX=i;
-					posY=j;
-					encontrada=true;
-				}
-			}
-		}
-		char valor = this.sudoku.getValorSolucion(posX, posY);
-		this.sudoku.setValor(valor, posX, posY);
+		this.game.rellenarCasillaVacia();
+	}
+
+	private void cargarSudoku() {
+		System.out.println("GestorPartida.cargarSudoku:");
+		String id = "1111";
+		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
+		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
+		Sudoku sud = new Sudoku(id, solSud, sinRes);
+		this.game = new Partida(sud, 0, 5, 5);
+	}
+
+	public void pausar() {
+		// TODO Auto-generated method stub
+		this.game.pausar();
+	}
+
+	public void reanudar() {
+		// TODO Auto-generated method stub
+		this.game.reanudar();
 	}
 }

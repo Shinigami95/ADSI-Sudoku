@@ -1,7 +1,7 @@
 package packControladores;
 
+import packExcepciones.ExcepcionConectarBD;
 import packModelo.Logros;
-import packSudoku.excepciones.ExcepcionConectarBD;
 
 //
 public class GestorLogros {

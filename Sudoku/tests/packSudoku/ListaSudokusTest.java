@@ -6,13 +6,13 @@ package packSudoku;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 
-import packSudoku.excepciones.ExcepcionCoordenadaNoValida;
-import packSudoku.excepciones.ExcepcionNoHayFicheroSudokus;
-import packSudoku.excepciones.ExcepcionNoHayValorEnCasilla;
-import packSudoku.excepciones.ExcepcionValorInicial;
-import packSudoku.excepciones.ExcepcionValorNoValido;
-import packSudokuAntiguo.ListaSudokus;
-import packSudokuAntiguo.Sudoku;
+import ANTpackSudokuAntiguo.ListaSudokus;
+import ANTpackSudokuAntiguo.Sudoku;
+import packExcepciones.ExcepcionCoordenadaNoValida;
+import packExcepciones.ExcepcionNoHayFicheroSudokus;
+import packExcepciones.ExcepcionNoHayValorEnCasilla;
+import packExcepciones.ExcepcionValorInicial;
+import packExcepciones.ExcepcionValorNoValido;
 import junit.framework.TestCase;
 
 /**
@@ -102,7 +102,7 @@ public class ListaSudokusTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.ListaSudokus#cargar(java.lang.String)}.
+     * Test method for {@link ANTpackSudokuAntiguo.ListaSudokus#cargar(java.lang.String)}.
      */
     public void testCargar() {
 	Iterator<Sudoku> iteradorSudokus = listaSudokus.getIterador(1);
@@ -129,7 +129,7 @@ public class ListaSudokusTest extends TestCase {
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.ListaSudokus#getIterador(int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.ListaSudokus#getIterador(int)}.
      */
     public void testGetIterador() {
         try {

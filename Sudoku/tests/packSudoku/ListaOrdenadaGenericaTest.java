@@ -6,8 +6,8 @@ package packSudoku;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import packSudokuAntiguo.ICondicion;
-import packSudokuAntiguo.ListaOrdenadaGenerica;
+import ANTpackSudokuAntiguo.ICondicion;
+import ANTpackSudokuAntiguo.ListaOrdenadaGenerica;
 import junit.framework.TestCase;
 
 /**
@@ -48,7 +48,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#ListaOrdenadaGenerica(java.util.Comparator)}
+     * {@link ANTpackSudokuAntiguo.ListaOrdenadaGenerica#ListaOrdenadaGenerica(java.util.Comparator)}
      * .
      */
     public void testListaOrdenadaGenerica()
@@ -59,7 +59,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#anadirElemento(java.lang.Object)}
+     * {@link ANTpackSudokuAntiguo.ListaOrdenadaGenerica#anadirElemento(java.lang.Object)}
      * .
      */
     public void testAnadirElemento()
@@ -110,7 +110,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#existeElementoSatisfaceCondicion(packSudokuAntiguo.ICondicion)}
+     * {@link ANTpackSudokuAntiguo.ListaOrdenadaGenerica#existeElementoSatisfaceCondicion(ANTpackSudokuAntiguo.ICondicion)}
      * .
      */
     public void testExisteElementoSatisfaceCondicion()
@@ -170,7 +170,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.ListaOrdenadaGenerica#getIterador()}.
+     * Test method for {@link ANTpackSudokuAntiguo.ListaOrdenadaGenerica#getIterador()}.
      */
     public void testGetIterador()
     {
@@ -201,7 +201,7 @@ public class ListaOrdenadaGenericaTest extends TestCase
 
     /**
      * Test method for
-     * {@link packSudokuAntiguo.ListaOrdenadaGenerica#getIterador(packSudokuAntiguo.ICondicion)}
+     * {@link ANTpackSudokuAntiguo.ListaOrdenadaGenerica#getIterador(ANTpackSudokuAntiguo.ICondicion)}
      * .
      */
     public void testGetIteradorICondicionOfE()

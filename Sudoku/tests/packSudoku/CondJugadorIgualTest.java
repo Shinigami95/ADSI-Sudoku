@@ -3,8 +3,8 @@
  */
 package packSudoku;
 
-import packSudokuAntiguo.CondJugadorIgual;
-import packSudokuAntiguo.Jugador;
+import ANTpackSudokuAntiguo.CondJugadorIgual;
+import ANTpackSudokuAntiguo.Jugador;
 import junit.framework.TestCase;
 
 /**
@@ -45,7 +45,7 @@ public class CondJugadorIgualTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.CondJugadorIgual#CondJugadorIgual(packSudokuAntiguo.Jugador)}.
+     * Test method for {@link ANTpackSudokuAntiguo.CondJugadorIgual#CondJugadorIgual(ANTpackSudokuAntiguo.Jugador)}.
      */
     public void testCondJugadorIgual()
     {
@@ -53,7 +53,7 @@ public class CondJugadorIgualTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.CondJugadorIgual#satisfaceCondicion(packSudokuAntiguo.Jugador)}.
+     * Test method for {@link ANTpackSudokuAntiguo.CondJugadorIgual#satisfaceCondicion(ANTpackSudokuAntiguo.Jugador)}.
      */
     public void testSatisfaceCondicion()
     {

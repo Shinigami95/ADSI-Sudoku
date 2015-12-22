@@ -14,7 +14,7 @@ public class GestorSesion {
 		}
 		return miGestor;
 	}
-	
+
 	public void iniciarSesion(String pJugador, String pTipoSesion){
 		this.user=pJugador;
 		this.tipoSesion=pTipoSesion;
@@ -29,3 +29,5 @@ public class GestorSesion {
 		return user;
 	}
 }
+
+

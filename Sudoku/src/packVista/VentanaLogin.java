@@ -24,10 +24,11 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import ANTpackSudokuAntiguo.VentanaJuego;
 import packControladores.GestorPartida;
+import packExcepciones.ExcepcionNoHaySudokuCargado;
 import packModelo.CatalogoUsuarios;
 import packModelo.Dificultad;
-import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
 
 public class VentanaLogin extends JFrame{
 

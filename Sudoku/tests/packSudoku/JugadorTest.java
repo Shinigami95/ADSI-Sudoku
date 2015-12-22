@@ -3,7 +3,7 @@
  */
 package packSudoku;
 
-import packSudokuAntiguo.Jugador;
+import ANTpackSudokuAntiguo.Jugador;
 import junit.framework.TestCase;
 
 // TODO: Auto-generated Javadoc
@@ -36,7 +36,7 @@ public class JugadorTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Jugador#Jugador(java.lang.String)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Jugador#Jugador(java.lang.String)}.
      */
     public void testJugador()
     {
@@ -54,7 +54,7 @@ public class JugadorTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Jugador#setPuntos(int)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Jugador#setPuntos(int)}.
      */
     public void testSetPuntos()
     {
@@ -65,7 +65,7 @@ public class JugadorTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Jugador#getNombre()}.
+     * Test method for {@link ANTpackSudokuAntiguo.Jugador#getNombre()}.
      */
     public void testGetNombre()
     {
@@ -76,7 +76,7 @@ public class JugadorTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Jugador#getPuntos()}.
+     * Test method for {@link ANTpackSudokuAntiguo.Jugador#getPuntos()}.
      */
     public void testGetPuntos()
     {
@@ -89,7 +89,7 @@ public class JugadorTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Jugador#masPuntos(packSudokuAntiguo.Jugador)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Jugador#masPuntos(ANTpackSudokuAntiguo.Jugador)}.
      */
     public void testMasPuntos()
     {
@@ -107,7 +107,7 @@ public class JugadorTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.Jugador#isIgual(packSudokuAntiguo.Jugador)}.
+     * Test method for {@link ANTpackSudokuAntiguo.Jugador#isIgual(ANTpackSudokuAntiguo.Jugador)}.
      */
     public void testEsIgual()
     {
