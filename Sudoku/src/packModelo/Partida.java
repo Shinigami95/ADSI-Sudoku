@@ -1,12 +1,18 @@
 package packModelo;
 
 import java.awt.Point;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import packControladores.ConexionBD;
+import packControladores.GestorSesion;
+import packExcepciones.ExcepcionConectarBD;
 
 public class Partida extends Observable{
 	private int tiempoSeg, tiempoMin, tiempoHor;
@@ -162,5 +168,28 @@ public class Partida extends Observable{
 
 	public int getNumCompr() {
 		return this.numComprobaciones;
+	}
+	
+	//falta revisarlo
+	//hay que modificar la BD para lo de RETO
+	public void guardarPartida() throws ExcepcionConectarBD{
+		String jugador=GestorSesion.getGestor().getUserSesion();
+		try{
+			ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';");
+			int reto=0;
+			if(GestorSesion.getGestor().getEsReto()){
+				reto=1;
+			}
+			if(!result.next()){
+				ConexionBD.getConexionBD().actualizarBD("INSERT INTO PARTIDA VALUES('"+jugador+"',"+sudoku.getId()+",'"+matrizPartida.toString()+"',"+numAyudas+","+numComprobaciones+","+tiempoASegundos()+","+reto+");");
+			}
+			else{
+				ConexionBD.getConexionBD().actualizarBD("UPDATE PARTIDA SET ID_SUDOKU="+sudoku.getId()+", MATRIZ_TABLERO='"+matrizPartida.toString()+"', NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numComprobaciones+", TIEMPO="+tiempoASegundos()+", RETO="+reto+" WHERE NOMBRE_JUG='"+jugador+"';");
+			}
+		}
+		catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+		
 	}
 }

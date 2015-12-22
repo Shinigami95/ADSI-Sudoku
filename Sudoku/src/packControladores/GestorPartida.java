@@ -2,6 +2,7 @@ package packControladores;
 
 import java.util.Observer;
 
+import packExcepciones.ExcepcionConectarBD;
 import packExcepciones.ExcepcionNoHaySudokuCargado;
 import packModelo.Dificultad;
 import packModelo.Partida;
@@ -119,5 +120,14 @@ public class GestorPartida {
 
 	public int getNumCompr() {
 		return this.game.getNumCompr();
+	}
+	
+	public void guardarPartida() throws ExcepcionConectarBD{
+		try{
+			game.guardarPartida();
+		}
+		catch(Exception e){
+			System.out.println(e.getMessage());
+		}
 	}
 }

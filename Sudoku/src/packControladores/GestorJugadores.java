@@ -26,18 +26,21 @@ public class GestorJugadores {
 		//System.out.println(getGestorJugadores().identificarUsuario("PRUEBA3", "FACIL"));
 	}
 	
-	//problema no introduce en jugador, devuelve duplicate key
-	public void registrarJugador(String pNombre, String pPass, String pPregunta, String pRespuesta) throws ExcepcionConectarBD{
+	//POST: vacio si ya existe usuario, si no existe devuelve su nombre.
+	public String registrarJugador(String pNombre, String pPass, String pPregunta, String pRespuesta) throws ExcepcionConectarBD{
+		String respuesta="";
 		if(!buscarJugador(pNombre)){
-			ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO VALUES('"+pNombre+"','"+pPass+"','"+pPregunta+"','"+pRespuesta+"')");
-			ConexionBD.getConexionBD().actualizarBD("INSERT INTO JUGADOR(NOMBRE) VALUES('"+pNombre+"')");
+			ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO VALUES('"+pNombre+"','"+pPass+"','"+pPregunta+"','"+pRespuesta+"');");
+			ConexionBD.getConexionBD().actualizarBD("INSERT INTO JUGADOR(NOMBRE) VALUES('"+pNombre+"');");
+			respuesta=pNombre;
 		}
+		return respuesta;
 	}
 	
 	//POST: true si existe
 	private boolean buscarJugador(String pNombre) throws ExcepcionConectarBD{
 		boolean esta= false;
-		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"'");
+		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"';");
 		try{
 			if(result.next()){
 				esta=true;}
@@ -55,18 +58,17 @@ public class GestorJugadores {
 	 */
 	public String identificarUsuario(String pNombre, String pPass) throws ExcepcionConectarBD{
 		String tipoSesion = "incorrecta";
-		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"' AND CONTR='"+pPass+"'");
+		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"' AND CONTR='"+pPass+"';");
 		try{
 			if(result.next()){
 				ConexionBD.getConexionBD().closeResult(result);
-				ResultSet result2=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM JUGADOR WHERE NOMBRE='"+pNombre+"'");
+				ResultSet result2=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM JUGADOR WHERE NOMBRE='"+pNombre+"';");
 				if(result2.next()){
 					tipoSesion="jugador";
 				}
 				else{
 					tipoSesion="admin";
 				}
-				System.out.println(result2.getString("NOMBRE"));
 			}
 		}
 		catch(SQLException e){
@@ -77,7 +79,7 @@ public class GestorJugadores {
 	
 	public String buscarPreguntaJugador(String pNombre) throws ExcepcionConectarBD{
 		String pregunta= "";
-		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT PREG FROM USUARIO WHERE NOMBRE='"+pNombre+"'");
+		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT PREG FROM USUARIO WHERE NOMBRE='"+pNombre+"';");
 		try{
 			if(result.next()){
 				pregunta=result.getString("PREG");}
@@ -89,12 +91,12 @@ public class GestorJugadores {
 	}
 	
 	public void actualizarPass(String pNombre, String pPass) throws ExcepcionConectarBD{
-		ConexionBD.getConexionBD().actualizarBD("UPDATE USUARIO SET CONTR='"+pPass+"' WHERE NOMBRE='"+pNombre+"'");
+		ConexionBD.getConexionBD().actualizarBD("UPDATE USUARIO SET CONTR='"+pPass+"' WHERE NOMBRE='"+pNombre+"';");
 	}
 	
 	public boolean comprobarRespuesta(String pNombre,String pRespuesta) throws ExcepcionConectarBD{
 		boolean correcta= false;
-		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT RESP FROM USUARIO WHERE NOMBRE='"+pNombre+"'");
+		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT RESP FROM USUARIO WHERE NOMBRE='"+pNombre+"';");
 		try{
 			if(result.next()){
 				if(result.getString("RESP").compareTo(pRespuesta)==0){
