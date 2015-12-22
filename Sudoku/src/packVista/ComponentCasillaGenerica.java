@@ -39,6 +39,10 @@ public class ComponentCasillaGenerica extends JPanel implements Observer{
 		this.add(mCasilla);
 	}
 	
+	public boolean esBorrador(){
+		return this.mCasilla instanceof ComponentCasillaBorrador;
+	}
+	
 	public void escribirTexto(String pTexto) {
 		if(this.mCasilla!=null)this.mCasilla.escribirTexto(pTexto);
 	}

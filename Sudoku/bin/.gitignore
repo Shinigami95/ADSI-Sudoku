@@ -1,12 +1,3 @@
-/packControladores/
-/packInterfazGrafica/
-/packMain/
-/packModelo/
-/packPrincipal/
-/packSudoku/
-/packSudokuAntiguo/
 /packVista/
-/ANTpackInterfazGrafica/
-/ANTpackPrincipal/
-/packExcepciones/
-/ANTpackSudokuAntiguo/
+/packModelo/
+/packControladores/

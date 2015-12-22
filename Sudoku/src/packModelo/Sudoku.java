@@ -35,7 +35,7 @@ public class Sudoku{
 	}
 	
 	public char getValorSolucion(int pX, int pY) {
-		return this.inicial.getValor(pX, pY);
+		return this.solucion.getValor(pX, pY);
 	}
 	
 	public String getId() {

@@ -83,8 +83,8 @@ public class GestorPartida {
 		return this.borradorActivo;
 	}
 
-	public void rellenarCasillaVacia(){
-		this.game.rellenarCasillaVacia();
+	public void ayudar(){
+		this.game.ayudar();
 	}
 
 	private void cargarSudoku() {
@@ -97,12 +97,27 @@ public class GestorPartida {
 	}
 
 	public void pausar() {
-		// TODO Auto-generated method stub
 		this.game.pausar();
 	}
 
 	public void reanudar() {
-		// TODO Auto-generated method stub
 		this.game.reanudar();
+	}
+
+	public String tiempoAString() {
+		return this.game.tiempoAString();
+	}
+
+	public int getNumAyudas() {
+		return this.game.getNumAyudas();
+	}
+
+	public boolean comprobar(int pCorX, int pCorY) {
+		// TODO Auto-generated method stub
+		return this.game.comprobar(pCorX,pCorY);
+	}
+
+	public int getNumCompr() {
+		return this.game.getNumCompr();
 	}
 }

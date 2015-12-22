@@ -1,7 +1,10 @@
 package packModelo;
 
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,6 +20,7 @@ public class Partida extends Observable{
 		pausado = false;
 		numAyudas = pA;
 		numComprobaciones = pC;
+		sudoku = pSud;
 		matrizPartida = new MatrizPartida(pSud.toStringMatrizInicial());
 		tiempoHor=pT/3600;
 		tiempoMin=(pT%3600)/60;
@@ -43,12 +47,22 @@ public class Partida extends Observable{
 				}
 			}
 			this.setChanged();
-			this.notifyObservers(tiempoHor+":"+tiempoMin+":"+tiempoSeg);
-	
+			this.notifyObservers();
 		}
 	}
 	
-	private int tiempoASegundos(){
+	public String tiempoAString(){
+		String ts =Integer.toString(tiempoSeg);
+		String tm =Integer.toString(tiempoMin);
+		String th =Integer.toString(tiempoHor);
+		if (tiempoSeg<10) ts = "0"+ts;
+		if (tiempoMin<10) tm = "0"+tm;
+		if (tiempoHor<10) th = "0"+th;
+		
+		return th +":"+ tm +":"+ ts;
+	}
+	
+	public int tiempoASegundos(){
 		return tiempoSeg + tiempoMin*60 + tiempoHor*3600;
 	}
 
@@ -84,21 +98,16 @@ public class Partida extends Observable{
 		return this.matrizPartida.getValor(pX, pY) == this.sudoku.getValorSolucion(pX, pY);
 	}
 	
-	public void rellenarCasillaVacia(){
-		int posX = 0;
-		int posY = 0;
-		boolean encontrada=false;
-		for(int i=0;i<9 && !encontrada;i++){
-			for(int j=0;j<9 && !encontrada;j++){
-				if(this.sudoku.getValor(i, j)=='0'){
-					posX=i;
-					posY=j;
-					encontrada=true;
-				}
-			}
-		}
-		char valor = this.sudoku.getValorSolucion(posX, posY);
-		this.sudoku.setValor(valor, posX, posY);
+	private void dcrAyudas() {
+		this.numAyudas--;
+		this.setChanged();
+		this.notifyObservers();
+	}
+
+	private void dcrCompr() {
+		this.numComprobaciones--;
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	public void addObserver(Observer pO, int pX, int pY){
@@ -113,5 +122,45 @@ public class Partida extends Observable{
 	public void reanudar() {
 		// TODO Auto-generated method stub
 		this.pausado = false;
+	}
+
+	public int getNumAyudas() {
+		return this.numAyudas;
+	}
+	
+	public void ayudar(){
+		if(numAyudas>0){
+			ArrayList<Point> listaPuntos = new ArrayList<Point>();
+			for(int i=0;i<9;i++){
+				for(int j=0;j<9;j++){
+					if(this.matrizPartida.getValor(i, j)=='0'){
+						listaPuntos.add(new Point(i,j));
+						System.out.print("("+i+","+j+")");
+					}
+				}
+			}
+			Random rn = new Random();
+			Point cas = listaPuntos.get(rn.nextInt(listaPuntos.size()));
+			char valor = this.sudoku.getValorSolucion(cas.x, cas.y);
+			System.out.println("\n("+cas.x+","+cas.y+") ->"+valor);
+			this.matrizPartida.anadirNumero(valor, cas.x, cas.y);
+			this.dcrAyudas();
+		}
+	}
+
+	public boolean comprobar(int pCorX, int pCorY) {
+		if(numComprobaciones>0){
+			this.dcrCompr();
+			char valMatriz = this.matrizPartida.getValor(pCorX, pCorY);
+			char valSol = this.sudoku.getValorSolucion(pCorX, pCorY);
+			return valMatriz == valSol;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public int getNumCompr() {
+		return this.numComprobaciones;
 	}
 }

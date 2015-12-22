@@ -35,6 +35,9 @@ import java.util.Observable;
 import java.util.Observer;
 
 import javax.swing.JCheckBox;
+import javax.swing.BoxLayout;
+import javax.swing.JSeparator;
+import javax.swing.SwingConstants;
 
 public class VentanaSudoku extends JFrame implements Observer{
 
@@ -56,6 +59,18 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private JLabel labelTiempoValor;
 	private JCheckBox chckbxBorrador;
 	private JButton btnParar;
+	private JMenuItem[] jmiNumeros;
+	private JMenuItem jmiQuitarValor;
+	private JMenuItem jmiComprobarValor;
+	private JPopupMenu.Separator jpms1;
+	private JPopupMenu.Separator jpms2;
+	private JLabel lblBorrador;
+	private JLabel lblAyudas;
+	private JLabel labelAyudasValor;
+	private JLabel lblComprobaciones;
+	private JLabel labelComprValor;
+	private JSeparator separator;
+	private JSeparator separator_1;
 	
 	/**
 	 * Launch 
@@ -105,7 +120,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 	private void initialize() {
 		setBounds(100, 100, 650, 650);
-		setMinimumSize(new Dimension(450, 450));
+		setMinimumSize(new Dimension(500, 500));
 		setTitle("Sudoku - Juego");
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -114,7 +129,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		setContentPane(contentPane);
 		contentPane.add(getPan_sudoku(), BorderLayout.CENTER);
 		contentPane.add(getPan_titulo(), BorderLayout.NORTH);
-		contentPane.add(getPan_botones(), BorderLayout.SOUTH);
+		contentPane.add(getPan_botones(), BorderLayout.WEST);
 		addWindowListener(getControlador());
 	}
 	
@@ -169,31 +184,66 @@ public class VentanaSudoku extends JFrame implements Observer{
 		return getMatrizCasillas()[pX][pY];
 	}
 	
-	private JPopupMenu getMiPopupMenu() {
-		if (miPopupMenu==null){
-			miPopupMenu = new JPopupMenu();
-	        JMenuItem menuItem;
-	        for (int i = 1; i <= 9; i++) {
+	private JMenuItem[] getJmiNumeros(){
+		if (jmiNumeros==null){
+			jmiNumeros = new JMenuItem[9];
+			JMenuItem menuItem;
+			for (int i = 1; i <= jmiNumeros.length; i++) {
 	            menuItem = new JMenuItem("" + i + "");
 	            menuItem.setActionCommand("asignarValor");
 	            menuItem.addMouseListener(this.getControlador());
-	            miPopupMenu.add(menuItem);
+	            jmiNumeros[i-1] = menuItem;
 	        }
-	        miPopupMenu.add(new JPopupMenu.Separator());
+		}
+		return jmiNumeros;
+	}
+	
+	private JMenuItem getJmiQuitarValor(){
+		if (jmiQuitarValor==null){
+			jmiQuitarValor = new JMenuItem("Quitar Valor");
+			jmiQuitarValor.setActionCommand("quitarValor");
+			jmiQuitarValor.addMouseListener(this.getControlador());
+		}
+		return jmiQuitarValor;
+	}
+	
+	private JMenuItem getJmiComprobarValor(){
+		if (jmiComprobarValor==null){
+			jmiComprobarValor = new JMenuItem("Comprobar Valor");
+			jmiComprobarValor.setActionCommand("comprobarValor");
+			jmiComprobarValor.addMouseListener(this.getControlador());
+		}
+		return jmiComprobarValor;
+	}
+	
+	private JPopupMenu.Separator getSeparador1(){
+		if(jpms1==null){
+			jpms1 = new JPopupMenu.Separator();
+		}
+		return jpms1;
+	}
+	
+	private JPopupMenu.Separator getSeparador2(){
+		if(jpms2==null){
+			jpms2 = new JPopupMenu.Separator();
+		}
+		return jpms2;
+	}
+	
+	private JPopupMenu getMiPopupMenu() {
+		if (miPopupMenu==null){
+			miPopupMenu = new JPopupMenu();
+	        for (int i = 0; i < getJmiNumeros().length; i++) {
+	            miPopupMenu.add(getJmiNumeros()[i]);
+	        }
+	        miPopupMenu.add(getSeparador1());
 	        //Menu quitar valor
-	        menuItem = new JMenuItem("Quitar Valor");
-	        menuItem.setActionCommand("quitarValor");
-	        menuItem.addMouseListener(this.getControlador());
-	        miPopupMenu.add(menuItem);
-	        miPopupMenu.add(new JPopupMenu.Separator());
+	        miPopupMenu.add(getJmiQuitarValor());
+	        miPopupMenu.add(getSeparador2());
 	        //Menu comprobar valor
-	        menuItem = new JMenuItem("Comprobar Valor");
-	        menuItem.setActionCommand("comprobarValor");
-	        menuItem.addMouseListener(this.getControlador());
-	        miPopupMenu.add(menuItem);
+	        miPopupMenu.add(getJmiComprobarValor());
 	        miPopupMenu.setFocusable(true);
 	        miPopupMenu.addPopupMenuListener(this.getControlador());
-System.out.println("PopUp creado");
 		}
 		return miPopupMenu;
     }
@@ -223,12 +273,20 @@ System.out.println("PopUp creado");
 		if (pan_botones == null) {
 			pan_botones = new JPanel();
 			pan_botones.setBackground(Color.WHITE);
-			pan_botones.add(getChckbxBorrador());
-			pan_botones.add(getBtnAyuda());
-			pan_botones.add(getBtnRendirse());
+			pan_botones.setLayout(new BoxLayout(pan_botones, BoxLayout.PAGE_AXIS));
 			pan_botones.add(getLabelTiempo());
 			pan_botones.add(getLabelTiempoValor());
+			pan_botones.add(getLblAyudas());
+			pan_botones.add(getLabelAyudasValor());
+			pan_botones.add(getLblComprobaciones());
+			pan_botones.add(getLabelComprValor());
+			pan_botones.add(getSeparator());
+			pan_botones.add(getLblBorrador());
+			pan_botones.add(getChckbxBorrador());
+			pan_botones.add(getSeparator_1());
 			pan_botones.add(getBtnParar());
+			pan_botones.add(getBtnAyuda());
+			pan_botones.add(getBtnRendirse());
 		}
 		return pan_botones;
 	}
@@ -267,6 +325,7 @@ System.out.println("PopUp creado");
 	private JButton getBtnParar() {
 		if (btnParar == null) {
 			btnParar = new JButton("Parar");
+			btnParar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			btnParar.addActionListener(getControlador());
 			btnParar.setActionCommand("PRESS_btnParar");
 		}
@@ -275,7 +334,8 @@ System.out.println("PopUp creado");
 	
 	private JLabel getLabelTiempo() {
 		if (labelTiempo == null) {
-			labelTiempo = new JLabel("Tiempo");
+			labelTiempo = new JLabel("Tiempo:");
+			labelTiempo.setFont(new Font("Tahoma", Font.BOLD, 13));
 		}
 		return labelTiempo;
 	}
@@ -289,7 +349,7 @@ System.out.println("PopUp creado");
 	
 	private JCheckBox getChckbxBorrador() {
 		if (chckbxBorrador == null) {
-			chckbxBorrador = new JCheckBox("Borrador");
+			chckbxBorrador = new JCheckBox("");
 			chckbxBorrador.addActionListener(getControlador());
 			chckbxBorrador.setActionCommand("PRESS_chckbxBorrador");
 		}
@@ -313,23 +373,19 @@ System.out.println("PopUp creado");
 				VentanaSudoku.getVentanaSudoku().switchBorrador();
 			} else if(action.equals("PRESS_btnParar")){
 				VentanaSudoku.getVentanaSudoku().pausar();
+			} else if(action.equals("PRESS_btnAyuda")){
+				VentanaSudoku.getVentanaSudoku().ayudar();
 			}
 		}
 
 		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
+		public void mouseClicked(MouseEvent e) {}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
+		public void mouseEntered(MouseEvent e) {}
 
 		@Override
-		public void mouseExited(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
+		public void mouseExited(MouseEvent e) {}
 
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -348,23 +404,27 @@ System.out.println("PopUp creado");
 		}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-		}
+		public void mouseReleased(MouseEvent e) {}
 
 		@Override
-		public void popupMenuCanceled(PopupMenuEvent e) {
-			// TODO Auto-generated method stub
-		}
+		public void popupMenuCanceled(PopupMenuEvent e) {}
 
 		@Override
-		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			// TODO Auto-generated method stub
-		}
+		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
 
 		@Override
 		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-			// TODO Auto-generated method stub
+			ComponentCasillaGenerica cas = (ComponentCasillaGenerica)getMiPopupMenu().getInvoker();
+			System.out.println(cas);
+			char valorCas = GestorPartida.getGestor().getValorCasillaSudoku(cas.getCorX(), cas.getCorY());
+			if (cas.esBorrador() || valorCas=='0' || GestorPartida.getGestor().getNumCompr() == 0){
+				VentanaSudoku.getVentanaSudoku().getSeparador2().setVisible(false);
+				VentanaSudoku.getVentanaSudoku().getJmiComprobarValor().setVisible(false);
+			} 
+			else {
+				VentanaSudoku.getVentanaSudoku().getSeparador2().setVisible(true);
+				VentanaSudoku.getVentanaSudoku().getJmiComprobarValor().setVisible(true);
+			}
 		}
 	}
 
@@ -372,13 +432,33 @@ System.out.println("PopUp creado");
 	public void update(Observable arg0, Object arg1) {
 		// TODO Auto-generated method stub
 		if(arg0 instanceof Partida){
-			getLabelTiempoValor().setText((String)arg1);
+			//tiempo
+			String tiempo = GestorPartida.getGestor().tiempoAString();
+			getLabelTiempoValor().setText("     "+tiempo);
+			//ayudas
+			int nayud = GestorPartida.getGestor().getNumAyudas();
+			if (nayud<=0) getBtnAyuda().setEnabled(false);
+			else getBtnAyuda().setEnabled(true);
+			getLabelAyudasValor().setText("     "+nayud);
+			//comprobacion
+			int ncompr = GestorPartida.getGestor().getNumCompr();
+			getLabelComprValor().setText("     "+ncompr);
 		}
+	}
+
+	public void ayudar() {
+		GestorPartida.getGestor().ayudar();
 	}
 
 	public void comprobarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		// TODO Auto-generated method stub
-		
+		boolean result = GestorPartida.getGestor().comprobar(cas.getCorX(), cas.getCorY());
+		if(result){
+			JOptionPane.showMessageDialog(this, "OK");
+		}
+		else{
+			JOptionPane.showMessageDialog(this, ">.<");
+		}
 	}
 
 	public void quitarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
@@ -408,4 +488,49 @@ System.out.println("PopUp creado");
 		GestorPartida.getGestor().reanudar();
 	}
 
+	private JLabel getLblBorrador() {
+		if (lblBorrador == null) {
+			lblBorrador = new JLabel("Borrador:");
+		}
+		return lblBorrador;
+	}
+	private JLabel getLblAyudas() {
+		if (lblAyudas == null) {
+			lblAyudas = new JLabel("Ayudas:");
+			lblAyudas.setFont(new Font("Tahoma", Font.BOLD, 13));
+		}
+		return lblAyudas;
+	}
+	private JLabel getLabelAyudasValor() {
+		if (labelAyudasValor == null) {
+			labelAyudasValor = new JLabel("<Ayudas>");
+		}
+		return labelAyudasValor;
+	}
+	private JLabel getLblComprobaciones() {
+		if (lblComprobaciones == null) {
+			lblComprobaciones = new JLabel("Comprobaciones:");
+			lblComprobaciones.setFont(new Font("Tahoma", Font.BOLD, 13));
+		}
+		return lblComprobaciones;
+	}
+	private JLabel getLabelComprValor() {
+		if (labelComprValor == null) {
+			labelComprValor = new JLabel("<Compr>");
+			labelComprValor.setHorizontalAlignment(SwingConstants.LEFT);
+		}
+		return labelComprValor;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+		}
+		return separator_1;
+	}
 }
