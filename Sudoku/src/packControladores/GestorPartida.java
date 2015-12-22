@@ -2,10 +2,10 @@ package packControladores;
 
 import java.util.Observer;
 
+import packExcepciones.ExcepcionNoHaySudokuCargado;
 import packModelo.Dificultad;
 import packModelo.Partida;
 import packModelo.Sudoku;
-import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
 
 public class GestorPartida {
 

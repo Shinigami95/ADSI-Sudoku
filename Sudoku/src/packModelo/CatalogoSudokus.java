@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
 
-import packSudoku.excepciones.ExcepcionNoHayFicheroSudokus;
-import packSudoku.excepciones.ExcepcionNoHaySudokuCargado;
+import packExcepciones.ExcepcionNoHayFicheroSudokus;
+import packExcepciones.ExcepcionNoHaySudokuCargado;
 
 public class CatalogoSudokus {
 

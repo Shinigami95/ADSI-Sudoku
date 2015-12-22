@@ -3,8 +3,8 @@
  */
 package packSudoku;
 
-import packSudokuAntiguo.ComparadorSudokus;
-import packSudokuAntiguo.Sudoku;
+import ANTpackSudokuAntiguo.ComparadorSudokus;
+import ANTpackSudokuAntiguo.Sudoku;
 import junit.framework.TestCase;
 
 /**
@@ -31,7 +31,7 @@ public class ComparadorSudokusTest extends TestCase
     }
 
     /**
-     * Test method for {@link packSudokuAntiguo.ComparadorSudokus#compare(packSudokuAntiguo.Sudoku, packSudokuAntiguo.Sudoku)}.
+     * Test method for {@link ANTpackSudokuAntiguo.ComparadorSudokus#compare(ANTpackSudokuAntiguo.Sudoku, ANTpackSudokuAntiguo.Sudoku)}.
      */
     public void testCompare()
     {

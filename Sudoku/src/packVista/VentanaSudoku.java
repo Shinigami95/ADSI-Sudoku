@@ -1,6 +1,7 @@
 package packVista;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 
@@ -14,8 +15,11 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import java.awt.Color;
+
 import javax.swing.JLabel;
+
 import java.awt.Font;
+
 import javax.swing.JButton;
 
 import packControladores.GestorPartida;
@@ -50,6 +54,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private JLabel labelTiempo;
 	private JLabel labelTiempoValor;
 	private JCheckBox chckbxBorrador;
+	private JButton btnParar;
 	
 	/**
 	 * Launch 
@@ -99,6 +104,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 	private void initialize() {
 		setBounds(100, 100, 650, 650);
+		setMinimumSize(new Dimension(450, 450));
 		setTitle("Sudoku - Juego");
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -221,6 +227,7 @@ System.out.println("PopUp creado");
 			pan_botones.add(getBtnRendirse());
 			pan_botones.add(getLabelTiempo());
 			pan_botones.add(getLabelTiempoValor());
+			pan_botones.add(getBtnParar());
 		}
 		return pan_botones;
 	}
@@ -378,5 +385,15 @@ System.out.println("PopUp creado");
 		GestorPartida.getGestor().switchBorrador();
 		if(GestorPartida.getGestor().estaActivoBorrador()==true) System.out.println("Borrador Activado");
 		else System.out.println("Borrador Desactivado");
+	}
+	private JButton getBtnParar() {
+		if (btnParar == null) {
+			btnParar = new JButton("Parar");
+			btnParar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+		}
+		return btnParar;
 	}
 }

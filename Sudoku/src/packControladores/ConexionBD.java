@@ -6,9 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 
+
 import com.mysql.jdbc.Statement;
 
-import packSudoku.excepciones.ExcepcionConectarBD;
+import packExcepciones.ExcepcionConectarBD;
 //https://www.youtube.com/watch?v=OyN1Uocw2AU
 public class ConexionBD {
 	private static String driver;
