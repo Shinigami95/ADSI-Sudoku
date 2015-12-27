@@ -21,8 +21,10 @@ public class Partida extends Observable{
 	private Sudoku sudoku;
 	private MatrizPartida matrizPartida;
 	private boolean pausado;
+	private boolean esReto;
 	
-	public Partida(Sudoku pSud, int pT, int pA, int pC) {
+	public Partida(Sudoku pSud, boolean pEsReto, int pT, int pA, int pC) {
+		esReto = pEsReto;
 		pausado = false;
 		numAyudas = pA;
 		numComprobaciones = pC;
@@ -170,14 +172,19 @@ public class Partida extends Observable{
 		return this.numComprobaciones;
 	}
 	
+
+	private boolean getEsReto() {
+		return this.esReto;
+	}
+	
 	//falta revisarlo
 	//hay que modificar la BD para lo de RETO
 	public void guardarPartida() throws ExcepcionConectarBD{
-		String jugador=GestorSesion.getGestor().getUserSesion();
+		String jugador = GestorSesion.getGestor().getUserSesion();
 		try{
 			ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';");
 			int reto=0;
-			if(GestorSesion.getGestor().getEsReto()){
+			if(getEsReto()){
 				reto=1;
 			}
 			if(!result.next()){
@@ -196,11 +203,7 @@ public class Partida extends Observable{
 	public boolean haTerminado() {
 		String mPartida = this.matrizPartida.toStringCasillas();
 		String mSol = this.sudoku.toStringMatrizSolucion();
-		System.out.println("-------Partida ha terminado------");
-		System.out.println(mPartida);
-		System.out.println(mSol);
 		boolean result = mPartida.equals(mSol);
-		System.out.println(result);
 		return result;
 	}
 }

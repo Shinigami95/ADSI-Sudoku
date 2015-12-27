@@ -4,7 +4,6 @@ public class GestorSesion {
 	private static GestorSesion miGestor;
 	private String user;
 	private String tipoSesion;//admin o usuario
-	private boolean esReto;
 	
 	//habrá que modificarlo
 	private GestorSesion() {user = "Jorge";}
@@ -19,7 +18,6 @@ public class GestorSesion {
 	public void iniciarSesion(String pJugador, String pTipoSesion){
 		this.user=pJugador;
 		this.tipoSesion=pTipoSesion;
-		this.esReto=false;
 	}
 	
 	public void cerrarSesion(){
@@ -29,18 +27,6 @@ public class GestorSesion {
 	
 	public String getUserSesion(){
 		return user;
-	}
-	
-	public boolean getEsReto(){
-		return esReto;
-	}
-	
-	public void iniciarReto(){
-		esReto=true;
-	}
-	
-	public void finReto(){
-		esReto=false;
 	}
 }
 

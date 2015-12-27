@@ -20,7 +20,6 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JPasswordField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-import ANTpackSudokuAntiguo.Sesion;
 import packControladores.GestorJugadores;
 
 import java.awt.Font;
@@ -37,6 +36,7 @@ public class VentanaInicio extends JFrame {
 	private JButton buttonRegistro;
 	private JButton buttonSesion;
 	private ControladorInicio controlador;
+	private static VentanaInicio mVentana = null;
 
 	/**
 	 * Launch the application.
@@ -57,9 +57,17 @@ public class VentanaInicio extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaInicio() {
+	private VentanaInicio() {
 		initialize();
 	}
+	
+	public static VentanaInicio getVentanaInicio(){
+		if(mVentana == null){
+			mVentana = new VentanaInicio();
+		}
+		return mVentana;
+	}
+	
 	private void initialize() {
 		setTitle("Juego Sudoku");
 		setResizable(false);

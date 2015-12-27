@@ -1,9 +1,9 @@
 package packMain;
 
-import ANTpackInterfazGrafica.ISVentanaLogin;
+import packVista.VentanaInicio;
 
 public class MainClass {
 	public static void main(String args[]){
-		ISVentanaLogin.getVentanaLogin().setVisible(true);
+		VentanaInicio.getVentanaInicio().setVisible(true);
 	}
 }

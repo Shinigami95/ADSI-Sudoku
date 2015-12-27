@@ -98,7 +98,7 @@ public class GestorPartida {
 		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
 		Sudoku sud = new Sudoku(id, solSud, sinRes);
-		this.game = new Partida(sud, 0, 90, 5);
+		this.game = new Partida(sud, false, 0, 90, 5);
 	}
 
 	public void pausar() {
