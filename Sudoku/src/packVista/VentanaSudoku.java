@@ -355,7 +355,51 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 		return chckbxBorrador;
 	}
-	
+	private JLabel getLblBorrador() {
+		if (lblBorrador == null) {
+			lblBorrador = new JLabel("Borrador:");
+		}
+		return lblBorrador;
+	}
+	private JLabel getLblAyudas() {
+		if (lblAyudas == null) {
+			lblAyudas = new JLabel("Ayudas:");
+			lblAyudas.setFont(new Font("Tahoma", Font.BOLD, 13));
+		}
+		return lblAyudas;
+	}
+	private JLabel getLabelAyudasValor() {
+		if (labelAyudasValor == null) {
+			labelAyudasValor = new JLabel("<Ayudas>");
+		}
+		return labelAyudasValor;
+	}
+	private JLabel getLblComprobaciones() {
+		if (lblComprobaciones == null) {
+			lblComprobaciones = new JLabel("Comprobaciones:");
+			lblComprobaciones.setFont(new Font("Tahoma", Font.BOLD, 13));
+		}
+		return lblComprobaciones;
+	}
+	private JLabel getLabelComprValor() {
+		if (labelComprValor == null) {
+			labelComprValor = new JLabel("<Compr>");
+			labelComprValor.setHorizontalAlignment(SwingConstants.LEFT);
+		}
+		return labelComprValor;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JSeparator getSeparator_1() {
+		if (separator_1 == null) {
+			separator_1 = new JSeparator();
+		}
+		return separator_1;
+	}
 	private Controlador getControlador() {
 		if (controlador == null) {
 			controlador = new Controlador();
@@ -373,8 +417,8 @@ public class VentanaSudoku extends JFrame implements Observer{
 				VentanaSudoku.getVentanaSudoku().switchBorrador();
 			} else if(action.equals("PRESS_btnParar")){
 				VentanaSudoku.getVentanaSudoku().pausar();
-			} else if(action.equals("PRESS_btnAyuda")){
-				VentanaSudoku.getVentanaSudoku().ayudar();
+			} else if(action.equals("PRESS_btnRendirse")){
+				VentanaSudoku.getVentanaSudoku().rendirse();
 			}
 		}
 
@@ -397,6 +441,9 @@ public class VentanaSudoku extends JFrame implements Observer{
 		    }
 		    else if(menuItem.getActionCommand().equalsIgnoreCase("quitarValor")){
 		    	VentanaSudoku.getVentanaSudoku().quitarValorCasilla(e, cas);
+		    }
+		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
+		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e, cas);
 		    }
 		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
 		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e, cas);
@@ -446,18 +493,30 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	public void rendirse() {
+		int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea rendirse?", "Rendirse", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		if(respuesta == JOptionPane.YES_OPTION){
+			//TODO ir a ventana jugador
+			JOptionPane.showMessageDialog(this, ">.< Rendido >.<");
+			this.dispose();
+		}
+	}
+
 	public void ayudar() {
 		GestorPartida.getGestor().ayudar();
+		boolean haTerminado = GestorPartida.getGestor().haTerminado();
+		if(haTerminado){
+			mostrarVentanaFinal();
+		}
 	}
 
 	public void comprobarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
-		// TODO Auto-generated method stub
 		boolean result = GestorPartida.getGestor().comprobar(cas.getCorX(), cas.getCorY());
 		if(result){
-			JOptionPane.showMessageDialog(this, "OK");
+			JOptionPane.showMessageDialog(this, "Casilla ("+cas.getCorX()+","+cas.getCorY()+") -> Correcto OK");
 		}
 		else{
-			JOptionPane.showMessageDialog(this, ">.<");
+			JOptionPane.showMessageDialog(this, "Casilla ("+cas.getCorX()+","+cas.getCorY()+") -> Mal >.< ");
 		}
 	}
 
@@ -470,9 +529,23 @@ public class VentanaSudoku extends JFrame implements Observer{
 		JMenuItem menuItem = (JMenuItem) e.getComponent();
 		char valor= menuItem.getText().charAt(0);
 		System.out.println("VentSud.setValorCasilla -> ("+cas.getCorX()+","+cas.getCorY()+")");
-        GestorPartida.getGestor().setValor(valor, cas.getCorX(), cas.getCorY());
+		if(GestorPartida.getGestor().getBorradorActivo()){
+			GestorPartida.getGestor().setValor(valor, cas.getCorX(), cas.getCorY());
+		} else{
+			GestorPartida.getGestor().setValor(valor, cas.getCorX(), cas.getCorY());
+			boolean haTerminado = GestorPartida.getGestor().haTerminado();
+			if(haTerminado){
+				mostrarVentanaFinal();
+			}
+		}
 	}
 
+	public void mostrarVentanaFinal(){
+		JOptionPane.showMessageDialog(this, "Enhorabuena has completado el sudoku.");
+		VentanaFinal.getVentana().setVisible(true);
+		this.dispose();
+	}
+	
 	public void switchBorrador() {
 		GestorPartida.getGestor().switchBorrador();
 		if(GestorPartida.getGestor().estaActivoBorrador()==true) System.out.println("Borrador Activado");
@@ -486,51 +559,5 @@ public class VentanaSudoku extends JFrame implements Observer{
 		JOptionPane.showMessageDialog(this, "PAUSA");
 		this.setVisible(true);
 		GestorPartida.getGestor().reanudar();
-	}
-
-	private JLabel getLblBorrador() {
-		if (lblBorrador == null) {
-			lblBorrador = new JLabel("Borrador:");
-		}
-		return lblBorrador;
-	}
-	private JLabel getLblAyudas() {
-		if (lblAyudas == null) {
-			lblAyudas = new JLabel("Ayudas:");
-			lblAyudas.setFont(new Font("Tahoma", Font.BOLD, 13));
-		}
-		return lblAyudas;
-	}
-	private JLabel getLabelAyudasValor() {
-		if (labelAyudasValor == null) {
-			labelAyudasValor = new JLabel("<Ayudas>");
-		}
-		return labelAyudasValor;
-	}
-	private JLabel getLblComprobaciones() {
-		if (lblComprobaciones == null) {
-			lblComprobaciones = new JLabel("Comprobaciones:");
-			lblComprobaciones.setFont(new Font("Tahoma", Font.BOLD, 13));
-		}
-		return lblComprobaciones;
-	}
-	private JLabel getLabelComprValor() {
-		if (labelComprValor == null) {
-			labelComprValor = new JLabel("<Compr>");
-			labelComprValor.setHorizontalAlignment(SwingConstants.LEFT);
-		}
-		return labelComprValor;
-	}
-	private JSeparator getSeparator() {
-		if (separator == null) {
-			separator = new JSeparator();
-		}
-		return separator;
-	}
-	private JSeparator getSeparator_1() {
-		if (separator_1 == null) {
-			separator_1 = new JSeparator();
-		}
-		return separator_1;
 	}
 }

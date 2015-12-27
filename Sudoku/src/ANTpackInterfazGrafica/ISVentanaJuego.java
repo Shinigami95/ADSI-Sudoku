@@ -1,4 +1,4 @@
-package ANTpackSudokuAntiguo;
+package ANTpackInterfazGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -25,7 +25,6 @@ import packControladores.GestorSesion;
 import packExcepciones.ExcepcionNoHaySudokuCargado;
 import packExcepciones.ExcepcionValorNoValido;
 import packModelo.Dificultad;
-import packVista.VentanaLogin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,10 +36,10 @@ import java.util.Observable;
 import java.util.Observer;
 
 
-public class VentanaJuego extends JFrame implements Observer{
+public class ISVentanaJuego extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
-	private static VentanaJuego mVJuego;
+	private static ISVentanaJuego mVJuego;
 	private JPanel contentPane;
 	private JPanel pan_titulo;
 	private JLabel lblTitulo;
@@ -61,7 +60,7 @@ public class VentanaJuego extends JFrame implements Observer{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaJuego frame = new VentanaJuego();
+					ISVentanaJuego frame = new ISVentanaJuego();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,12 +72,12 @@ public class VentanaJuego extends JFrame implements Observer{
 	/**
 	 * Create the frame.
 	 */
-	private VentanaJuego() {
+	private ISVentanaJuego() {
 		initialize();
 	}
-	public static VentanaJuego getVentanaJuego(){
+	public static ISVentanaJuego getVentanaJuego(){
 		if(mVJuego==null){
-			mVJuego = new VentanaJuego();
+			mVJuego = new ISVentanaJuego();
 		}
 		return mVJuego;
 	}
@@ -310,8 +309,8 @@ public class VentanaJuego extends JFrame implements Observer{
 	private void rendirse(){
 		this.obtenerSolucion();
 		JOptionPane.showMessageDialog(this, "Gracias por jugar, mucha suerte la pr\u00F3xima vez.");
-		VentanaLogin.getVentanaLogin().setVisible(true);
-		VentanaJuego.getVentanaJuego().dispose();
+		ISVentanaLogin.getVentanaLogin().setVisible(true);
+		ISVentanaJuego.getVentanaJuego().dispose();
 	}
 	
 	private void obtenerSolucion(){
@@ -346,21 +345,21 @@ public class VentanaJuego extends JFrame implements Observer{
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			VentanaLogin.getVentanaLogin().setVisible(true);
-			VentanaJuego.getVentanaJuego().dispose();
+			ISVentanaLogin.getVentanaLogin().setVisible(true);
+			ISVentanaJuego.getVentanaJuego().dispose();
 		}
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String action = arg0.getActionCommand();
 			if(action.equals("PRESS_btnAyuda")){
-				VentanaJuego.getVentanaJuego().ayudarConSudoku();
+				ISVentanaJuego.getVentanaJuego().ayudarConSudoku();
 			}
 			else if (action.equals("PRESS_btnRendirse")){
-				VentanaJuego.getVentanaJuego().rendirse();
+				ISVentanaJuego.getVentanaJuego().rendirse();
 			}
 			else if (action.equals("PRESS_btnEsCoherente")){
-				VentanaJuego.getVentanaJuego().comprobarcoherenciaSudoku();
+				ISVentanaJuego.getVentanaJuego().comprobarcoherenciaSudoku();
 			}
 		}
 	}
@@ -368,7 +367,7 @@ public class VentanaJuego extends JFrame implements Observer{
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		this.ponerCasillasBlancas();
-		VentanaJuego.getVentanaJuego().estaTerminado();
+		ISVentanaJuego.getVentanaJuego().estaTerminado();
 	}
 		
 	private void ponerCasillasBlancas(){
@@ -386,17 +385,17 @@ public class VentanaJuego extends JFrame implements Observer{
 			if(dialogResponse == JOptionPane.YES_OPTION){
 				try{
 					GestorPartida.getGestor().cargarSudParaUs(Dificultad.FACIL, GestorSesion.getGestor().getUserSesion());
-					VentanaJuego.getVentanaJuego().cargarSudoku();
+					ISVentanaJuego.getVentanaJuego().cargarSudoku();
 				}
 				catch(ExcepcionNoHaySudokuCargado e){
 					JOptionPane.showMessageDialog(this, "No hay sudokus disponibles de esta dificultad");
-					VentanaLogin.getVentanaLogin().setVisible(true);
-					VentanaJuego.getVentanaJuego().dispose();
+					ISVentanaLogin.getVentanaLogin().setVisible(true);
+					ISVentanaJuego.getVentanaJuego().dispose();
 				}
 			}
 			else{
-				VentanaLogin.getVentanaLogin().setVisible(true);
-				VentanaJuego.getVentanaJuego().dispose();
+				ISVentanaLogin.getVentanaLogin().setVisible(true);
+				ISVentanaJuego.getVentanaJuego().dispose();
 			}
 		}
 	}

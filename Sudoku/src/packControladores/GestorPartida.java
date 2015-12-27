@@ -40,8 +40,12 @@ public class GestorPartida {
 		return this.game.getId();
 	}
 	
+	public boolean getBorradorActivo(){
+		return this.borradorActivo;
+	}
+	
 	public void setValor(char pV, int pX, int pY) {
-		if(borradorActivo){
+		if(this.getBorradorActivo()){
 			this.game.anadirBorrador(pV, pX, pY);
 		} else{
 			this.game.anadirNumero(pV, pX, pY);
@@ -94,7 +98,7 @@ public class GestorPartida {
 		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
 		Sudoku sud = new Sudoku(id, solSud, sinRes);
-		this.game = new Partida(sud, 0, 5, 5);
+		this.game = new Partida(sud, 0, 90, 5);
 	}
 
 	public void pausar() {
@@ -129,5 +133,9 @@ public class GestorPartida {
 		catch(Exception e){
 			System.out.println(e.getMessage());
 		}
+	}
+
+	public boolean haTerminado() {
+		return this.game.haTerminado();
 	}
 }

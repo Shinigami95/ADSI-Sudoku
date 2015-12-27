@@ -1,4 +1,4 @@
-package packVista;
+package ANTpackInterfazGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,16 +24,15 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-import ANTpackSudokuAntiguo.VentanaJuego;
 import packControladores.GestorPartida;
 import packExcepciones.ExcepcionNoHaySudokuCargado;
 import packModelo.CatalogoUsuarios;
 import packModelo.Dificultad;
 
-public class VentanaLogin extends JFrame{
+public class ISVentanaLogin extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private static VentanaLogin mVLogin;
+	private static ISVentanaLogin mVLogin;
 	private JPanel contentPane;
 	private JPanel panelSudoku;
 	private JPanel panelDatos;
@@ -57,7 +56,7 @@ public class VentanaLogin extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaLogin frame = getVentanaLogin();
+					ISVentanaLogin frame = getVentanaLogin();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -69,14 +68,14 @@ public class VentanaLogin extends JFrame{
 	/**
 	 * Create the frame.
 	 */
-	private VentanaLogin() {
+	private ISVentanaLogin() {
 		super();
 		initialize();
 	}
 	
-	public static VentanaLogin getVentanaLogin(){
+	public static ISVentanaLogin getVentanaLogin(){
 		if(mVLogin==null){
-			mVLogin = new VentanaLogin();
+			mVLogin = new ISVentanaLogin();
 		}
 		return mVLogin;
 	}
@@ -228,9 +227,9 @@ public class VentanaLogin extends JFrame{
 			else if(levelSelected.equals("Medio")) dif = Dificultad.MEDIO;
 			else dif = Dificultad.FACIL;
 			GestorPartida.getGestor().cargarSudParaUs(dif, userName);
-			VentanaJuego.getVentanaJuego().cargarSudoku();
-			VentanaJuego.getVentanaJuego().setVisible(true);
-			VentanaLogin.getVentanaLogin().dispose();
+			ISVentanaJuego.getVentanaJuego().cargarSudoku();
+			ISVentanaJuego.getVentanaJuego().setVisible(true);
+			ISVentanaLogin.getVentanaLogin().dispose();
 		}
 		catch(ExcepcionNoHaySudokuCargado e){
 			JOptionPane.showMessageDialog(this, "No hay sudokus disponibles");
@@ -266,8 +265,8 @@ public class VentanaLogin extends JFrame{
 				guardarDatosUsuarios();
 			}
 			else if (action.equals("PRESS_btnRanking")){
-				VentanaRanking.getVentanaRanking().setVisible(true);
-				VentanaLogin.getVentanaLogin().dispose();
+				ISVentanaRanking.getVentanaRanking().setVisible(true);
+				ISVentanaLogin.getVentanaLogin().dispose();
 			}
 		}
 

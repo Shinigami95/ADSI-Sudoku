@@ -192,4 +192,15 @@ public class Partida extends Observable{
 		}
 		
 	}
+
+	public boolean haTerminado() {
+		String mPartida = this.matrizPartida.toStringCasillas();
+		String mSol = this.sudoku.toStringMatrizSolucion();
+		System.out.println("-------Partida ha terminado------");
+		System.out.println(mPartida);
+		System.out.println(mSol);
+		boolean result = mPartida.equals(mSol);
+		System.out.println(result);
+		return result;
+	}
 }

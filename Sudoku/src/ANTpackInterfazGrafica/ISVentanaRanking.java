@@ -1,4 +1,4 @@
-package packVista;
+package ANTpackInterfazGrafica;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -26,10 +26,10 @@ import packModelo.CatalogoUsuarios;
 
 import java.awt.event.KeyEvent;
 
-public class VentanaRanking extends JFrame{
+public class ISVentanaRanking extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	private static VentanaRanking mVRanking;
+	private static ISVentanaRanking mVRanking;
 	private JPanel contentPane;
 	private JPanel panelRanking;
 	private JPanel panelPuntuaciones;
@@ -49,7 +49,7 @@ public class VentanaRanking extends JFrame{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaRanking frame = getVentanaRanking();
+					ISVentanaRanking frame = getVentanaRanking();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,14 +61,14 @@ public class VentanaRanking extends JFrame{
 	/**
 	 * Create the frame.
 	 */
-	private VentanaRanking() {
+	private ISVentanaRanking() {
 		super();
 		initialize();
 	}
 	
-	public static VentanaRanking getVentanaRanking(){
+	public static ISVentanaRanking getVentanaRanking(){
 		if(mVRanking==null){
-			mVRanking = new VentanaRanking();
+			mVRanking = new ISVentanaRanking();
 		}
 		return mVRanking;
 	}
@@ -191,8 +191,8 @@ public class VentanaRanking extends JFrame{
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			VentanaLogin.getVentanaLogin().setVisible(true);
-			VentanaRanking.getVentanaRanking().dispose();
+			ISVentanaLogin.getVentanaLogin().setVisible(true);
+			ISVentanaRanking.getVentanaRanking().dispose();
 		}
 		
 		@Override

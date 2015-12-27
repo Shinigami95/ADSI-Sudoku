@@ -53,4 +53,8 @@ public class Sudoku{
 	public String toStringMatrizInicial() {
 		return this.inicial.toStringValores();
 	}
+	
+	public String toStringMatrizSolucion() {
+		return this.solucion.toStringValores();
+	}
 }
