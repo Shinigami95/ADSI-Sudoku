@@ -12,6 +12,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JSplitPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
+import java.awt.Color;
 
 public class VentanaEstadisticasJugador extends JFrame {
 
@@ -19,19 +21,10 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private JScrollPane scrollPaneSelectSudoku;
 	private JPanel panelDatosJugador;
 	private JPanel panelDatosSudoku;
-	private JLabel lblResPorCat;
-	private JLabel lblFaciles;
-	private JLabel lblNormales;
-	private JLabel lblDificiles;
-	private JSeparator separator;
-	private JLabel lblNumSudokusResueltos;
-	private JSeparator separator_1;
-	private JLabel lblNumFacil;
-	private JLabel lblNumNormal;
-	private JLabel lblNumDificil;
-	private JLabel lblNumRes;
-	private JLabel lblPorcentajeResueltos;
-	private JLabel lblPorcentRes;
+	private JTextArea txtrEstadsticasJugador;
+	private JTextArea txtrEstadsticasDelSudoku;
+	private JPanel panelSelectSudoku;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Launch the application.
@@ -57,14 +50,14 @@ public class VentanaEstadisticasJugador extends JFrame {
 	}
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 527, 341);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		contentPane.add(getPanelDatosJugador(), BorderLayout.WEST);
-		contentPane.add(getScrollPaneSelectSudoku(), BorderLayout.CENTER);
 		contentPane.add(getPanelDatosSudoku(), BorderLayout.EAST);
+		contentPane.add(getPanelSelectSudoku(), BorderLayout.CENTER);
 	}
 	private JScrollPane getScrollPaneSelectSudoku() {
 		if (scrollPaneSelectSudoku == null) {
@@ -75,105 +68,48 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private JPanel getPanelDatosJugador() {
 		if (panelDatosJugador == null) {
 			panelDatosJugador = new JPanel();
+			panelDatosJugador.setBackground(Color.WHITE);
 			panelDatosJugador.setLayout(new BoxLayout(panelDatosJugador, BoxLayout.Y_AXIS));
-			panelDatosJugador.add(getLblResPorCat());
-			panelDatosJugador.add(getLblFaciles());
-			panelDatosJugador.add(getLblNumFacil());
-			panelDatosJugador.add(getLblNormales());
-			panelDatosJugador.add(getLblNumNormal());
-			panelDatosJugador.add(getLblDificiles());
-			panelDatosJugador.add(getLblNumDificil());
-			panelDatosJugador.add(getSeparator());
-			panelDatosJugador.add(getLblNumSudokusResueltos());
-			panelDatosJugador.add(getLblNumRes());
-			panelDatosJugador.add(getLblPorcentajeResueltos());
-			panelDatosJugador.add(getLblPorcentRes());
-			panelDatosJugador.add(getSeparator_1());
+			panelDatosJugador.add(getTxtrEstadsticasJugador());
 		}
 		return panelDatosJugador;
 	}
 	private JPanel getPanelDatosSudoku() {
 		if (panelDatosSudoku == null) {
 			panelDatosSudoku = new JPanel();
+			panelDatosSudoku.setBackground(Color.WHITE);
+			panelDatosSudoku.add(getTxtrEstadsticasDelSudoku());
 		}
 		return panelDatosSudoku;
 	}
-	private JLabel getLblResPorCat() {
-		if (lblResPorCat == null) {
-			lblResPorCat = new JLabel("Resoluci\u00F3n por categor\u00EDa: ");
+	private JTextArea getTxtrEstadsticasJugador() {
+		if (txtrEstadsticasJugador == null) {
+			txtrEstadsticasJugador = new JTextArea();
+			txtrEstadsticasJugador.setText("Estad\u00EDsticas del\r\njugador de la sesi\u00F3n ");
 		}
-		return lblResPorCat;
+		return txtrEstadsticasJugador;
 	}
-	private JLabel getLblFaciles() {
-		if (lblFaciles == null) {
-			lblFaciles = new JLabel("F\u00E1ciles:");
+	private JTextArea getTxtrEstadsticasDelSudoku() {
+		if (txtrEstadsticasDelSudoku == null) {
+			txtrEstadsticasDelSudoku = new JTextArea();
+			txtrEstadsticasDelSudoku.setText("Estad\u00EDsticas del \r\nsudoku seleccionado ");
 		}
-		return lblFaciles;
+		return txtrEstadsticasDelSudoku;
 	}
-	private JLabel getLblNormales() {
-		if (lblNormales == null) {
-			lblNormales = new JLabel("Normales:");
+	private JPanel getPanelSelectSudoku() {
+		if (panelSelectSudoku == null) {
+			panelSelectSudoku = new JPanel();
+			panelSelectSudoku.setBackground(Color.WHITE);
+			panelSelectSudoku.setLayout(new BorderLayout(0, 0));
+			panelSelectSudoku.add(getScrollPaneSelectSudoku(), BorderLayout.CENTER);
+			panelSelectSudoku.add(getLblNewLabel(), BorderLayout.NORTH);
 		}
-		return lblNormales;
+		return panelSelectSudoku;
 	}
-	private JLabel getLblDificiles() {
-		if (lblDificiles == null) {
-			lblDificiles = new JLabel("Dificiles:");
+	private JLabel getLblNewLabel() {
+		if (lblNewLabel == null) {
+			lblNewLabel = new JLabel("Elige sudoku: ");
 		}
-		return lblDificiles;
-	}
-	private JSeparator getSeparator() {
-		if (separator == null) {
-			separator = new JSeparator();
-		}
-		return separator;
-	}
-	private JLabel getLblNumSudokusResueltos() {
-		if (lblNumSudokusResueltos == null) {
-			lblNumSudokusResueltos = new JLabel("Num. sudokus resueltos: ");
-		}
-		return lblNumSudokusResueltos;
-	}
-	private JSeparator getSeparator_1() {
-		if (separator_1 == null) {
-			separator_1 = new JSeparator();
-		}
-		return separator_1;
-	}
-	private JLabel getLblNumFacil() {
-		if (lblNumFacil == null) {
-			lblNumFacil = new JLabel("<NumFacil>");
-		}
-		return lblNumFacil;
-	}
-	private JLabel getLblNumNormal() {
-		if (lblNumNormal == null) {
-			lblNumNormal = new JLabel("<NumNormal>");
-		}
-		return lblNumNormal;
-	}
-	private JLabel getLblNumDificil() {
-		if (lblNumDificil == null) {
-			lblNumDificil = new JLabel("<NumDif\u00EDcil>");
-		}
-		return lblNumDificil;
-	}
-	private JLabel getLblNumRes() {
-		if (lblNumRes == null) {
-			lblNumRes = new JLabel("<NumRes>");
-		}
-		return lblNumRes;
-	}
-	private JLabel getLblPorcentajeResueltos() {
-		if (lblPorcentajeResueltos == null) {
-			lblPorcentajeResueltos = new JLabel("Porcentaje resueltos: ");
-		}
-		return lblPorcentajeResueltos;
-	}
-	private JLabel getLblPorcentRes() {
-		if (lblPorcentRes == null) {
-			lblPorcentRes = new JLabel("<NumPorcentRes>");
-		}
-		return lblPorcentRes;
+		return lblNewLabel;
 	}
 }
