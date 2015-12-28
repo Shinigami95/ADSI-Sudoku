@@ -25,7 +25,6 @@ public class GestorSudokus {
 			result.last();
 			String[] data = new String[result.getRow()];
 			result.beforeFirst();
-			System.out.println(result.getFetchSize());
 			for(int i = 0;result.next();i++){
 				data[i] = String.valueOf(result.getInt("ID_S"));
 			}

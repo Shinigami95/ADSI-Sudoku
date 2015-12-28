@@ -7,10 +7,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.DefaultListModel;
-import javax.swing.JScrollPane;
 import javax.swing.JLabel;
 import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
@@ -37,7 +37,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JScrollPane scrollPaneSelectSudoku;
 	private JTextPane textPaneDatosJugador;
 	private JTextPane textPaneSelectSudoku;
 	private JLabel lblNewLabel;
@@ -97,7 +96,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 			getDefListModelSudokus().addElement(lista[i]);
 		}
 		getListSudokus().setSelectedIndex(0);
-		cargarDatosSudoku(getListSudokus().getSelectedValue());
 	}
 	
 	public void cargarDatosSudoku(String pIdSudoku){
@@ -123,14 +121,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 		contentPane.add(getPanelSelectSudoku(), BorderLayout.CENTER);
 		contentPane.add(getPanelDatosJugador(), BorderLayout.WEST);
 		contentPane.add(getPanelDatosSudoku(), BorderLayout.EAST);
-	}
-	
-	private JScrollPane getScrollPaneSelectSudoku() {
-		if (scrollPaneSelectSudoku == null) {
-			scrollPaneSelectSudoku = new JScrollPane();
-			scrollPaneSelectSudoku.setViewportView(getListSudokus());
-		}
-		return scrollPaneSelectSudoku;
 	}
 	
 	private JTextPane getTextPaneDatosJugador() {
@@ -169,7 +159,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 			panelSelectSudoku.setBackground(Color.WHITE);
 			panelSelectSudoku.setLayout(new BorderLayout(0, 0));
 			panelSelectSudoku.add(getLblNewLabel(), BorderLayout.NORTH);
-			panelSelectSudoku.add(getScrollPaneSelectSudoku());
+			panelSelectSudoku.add(getListSudokus(), BorderLayout.CENTER);
 			panelSelectSudoku.add(getBtnVerEst(), BorderLayout.SOUTH);
 		}
 		return panelSelectSudoku;
@@ -185,7 +175,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private JList<String> getListSudokus() {
 		if (listSudokus == null) {
 			listSudokus = new JList<String>(getDefListModelSudokus());
-			listSudokus.setValueIsAdjusting(true);
+			listSudokus.setBorder(new LineBorder(getForeground(), 2));
 			listSudokus.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			listSudokus.addListSelectionListener(getControlador());
 		}

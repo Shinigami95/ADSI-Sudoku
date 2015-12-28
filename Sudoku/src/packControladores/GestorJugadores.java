@@ -13,7 +13,7 @@ public class GestorJugadores {
 		// TODO Auto-generated constructor stub
 	}
 
-	public static GestorJugadores getGestorJugadores(){
+	public static GestorJugadores getGestor(){
 		if(miGestorJugadores==null){
 			miGestorJugadores= new GestorJugadores();
 		}
@@ -21,7 +21,7 @@ public class GestorJugadores {
 	}
 	
 	public static void main(String args[]) throws ExcepcionConectarBD{
-		getGestorJugadores().registrarJugador("PRUEB", "FACIL", "1", "2");
+		GestorJugadores.getGestor().registrarJugador("PRUEB", "FACIL", "1", "2");
 		//ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('PRUEB5','Q')");
 		//System.out.println(getGestorJugadores().identificarUsuario("PRUEBA3", "FACIL"));
 	}
@@ -107,5 +107,23 @@ public class GestorJugadores {
 			System.out.println(e.getMessage());
 		}
 		return correcta;
+	}
+
+	public String[] getJugadores() throws ExcepcionConectarBD {
+		try{
+			String sql = "SELECT NOMBRE FROM JUGADOR;";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			result.last();
+			String[] data = new String[result.getRow()];
+			result.beforeFirst();
+			for(int i = 0;result.next();i++){
+				data[i] = result.getString("NOMBRE");
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+			return data;
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+			return null;
+		}
 	}
 }

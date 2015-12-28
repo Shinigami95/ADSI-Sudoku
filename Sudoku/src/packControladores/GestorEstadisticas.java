@@ -184,7 +184,7 @@ public class GestorEstadisticas {
 				+"</ul>";
 		String tiempoMedio = this.tiempoAString(this.getTiempoMedioResolucionSudoku(pIdSud));
 		data += "<h2>Tiempo medio de resoluci&oacute;n: </h2>"
-				+"<div border=1>"+tiempoMedio+"</div>";
+				+"<table border=1 align='center'>"+tiempoMedio+"</table>";
 		return data;
 	}
 	

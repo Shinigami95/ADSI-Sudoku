@@ -203,7 +203,7 @@ public class VentanaInicio extends JFrame {
 				//si admin otra ventana
 				try{
 					String pass= new String(textPass.getPassword());
-					String tipoSesion=GestorJugadores.getGestorJugadores().identificarUsuario(textNombre.getText(), pass);
+					String tipoSesion=GestorJugadores.getGestor().identificarUsuario(textNombre.getText(), pass);
 					if(tipoSesion.compareTo("admin")==0){
 						//TODO: iniciarSesion y abrir VentanaAdmin
 						System.out.println("ADMIN");

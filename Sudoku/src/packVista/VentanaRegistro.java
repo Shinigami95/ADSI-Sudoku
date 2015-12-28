@@ -223,7 +223,7 @@ public class VentanaRegistro extends JDialog {
 				else{
 					String pass= new String(textPass.getPassword());
 					try{
-						String respuesta=GestorJugadores.getGestorJugadores().registrarJugador(textUsuario.getText(), pass, textPregunta.getText(), textRespuesta.getText());
+						String respuesta=GestorJugadores.getGestor().registrarJugador(textUsuario.getText(), pass, textPregunta.getText(), textRespuesta.getText());
 						if(respuesta.length()>0){
 							new VentanaError("Bienvenido "+respuesta+".");
 						}

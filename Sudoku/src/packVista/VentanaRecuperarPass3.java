@@ -166,7 +166,7 @@ public class VentanaRecuperarPass3 extends JDialog {
 				else{
 					String pass= new String(textPass.getPassword());
 					try{
-						GestorJugadores.getGestorJugadores().actualizarPass(usuario, pass);
+						GestorJugadores.getGestor().actualizarPass(usuario, pass);
 						new VentanaError("La password ha sido actualizada.");
 					}
 					catch(ExcepcionConectarBD e){

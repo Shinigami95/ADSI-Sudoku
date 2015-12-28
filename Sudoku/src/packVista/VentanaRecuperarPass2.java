@@ -157,9 +157,9 @@ public class VentanaRecuperarPass2 extends JDialog {
 			
 			if(arg0.getActionCommand().equals("OK")){
 				try{
-					String pregunta = GestorJugadores.getGestorJugadores().buscarPreguntaJugador(usuario);
+					String pregunta = GestorJugadores.getGestor().buscarPreguntaJugador(usuario);
 					if(pregunta.length()>0){
-						if(GestorJugadores.getGestorJugadores().comprobarRespuesta(usuario, textRespuesta.getText())){
+						if(GestorJugadores.getGestor().comprobarRespuesta(usuario, textRespuesta.getText())){
 							new VentanaRecuperarPass3(usuario);
 						}
 						else{
