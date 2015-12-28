@@ -91,7 +91,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JLabel label_14;
 	private JList list_1;
 	private JList list_2;
-	DefaultListModel l;
+	private DefaultListModel l;
 
 	/**
 	 * Launch the application.
@@ -785,7 +785,7 @@ public class VentanaAdminLogros extends JFrame {
 				i++;
 			}
 			}catch(Exception e){
-				e=new ExcepcionConectarBD();
+				e=new ExcepcionConectarBD(); //Micky no se lo que quieres aqui pero creo que te falta el throw
 			}
 		return l;
 	}

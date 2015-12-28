@@ -23,7 +23,7 @@ public class GestorHistorial {
 	//Se ejecutara cada uno de los metodos en cada pestaña de la ventana
 	public String[] obtenerHistorialSudokus(String pJugador) throws ExcepcionConectarBD {
 		int j = 0;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,FECHA,COMPLETADO,PTO FROM JUGADO WHERE NOMBRE_JUG = '"+pJugador+"' ORDER BY FECHA;");
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,FECHA,COMPLETADO,PTO,SEGUNDOS FROM JUGADO WHERE NOMBRE_JUG = '"+pJugador+"' ORDER BY FECHA;");
 		String[] historialS = null;
 		try{
 			//Cogemos las columnas que tiene la tupla

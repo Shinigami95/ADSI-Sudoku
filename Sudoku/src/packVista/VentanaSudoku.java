@@ -411,7 +411,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// TODO Auto-generated method stub
 			String action = arg0.getActionCommand();
 			if(action.equals("PRESS_chckbxBorrador")){
 				VentanaSudoku.getVentanaSudoku().switchBorrador();
@@ -433,7 +432,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
 			JMenuItem menuItem = (JMenuItem) e.getSource();
 			ComponentCasillaGenerica cas = (ComponentCasillaGenerica)getMiPopupMenu().getInvoker();
 		    if (menuItem.getActionCommand().equalsIgnoreCase("asignarValor")){    	
@@ -477,7 +475,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		// TODO Auto-generated method stub
 		if(arg0 instanceof Partida){
 			//tiempo
 			String tiempo = GestorPartida.getGestor().tiempoAString();
@@ -553,7 +550,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 	
 	public void pausar() {
-		// TODO Auto-generated method stub
 		GestorPartida.getGestor().pausar();
 		this.setVisible(false);
 		JOptionPane.showMessageDialog(this, "PAUSA");
