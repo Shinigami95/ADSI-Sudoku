@@ -7,6 +7,8 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -14,6 +16,7 @@ import javax.swing.JTextPane;
 import javax.swing.ListSelectionModel;
 
 import packControladores.GestorEstadisticas;
+import packControladores.GestorSesion;
 import packControladores.GestorSudokus;
 import packExcepciones.ExcepcionConectarBD;
 
@@ -23,7 +26,9 @@ import java.awt.event.WindowAdapter;
 
 import javax.swing.JList;
 import javax.swing.JButton;
+
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 public class VentanaEstadisticasJugador extends JFrame {
 
@@ -41,7 +46,9 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private DefaultListModel<String> defListModelSudokus;
 	private Controlador controlador;
 	private JButton btnVerEst;
-	private static VentanaEstadisticasJugador mVent;
+	private static VentanaEstadisticasJugador mVent = null;
+	private JPanel panelDatosJugador;
+	private JPanel panelDatosSudoku;
 
 	/**
 	 * Launch the application.
@@ -50,7 +57,8 @@ public class VentanaEstadisticasJugador extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaEstadisticasJugador frame = new VentanaEstadisticasJugador();
+					VentanaEstadisticasJugador frame = VentanaEstadisticasJugador.getVentana();
+					VentanaEstadisticasJugador.getVentana().cargarDatos(); // cargar datos
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -64,7 +72,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 	 */
 	private VentanaEstadisticasJugador() {
 		initialize();
-		cargarDatos();
 	}
 	
 	public static VentanaEstadisticasJugador getVentana(){
@@ -76,6 +83,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 	
 	private void cargarDatos(){
 		try {
+			this.setTitle("Estad\u00EDsticas del jugador: "+ GestorSesion.getGestor().getUserSesion());
 			this.getTextPaneDatosJugador().setText(GestorEstadisticas.getGestor().getHTMLEstadisticasJugadorSesion());
 			this.cargarSudokusEnLista();
 		} catch (ExcepcionConectarBD e) {
@@ -89,21 +97,34 @@ public class VentanaEstadisticasJugador extends JFrame {
 			getDefListModelSudokus().addElement(lista[i]);
 		}
 		getListSudokus().setSelectedIndex(0);
+		cargarDatosSudoku(getListSudokus().getSelectedValue());
 	}
-
+	
+	public void cargarDatosSudoku(String pIdSudoku){
+		try {
+			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasSudoku(pIdSudoku);
+			this.getPanelDatosSudoku().removeAll();
+			this.getTextPaneSelectSudoku().setText(datosSud);
+			this.getPanelDatosSudoku().add(this.getTextPaneSelectSudoku());
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 760, 430);
-		setMinimumSize(new Dimension(760, 430));
+		setBounds(100, 100, 700, 430);
+		setMinimumSize(new Dimension(700, 430));
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
-		contentPane.add(getTextPaneDatosJugador(), BorderLayout.WEST);
-		contentPane.add(getTextPaneSelectSudoku(), BorderLayout.EAST);
 		contentPane.add(getPanelSelectSudoku(), BorderLayout.CENTER);
+		contentPane.add(getPanelDatosJugador(), BorderLayout.WEST);
+		contentPane.add(getPanelDatosSudoku(), BorderLayout.EAST);
 	}
+	
 	private JScrollPane getScrollPaneSelectSudoku() {
 		if (scrollPaneSelectSudoku == null) {
 			scrollPaneSelectSudoku = new JScrollPane();
@@ -111,6 +132,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 		}
 		return scrollPaneSelectSudoku;
 	}
+	
 	private JTextPane getTextPaneDatosJugador() {
 		if (textPaneDatosJugador == null) {
 			textPaneDatosJugador = new JTextPane();
@@ -132,12 +154,15 @@ public class VentanaEstadisticasJugador extends JFrame {
 		}
 		return textPaneSelectSudoku;
 	}
+	
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("Elige sudoku: ");
+			lblNewLabel = new JLabel("   Sudokus jugados: ");
+			lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		}
 		return lblNewLabel;
 	}
+	
 	private JPanel getPanelSelectSudoku() {
 		if (panelSelectSudoku == null) {
 			panelSelectSudoku = new JPanel();
@@ -149,37 +174,74 @@ public class VentanaEstadisticasJugador extends JFrame {
 		}
 		return panelSelectSudoku;
 	}
+	
 	private DefaultListModel<String> getDefListModelSudokus(){
 		if (defListModelSudokus == null) {
 			defListModelSudokus = new DefaultListModel<String>();
 		}
 		return defListModelSudokus;
 	}
+	
 	private JList<String> getListSudokus() {
 		if (listSudokus == null) {
 			listSudokus = new JList<String>(getDefListModelSudokus());
+			listSudokus.setValueIsAdjusting(true);
 			listSudokus.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listSudokus.addListSelectionListener(getControlador());
 		}
 		return listSudokus;
 	}
+	
 	private JButton getBtnVerEst() {
 		if (btnVerEst == null) {
 			btnVerEst = new JButton("Ver estad\u00EDsticas");
+			btnVerEst.setActionCommand("PRESS_btnVerEst");
 			btnVerEst.addActionListener(getControlador());
 		}
 		return btnVerEst;
 	}
+	
 	private Controlador getControlador(){
 		if(controlador==null){
 			controlador = new Controlador();
 		}
 		return controlador;
 	}
-	private class Controlador extends WindowAdapter implements ActionListener{
+	
+	private JPanel getPanelDatosJugador() {
+		if (panelDatosJugador == null) {
+			panelDatosJugador = new JPanel();
+			panelDatosJugador.setBackground(Color.WHITE);
+			panelDatosJugador.add(getTextPaneDatosJugador());
+		}
+		return panelDatosJugador;
+	}
+	
+	private JPanel getPanelDatosSudoku() {
+		if (panelDatosSudoku == null) {
+			panelDatosSudoku = new JPanel();
+			panelDatosSudoku.setBackground(Color.WHITE);
+			panelDatosSudoku.add(getTextPaneSelectSudoku());
+		}
+		return panelDatosSudoku;
+	}
+	
+	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
+		private String selItem = "";
+		
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
+			if(e.getActionCommand().equals("PRESS_btnVerEst")){
+				VentanaEstadisticasJugador.getVentana().cargarDatosSudoku(selItem);
+			}
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getSource() instanceof JList){
+				JList<String> list = (JList<String>)e.getSource();
+				selItem = list.getSelectedValue();
+			}
 		}
 	}
 }

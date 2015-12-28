@@ -418,6 +418,8 @@ public class VentanaSudoku extends JFrame implements Observer{
 				VentanaSudoku.getVentanaSudoku().pausar();
 			} else if(action.equals("PRESS_btnRendirse")){
 				VentanaSudoku.getVentanaSudoku().rendirse();
+			} else if(action.equals("PRESS_btnAyuda")){
+				VentanaSudoku.getVentanaSudoku().ayudar();
 			}
 		}
 
