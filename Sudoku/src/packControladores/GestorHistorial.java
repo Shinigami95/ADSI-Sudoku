@@ -82,7 +82,7 @@ public class GestorHistorial {
 			while(result.next()){
 				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
 				for(int j=0;j<columnas;j++){
-					//[i][0] = id_sudoku, [i][1] = fecha, [i][2] = completado, [i][3] = pto
+					//[i][0] = descripcion, [i][1] = id_sudoku, [i][2] = fecha,
 					historialL[i][j] = result.getString(i);
 				}
 				i++;
