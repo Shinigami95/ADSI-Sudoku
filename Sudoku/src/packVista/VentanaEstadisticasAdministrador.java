@@ -35,7 +35,7 @@ import javax.swing.JScrollPane;
 public class VentanaEstadisticasAdministrador extends JFrame {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -55,7 +55,7 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 	private JLabel lblJugadores;
 	private JButton btnVerEstJug;
 	private JList<String> listJugadores;
-	private boolean estaCargado = false; 
+	private boolean estaCargado = false;
 	private JScrollPane scrollPaneListJug;
 	private JScrollPane scrollPaneListSud;
 
