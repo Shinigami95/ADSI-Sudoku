@@ -1,15 +1,18 @@
 package packVista;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import javax.swing.DefaultListModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
@@ -21,8 +24,17 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
+
 import packControladores.ConexionBD;
-import packExcepciones.ExcepcionConectarBD;
+import packControladores.GestorLogros;
+import packSudoku.excepciones.ExcepcionConectarBD;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class VentanaAdminLogros extends JFrame {
 
@@ -40,7 +52,6 @@ public class VentanaAdminLogros extends JFrame {
 	private JTabbedPane tabbedPane_1;
 	private JButton btnAadir;
 	private JPanel panel_6;
-	private JPanel panel_7;
 	private JLabel lblPuntuacin;
 	private JTextField textField_1;
 	private JLabel lblNumJugadores;
@@ -49,16 +60,6 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField textField_3;
 	private JLabel lblCodsudoku;
 	private JComboBox comboBox;
-	private JLabel lblNivelSudoku;
-	private JComboBox comboBox_1;
-	private JLabel label;
-	private JComboBox comboBox_2;
-	private JLabel label_1;
-	private JComboBox comboBox_3;
-	private JLabel label_2;
-	private JTextField textField_4;
-	private JLabel label_3;
-	private JTextField textField_5;
 	private JPanel panel_8;
 	private JScrollPane scrollPane_1;
 	private JPanel panel_9;
@@ -68,8 +69,6 @@ public class VentanaAdminLogros extends JFrame {
 	private JLabel lblDescripcin_2;
 	private JLabel lblVarDescripcin;
 	private JButton btnModificar;
-	private JLabel label_4;
-	private JComboBox comboBox_4;
 	private JLabel label_5;
 	private JComboBox comboBox_5;
 	private JLabel label_6;
@@ -80,18 +79,16 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField textField_8;
 	private JLabel label_9;
 	private JTextField textField;
-	private JLabel label_10;
-	private JTextField textField_9;
 	private JList list;
 	private JScrollPane scrollPane;
 	private JPanel panel_4;
-	private JLabel label_11;
+	private JLabel lblCdigoSudoku;
 	private JLabel label_12;
 	private JLabel label_13;
 	private JLabel label_14;
 	private JList list_1;
 	private JList list_2;
-	private DefaultListModel l;
+	private static VentanaAdminLogros ventana;
 
 	/**
 	 * Launch the application.
@@ -100,8 +97,7 @@ public class VentanaAdminLogros extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaAdminLogros frame = new VentanaAdminLogros();
-					frame.setVisible(true);
+					getVentana();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -112,13 +108,28 @@ public class VentanaAdminLogros extends JFrame {
 	/**
 	 * Create the frame.
 	 * @throws ExcepcionConectarBD 
+	 * @throws SQLException 
 	 */
-	private VentanaAdminLogros() throws ExcepcionConectarBD{
+	public static void getVentana() throws ExcepcionConectarBD, SQLException{
+		if(ventana==null){
+			ventana = new VentanaAdminLogros();
+			
+		}
+		ventana.setVisible(true);
+	}
+	private VentanaAdminLogros() throws ExcepcionConectarBD, SQLException{
 		initialize();
 	}
 	
-	private void initialize() throws ExcepcionConectarBD {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private void initialize() throws ExcepcionConectarBD, SQLException {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				ventana.setVisible(false);
+				VentanaAdmin.getVentana();
+				
+			}
+		});
 		setBounds(100, 100, 559, 361);
 		setSize(800,500);
 		setResizable(false);
@@ -131,7 +142,7 @@ public class VentanaAdminLogros extends JFrame {
 
 	}
 
-	private JTabbedPane getTabbedPane() throws ExcepcionConectarBD {
+	private JTabbedPane getTabbedPane() throws ExcepcionConectarBD, SQLException {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.addTab("Eliminar", null, getPanel_1(), null);
@@ -149,7 +160,7 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return panel;
 	}
-	private JPanel getPanel_1() throws ExcepcionConectarBD {
+	private JPanel getPanel_1() throws ExcepcionConectarBD, SQLException {
 		if (panel_1 == null) {
 			panel_1 = new JPanel();
 			panel_1.setLayout(new BorderLayout(0, 0));
@@ -169,6 +180,17 @@ public class VentanaAdminLogros extends JFrame {
 	private JButton getBtnEliminar() {
 		if (btnEliminar == null) {
 			btnEliminar = new JButton("Eliminar");
+			btnEliminar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						GestorLogros.eliminar(list_1.getSelectedValue().toString());
+						getList_1();
+						getList_2();
+					} catch (ExcepcionConectarBD e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		}
 		return btnEliminar;
 	}
@@ -183,13 +205,25 @@ public class VentanaAdminLogros extends JFrame {
 		if (tabbedPane_1 == null) {
 			tabbedPane_1 = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane_1.addTab("Puntuaci\u00F3n", null, getPanel_6(), null);
-			tabbedPane_1.addTab("Resoluci\u00F3n", null, getPanel_7(), null);
 		}
 		return tabbedPane_1;
 	}
 	private JButton getBtnAadir() {
 		if (btnAadir == null) {
 			btnAadir = new JButton("A\u00F1adir");
+			btnAadir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(GestorLogros.datos(textField.getText(),textField_3.getText())){
+						try {
+							GestorLogros.añadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
+							getList_1();
+							getList_2();
+						} catch (ExcepcionConectarBD e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
 		}
 		return btnAadir;
 	}
@@ -200,69 +234,56 @@ public class VentanaAdminLogros extends JFrame {
 			gl_panel_6.setHorizontalGroup(
 				gl_panel_6.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_6.createSequentialGroup()
-						.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
+						.addGap(95)
+						.addGroup(gl_panel_6.createParallelGroup(Alignment.TRAILING)
 							.addGroup(gl_panel_6.createSequentialGroup()
-								.addGap(95)
-								.addGroup(gl_panel_6.createParallelGroup(Alignment.TRAILING)
+								.addComponent(getLblDescripcin_1())
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getTextField_3(), GroupLayout.PREFERRED_SIZE, 418, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_6.createSequentialGroup()
+								.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
 									.addGroup(gl_panel_6.createSequentialGroup()
-										.addComponent(getLblDescripcin_1())
+										.addComponent(getLblPuntuacin())
+										.addGap(18)
+										.addComponent(getTextField_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+									.addGroup(gl_panel_6.createSequentialGroup()
+										.addComponent(getLblCodsudoku())
+										.addPreferredGap(ComponentPlacement.UNRELATED)
+										.addComponent(getComboBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+								.addGap(54)
+								.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
+									.addGroup(gl_panel_6.createSequentialGroup()
+										.addComponent(getLblNumJugadores())
 										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getTextField_3(), GroupLayout.PREFERRED_SIZE, 418, GroupLayout.PREFERRED_SIZE))
+										.addComponent(getTextField_2(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 									.addGroup(gl_panel_6.createSequentialGroup()
-										.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
-											.addGroup(gl_panel_6.createSequentialGroup()
-												.addComponent(getLblPuntuacin())
-												.addGap(18)
-												.addComponent(getTextField_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-											.addGroup(gl_panel_6.createSequentialGroup()
-												.addComponent(getLblCodsudoku())
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(getComboBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-										.addGap(54)
-										.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
-											.addGroup(gl_panel_6.createSequentialGroup()
-												.addComponent(getLblNumJugadores())
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(getTextField_2(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-											.addGroup(gl_panel_6.createSequentialGroup()
-												.addComponent(getLblNivelSudoku())
-												.addGap(18)
-												.addComponent(getComboBox_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-										.addGap(28))))
-							.addGroup(gl_panel_6.createSequentialGroup()
-								.addGap(251)
-								.addComponent(getLabel_9(), GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
-								.addGap(5)
-								.addComponent(getTextField_9(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(149, Short.MAX_VALUE))
+										.addComponent(getLabel_9(), GroupLayout.PREFERRED_SIZE, 53, GroupLayout.PREFERRED_SIZE)
+										.addGap(5)
+										.addComponent(getTextField_9(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)))
+								.addGap(28)))
+						.addContainerGap(199, Short.MAX_VALUE))
 			);
 			gl_panel_6.setVerticalGroup(
 				gl_panel_6.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel_6.createSequentialGroup()
-						.addGap(13)
-						.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
-							.addComponent(getTextField_9(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panel_6.createSequentialGroup()
-								.addGap(3)
-								.addComponent(getLabel_9(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)))
-						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGap(44)
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.TRAILING)
-							.addGroup(gl_panel_6.createSequentialGroup()
-								.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblCodsudoku())
-									.addComponent(getComboBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(27)
-								.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblPuntuacin())
-									.addComponent(getTextField_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(gl_panel_6.createSequentialGroup()
-								.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblNivelSudoku())
-									.addComponent(getComboBox_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addGap(27)
-								.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblNumJugadores())
-									.addComponent(getTextField_2(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
+							.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
+								.addComponent(getTextField_9(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+								.addGroup(gl_panel_6.createSequentialGroup()
+									.addGap(3)
+									.addComponent(getLabel_9(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(gl_panel_6.createParallelGroup(Alignment.BASELINE)
+								.addComponent(getLblCodsudoku())
+								.addComponent(getComboBox(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
+						.addGap(27)
+						.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
+							.addGroup(Alignment.TRAILING, gl_panel_6.createParallelGroup(Alignment.BASELINE)
+								.addComponent(getLblPuntuacin())
+								.addComponent(getTextField_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+							.addGroup(Alignment.TRAILING, gl_panel_6.createParallelGroup(Alignment.BASELINE)
+								.addComponent(getLblNumJugadores())
+								.addComponent(getTextField_2(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
 						.addPreferredGap(ComponentPlacement.RELATED)
 						.addGroup(gl_panel_6.createParallelGroup(Alignment.LEADING)
 							.addComponent(getLblDescripcin_1())
@@ -273,74 +294,6 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return panel_6;
 	}
-	private JPanel getPanel_7() {
-		if (panel_7 == null) {
-			panel_7 = new JPanel();
-			GroupLayout gl_panel_7 = new GroupLayout(panel_7);
-			gl_panel_7.setHorizontalGroup(
-				gl_panel_7.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_7.createSequentialGroup()
-						.addGap(75)
-						.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_7.createSequentialGroup()
-								.addGap(140)
-								.addComponent(getLabel_10(), GroupLayout.PREFERRED_SIZE, 51, GroupLayout.PREFERRED_SIZE)
-								.addPreferredGap(ComponentPlacement.RELATED)
-								.addComponent(getTextField_9_1(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel_7.createSequentialGroup()
-								.addGap(103)
-								.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_panel_7.createSequentialGroup()
-										.addComponent(getLabel_2(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getTextField_4(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-									.addGroup(gl_panel_7.createSequentialGroup()
-										.addComponent(getLabel(), GroupLayout.PREFERRED_SIZE, 79, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getComboBox_2(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-										.addGap(46)
-										.addComponent(getLabel_1(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getComboBox_3(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-							.addGroup(gl_panel_7.createSequentialGroup()
-								.addComponent(getLabel_3(), GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
-								.addGap(4)
-								.addComponent(getTextField_5(), GroupLayout.PREFERRED_SIZE, 378, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap(209, Short.MAX_VALUE))
-			);
-			gl_panel_7.setVerticalGroup(
-				gl_panel_7.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_7.createSequentialGroup()
-						.addContainerGap()
-						.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getTextField_9_1(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addComponent(getLabel_10()))
-						.addGap(18)
-						.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
-							.addGroup(gl_panel_7.createSequentialGroup()
-								.addGap(3)
-								.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLabel(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-									.addComponent(getComboBox_2(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))
-							.addGroup(gl_panel_7.createSequentialGroup()
-								.addGap(3)
-								.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLabel_1(), GroupLayout.PREFERRED_SIZE, 17, GroupLayout.PREFERRED_SIZE)
-									.addComponent(getComboBox_3(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))))
-						.addGap(11)
-						.addGroup(gl_panel_7.createParallelGroup(Alignment.BASELINE)
-							.addComponent(getLabel_2())
-							.addComponent(getTextField_4(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-						.addGap(14)
-						.addGroup(gl_panel_7.createParallelGroup(Alignment.LEADING)
-							.addComponent(getLabel_3())
-							.addComponent(getTextField_5(), GroupLayout.PREFERRED_SIZE, 118, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap(138, Short.MAX_VALUE))
-			);
-			panel_7.setLayout(gl_panel_7);
-		}
-		return panel_7;
-	}
 	private JLabel getLblPuntuacin() {
 		if (lblPuntuacin == null) {
 			lblPuntuacin = new JLabel("Puntuaci\u00F3n:");
@@ -350,6 +303,13 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField getTextField_1() {
 		if (textField_1 == null) {
 			textField_1 = new JTextField();
+			textField_1.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c=arg0.getKeyChar();
+					if(c<'0' || c>'9')arg0.consume();
+				}
+			});
 			textField_1.setColumns(10);
 		}
 		return textField_1;
@@ -363,7 +323,15 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField getTextField_2() {
 		if (textField_2 == null) {
 			textField_2 = new JTextField();
+			textField_2.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c=arg0.getKeyChar();
+					if(c<'0' || c>'9')arg0.consume();
+				}
+			});
 			textField_2.setColumns(10);
+			
 		}
 		return textField_2;
 	}
@@ -388,73 +356,12 @@ public class VentanaAdminLogros extends JFrame {
 	}
 	private JComboBox getComboBox() {
 		if (comboBox == null) {
-			comboBox = new JComboBox();
+			DefaultComboBoxModel mdl=new DefaultComboBoxModel(GestorLogros.metodoSudoku());
+			comboBox = new JComboBox(mdl);
 		}
 		return comboBox;
 	}
-	private JLabel getLblNivelSudoku() {
-		if (lblNivelSudoku == null) {
-			lblNivelSudoku = new JLabel("Nivel Sudoku:");
-		}
-		return lblNivelSudoku;
-	}
-	private JComboBox getComboBox_1() {
-		if (comboBox_1 == null) {
-			comboBox_1 = new JComboBox();
-		}
-		return comboBox_1;
-	}
-	private JLabel getLabel() {
-		if (label == null) {
-			label = new JLabel("Nivel Sudoku:");
-		}
-		return label;
-	}
-	private JComboBox getComboBox_2() {
-		if (comboBox_2 == null) {
-			comboBox_2 = new JComboBox();
-		}
-		return comboBox_2;
-	}
-	private JLabel getLabel_1() {
-		if (label_1 == null) {
-			label_1 = new JLabel("Cod.Sudoku:");
-		}
-		return label_1;
-	}
-	private JComboBox getComboBox_3() {
-		if (comboBox_3 == null) {
-			comboBox_3 = new JComboBox();
-		}
-		return comboBox_3;
-	}
-	private JLabel getLabel_2() {
-		if (label_2 == null) {
-			label_2 = new JLabel("Num.Jugadores:");
-		}
-		return label_2;
-	}
-	private JTextField getTextField_4() {
-		if (textField_4 == null) {
-			textField_4 = new JTextField();
-			textField_4.setColumns(10);
-		}
-		return textField_4;
-	}
-	private JLabel getLabel_3() {
-		if (label_3 == null) {
-			label_3 = new JLabel("Descripci\u00F3n:");
-		}
-		return label_3;
-	}
-	private JTextField getTextField_5() {
-		if (textField_5 == null) {
-			textField_5 = new JTextField();
-			textField_5.setColumns(10);
-		}
-		return textField_5;
-	}
-	private JPanel getPanel_8() {
+	private JPanel getPanel_8() throws ExcepcionConectarBD, SQLException {
 		if (panel_8 == null) {
 			panel_8 = new JPanel();
 			panel_8.setLayout(new BorderLayout(0, 0));
@@ -466,8 +373,51 @@ public class VentanaAdminLogros extends JFrame {
 	}
 	private JScrollPane getScrollPane_1() {
 		if (scrollPane_1 == null) {
+			
 			scrollPane_1 = new JScrollPane();
+			scrollPane_1.setPreferredSize(new Dimension(200, 300));
 			scrollPane_1.setViewportView(getList_2());
+			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			list_2.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mousePressed(java.awt.event.MouseEvent e) {
+					try {
+						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
+						tes.next();
+						String ses=tes.getString("ID_SUDOKU");
+						ConexionBD.getConexionBD().closeResult(tes);
+						lblVarSudoku.setText(ses);
+						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
+						res.next();
+						String des=res.getString("DESCRIPCION");
+						ConexionBD.getConexionBD().closeResult(res);
+						lblVarDescripcin.setText(des);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					};
+					
+				}
+				
+				@Override
+				public void mouseExited(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseEntered(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+				}
+			});
+			
 		}
 		return scrollPane_1;
 	}
@@ -478,98 +428,81 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return panel_9;
 	}
-	private JPanel getPanel_10() {
+	private JPanel getPanel_10() throws ExcepcionConectarBD, SQLException {
 		if (panel_10 == null) {
 			panel_10 = new JPanel();
 			GroupLayout gl_panel_10 = new GroupLayout(panel_10);
 			gl_panel_10.setHorizontalGroup(
-				gl_panel_10.createParallelGroup(Alignment.LEADING)
+				gl_panel_10.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel_10.createSequentialGroup()
+						.addContainerGap(28, Short.MAX_VALUE)
+						.addGroup(gl_panel_10.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
+								.addComponent(getLblCodsudoku_1())
+								.addComponent(getLblDescripcin_2()))
+							.addComponent(getLabel_8(), GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel_10.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_panel_10.createSequentialGroup()
-										.addComponent(getLblCodsudoku_1())
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getLblVarSudoku()))
-									.addGroup(gl_panel_10.createSequentialGroup()
-										.addComponent(getLblDescripcin_2())
-										.addPreferredGap(ComponentPlacement.UNRELATED)
-										.addComponent(getLblVarDescripcin()))))
-							.addGroup(gl_panel_10.createSequentialGroup()
-								.addGap(23)
+								.addGap(36)
 								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(getTextField_8())
 									.addGroup(gl_panel_10.createSequentialGroup()
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getLabel_8(), GroupLayout.PREFERRED_SIZE, 71, GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(ComponentPlacement.RELATED)
-										.addComponent(getTextField_8()))
-									.addGroup(gl_panel_10.createSequentialGroup()
-										.addGap(73)
-										.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
+										.addGroup(gl_panel_10.createParallelGroup(Alignment.TRAILING)
 											.addGroup(gl_panel_10.createSequentialGroup()
-												.addGap(2)
+												.addComponent(getLabel_5(), GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+												.addGap(10)
+												.addComponent(getComboBox_5(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+											.addGroup(gl_panel_10.createSequentialGroup()
 												.addComponent(getLabel_6(), GroupLayout.PREFERRED_SIZE, 72, GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(ComponentPlacement.RELATED)
 												.addComponent(getTextField_6(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE)
 												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(getLabel_7(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(getTextField_7(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))
-											.addGroup(gl_panel_10.createSequentialGroup()
-												.addComponent(getLabel_4(), GroupLayout.PREFERRED_SIZE, 90, GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED)
-												.addComponent(getComboBox_4(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-												.addGap(38)
-												.addComponent(getLabel_5(), GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
-												.addGap(10)
-												.addComponent(getComboBox_5(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)))))))
-						.addGap(24))
+												.addComponent(getLabel_7(), GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)))
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(getTextField_7(), GroupLayout.PREFERRED_SIZE, 86, GroupLayout.PREFERRED_SIZE))))
+							.addGroup(gl_panel_10.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
+									.addComponent(getLblVarSudoku())
+									.addComponent(getLblVarDescripcin()))))
+						.addGap(93))
 			);
 			gl_panel_10.setVerticalGroup(
 				gl_panel_10.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_10.createSequentialGroup()
+						.addGap(51)
 						.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel_10.createSequentialGroup()
-								.addContainerGap()
-								.addGroup(gl_panel_10.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblCodsudoku_1())
-									.addComponent(getLblVarSudoku()))
+								.addComponent(getLblVarSudoku())
 								.addPreferredGap(ComponentPlacement.RELATED)
-								.addGroup(gl_panel_10.createParallelGroup(Alignment.BASELINE)
-									.addComponent(getLblDescripcin_2())
-									.addComponent(getLblVarDescripcin()))
-								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-									.addGroup(gl_panel_10.createSequentialGroup()
-										.addPreferredGap(ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
-										.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-											.addComponent(getComboBox_4(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-											.addComponent(getComboBox_5(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-										.addGap(8))
-									.addGroup(gl_panel_10.createSequentialGroup()
-										.addGap(187)
-										.addComponent(getLabel_4())
-										.addPreferredGap(ComponentPlacement.RELATED))))
+								.addComponent(getLblVarDescripcin())
+								.addContainerGap())
 							.addGroup(gl_panel_10.createSequentialGroup()
-								.addGap(232)
-								.addComponent(getLabel_5())
-								.addPreferredGap(ComponentPlacement.RELATED)))
-						.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-							.addComponent(getTextField_7(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
-							.addGroup(gl_panel_10.createSequentialGroup()
-								.addGap(3)
+								.addComponent(getLblCodsudoku_1())
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getLblDescripcin_2())
+								.addPreferredGap(ComponentPlacement.RELATED, 116, Short.MAX_VALUE)
 								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-									.addComponent(getLabel_7())
-									.addComponent(getTextField_6(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getComboBox_5(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+									.addGroup(gl_panel_10.createSequentialGroup()
+										.addGap(7)
+										.addComponent(getLabel_5())))
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
+									.addComponent(getTextField_7(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 									.addGroup(gl_panel_10.createSequentialGroup()
 										.addGap(3)
-										.addComponent(getLabel_6())))))
-						.addPreferredGap(ComponentPlacement.RELATED)
-						.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
-							.addComponent(getLabel_8())
-							.addComponent(getTextField_8(), GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE))
-						.addGap(21))
+										.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
+											.addComponent(getLabel_7())
+											.addComponent(getTextField_6(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addGroup(gl_panel_10.createSequentialGroup()
+												.addGap(3)
+												.addComponent(getLabel_6())))))
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addGroup(gl_panel_10.createParallelGroup(Alignment.LEADING)
+									.addComponent(getTextField_8(), GroupLayout.PREFERRED_SIZE, 97, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLabel_8()))
+								.addGap(69))))
 			);
 			panel_10.setLayout(gl_panel_10);
 		}
@@ -581,9 +514,15 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return lblCodsudoku_1;
 	}
-	private JLabel getLblVarSudoku() {
+	private JLabel getLblVarSudoku() throws ExcepcionConectarBD, SQLException {
 		if (lblVarSudoku == null) {
-			lblVarSudoku = new JLabel("Var sudoku");
+			lblVarSudoku = new JLabel();
+			if(list_2.getSelectedValue()!=null){
+				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
+				res.next();
+				String des=res.getString("ID_SUDOKU");
+				ConexionBD.getConexionBD().closeResult(res);
+			lblVarSudoku.setText(des);}
 		}
 		return lblVarSudoku;
 	}
@@ -593,29 +532,33 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return lblDescripcin_2;
 	}
-	private JLabel getLblVarDescripcin() {
+	private JLabel getLblVarDescripcin() throws ExcepcionConectarBD, SQLException {
 		if (lblVarDescripcin == null) {
-			lblVarDescripcin = new JLabel("Var descripci\u00F3n");
+			lblVarDescripcin = new JLabel();
+			if(list_2.getSelectedValue()!=null){
+			ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
+			res.next();
+			String des=res.getString("DESCRIPCION");
+			ConexionBD.getConexionBD().closeResult(res);
+			lblVarDescripcin.setText(des);}
+
 		}
 		return lblVarDescripcin;
 	}
 	private JButton getBtnModificar() {
 		if (btnModificar == null) {
 			btnModificar = new JButton("Modificar");
+			btnModificar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				try {
+					GestorLogros.modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
+				} catch (ExcepcionConectarBD e) {
+					e.printStackTrace();
+				}
+				}
+			});
 		}
 		return btnModificar;
-	}
-	private JLabel getLabel_4() {
-		if (label_4 == null) {
-			label_4 = new JLabel("Nivel Sudoku:");
-		}
-		return label_4;
-	}
-	private JComboBox getComboBox_4() {
-		if (comboBox_4 == null) {
-			comboBox_4 = new JComboBox();
-		}
-		return comboBox_4;
 	}
 	private JLabel getLabel_5() {
 		if (label_5 == null) {
@@ -625,7 +568,8 @@ public class VentanaAdminLogros extends JFrame {
 	}
 	private JComboBox getComboBox_5() {
 		if (comboBox_5 == null) {
-			comboBox_5 = new JComboBox();
+			DefaultComboBoxModel mdl=new DefaultComboBoxModel(GestorLogros.metodoSudoku());
+			comboBox_5 = new JComboBox(mdl);
 		}
 		return comboBox_5;
 	}
@@ -638,6 +582,13 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField getTextField_6() {
 		if (textField_6 == null) {
 			textField_6 = new JTextField();
+			textField_6.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c=arg0.getKeyChar();
+					if(c<'0' || c>'9')arg0.consume();
+				}
+			});
 			textField_6.setColumns(10);
 		}
 		return textField_6;
@@ -651,6 +602,13 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField getTextField_7() {
 		if (textField_7 == null) {
 			textField_7 = new JTextField();
+			textField_7.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c=arg0.getKeyChar();
+					if(c<'0' || c>'9')arg0.consume();
+				}
+			});
 			textField_7.setColumns(10);
 		}
 		return textField_7;
@@ -681,27 +639,57 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return textField;
 	}
-	private JLabel getLabel_10() {
-		if (label_10 == null) {
-			label_10 = new JLabel("C\u00F3digo:");
-		}
-		return label_10;
-	}
-	private JTextField getTextField_9_1() {
-		if (textField_9 == null) {
-			textField_9 = new JTextField();
-			textField_9.setColumns(10);
-		}
-		return textField_9;
-	}
 	private JScrollPane getScrollPane() throws ExcepcionConectarBD {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
+			scrollPane.setPreferredSize(new Dimension(200, 300));
 			scrollPane.setViewportView(getList_1());
+			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			list_1.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mousePressed(java.awt.event.MouseEvent e) {
+					try {
+						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+						tes.next();
+						String ses=tes.getString("ID_SUDOKU");
+						ConexionBD.getConexionBD().closeResult(tes);
+						label_12.setText(ses);
+						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+						res.next();
+						String des=res.getString("DESCRIPCION");
+						ConexionBD.getConexionBD().closeResult(res);
+						label_14.setText(des);
+						
+						
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					};
+					
+				}
+				
+				@Override
+				public void mouseExited(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseEntered(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+				}
+			});
 		}
 		return scrollPane;
 	}
-	private JPanel getPanel_4_1() {
+	private JPanel getPanel_4_1() throws ExcepcionConectarBD, SQLException {
 		if (panel_4 == null) {
 			panel_4 = new JPanel();
 			GroupLayout gl_panel_4 = new GroupLayout(panel_4);
@@ -740,14 +728,20 @@ public class VentanaAdminLogros extends JFrame {
 		return panel_4;
 	}
 	private JLabel getLabel_11_1() {
-		if (label_11 == null) {
-			label_11 = new JLabel("C\u00F3digo:");
+		if (lblCdigoSudoku == null) {
+			lblCdigoSudoku = new JLabel("C\u00F3digo Sudoku:");
 		}
-		return label_11;
+		return lblCdigoSudoku;
 	}
-	private JLabel getLabel_12_1() {
+	private JLabel getLabel_12_1() throws ExcepcionConectarBD, SQLException {
 		if (label_12 == null) {
-			label_12 = new JLabel("Var cod");
+			label_12 = new JLabel();
+			if(list_1.getSelectedValue()!=null){
+				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+				res.next();
+				String des=res.getString("ID_SUDOKU");
+				ConexionBD.getConexionBD().closeResult(res);
+			label_12.setText(des);}
 		}
 		return label_12;
 	}
@@ -757,9 +751,15 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return label_13;
 	}
-	private JLabel getLabel_14_1() {
+	private JLabel getLabel_14_1() throws ExcepcionConectarBD, SQLException {
 		if (label_14 == null) {
-			label_14 = new JLabel("Var descrip");
+			label_14 = new JLabel();
+			if(list_1.getSelectedValue()!=null){
+			ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+			res.next();
+			String des=res.getString("DESCRIPCION");
+			ConexionBD.getConexionBD().closeResult(res);
+			label_14.setText(des);}
 		}
 		return label_14;
 	}
@@ -767,39 +767,23 @@ public class VentanaAdminLogros extends JFrame {
 	//Kevin Arnold Arias Figueroa
 	//http://javiergarbedo.es/31-apuntes-java/arrays/326-cargar-un-jlist-con-los-datos-de-un-arraylist
 	//Javier Garcia Escobedo
-	private DefaultListModel llenarLista(){
-		try{
-			if(l==null){
-				l=new DefaultListModel();
-			}
-			System.out.println("hola");
-			l.clear();
-			System.out.println("hola");
-			ConexionBD con= ConexionBD.getConexionBD();
-			ResultSet resul=con.consultaBD("SELECT ID_L FROM LOGRO");
-			System.out.println("hola");
-			int i=0;
-			while(resul.next()){
-				System.out.println("hola");
-				l.add(i, resul.getString("ID_L"));
-				i++;
-			}
-			}catch(Exception e){
-				e=new ExcepcionConectarBD(); //Micky no se lo que quieres aqui pero creo que te falta el throw
-			}
-		return l;
-	}
 	private JList getList_1() throws ExcepcionConectarBD {
 		if (list_1 == null) {
-			this.llenarLista();
-			list_1 = new JList(l);
+			list_1 = new JList();
+			list_1.setVisibleRowCount(100);
 		}
+		list_1.setModel(GestorLogros.llenarLista());
 		return list_1;
 	}
 	private JList getList_2() {
 		if (list_2 == null) {
-			list_2 = new JList(l);
+			list_2 = new JList();
+			list_2.setVisibleRowCount(100);
 		}
+		list_2.setModel(GestorLogros.llenarLista());
 		return list_2;
 	}
+	
+		
+	
 }
