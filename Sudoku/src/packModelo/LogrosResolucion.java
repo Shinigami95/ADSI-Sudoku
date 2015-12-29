@@ -1,7 +1,8 @@
 package packModelo;
 
 import packControladores.ConexionBD;
-import packSudoku.excepciones.ExcepcionConectarBD;
+import packExcepciones.ExcepcionConectarBD;
+
 
 public class LogrosResolucion extends Logros{
 	

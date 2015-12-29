@@ -7,13 +7,14 @@ import java.util.Vector;
 import javax.swing.DefaultListModel;
 import javax.xml.bind.ParseConversionEvent;
 
+import packExcepciones.ExcepcionConectarBD;
 import packModelo.Logros;
-import packSudoku.excepciones.ExcepcionConectarBD;
+
 
 //
 public class GestorLogros {
 	
-public static void añadirLogro(String iDLogro,String iDSudoku,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD
+public static void anadirLogro(String iDLogro,String iDSudoku,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD
 {		
 	Logros.tipoLogro(iDLogro, iDSudoku, descripcion, puntos, numJug);
 	}	

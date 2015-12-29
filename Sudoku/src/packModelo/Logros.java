@@ -3,7 +3,8 @@ package packModelo;
 import javax.swing.JOptionPane;
 
 import packControladores.ConexionBD;
-import packSudoku.excepciones.ExcepcionConectarBD;
+import packExcepciones.ExcepcionConectarBD;
+
 
 public class Logros {
 	

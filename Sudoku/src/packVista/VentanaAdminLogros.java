@@ -25,9 +25,12 @@ import javax.swing.JComboBox;
 import javax.swing.JList;
 
 
+
 import packControladores.ConexionBD;
 import packControladores.GestorLogros;
-import packSudoku.excepciones.ExcepcionConectarBD;
+
+
+import packExcepciones.ExcepcionConectarBD;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -215,7 +218,7 @@ public class VentanaAdminLogros extends JFrame {
 				public void actionPerformed(ActionEvent arg0) {
 					if(GestorLogros.datos(textField.getText(),textField_3.getText())){
 						try {
-							GestorLogros.añadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
+							GestorLogros.anadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
 							getList_1();
 							getList_2();
 						} catch (ExcepcionConectarBD e) {
