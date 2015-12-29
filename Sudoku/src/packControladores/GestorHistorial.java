@@ -31,10 +31,12 @@ public class GestorHistorial {
 			historialS = new String[result.getFetchSize()][columnas];
 			//mientras haya tuplas en la base de datos
 			while(result.next()){
+				int k = 0;
 				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=0;j<columnas;j++){
+				for(int j=1;j<=columnas;j++){
 					//[i][0] = id_sudoku, [i][1] = fecha, [i][2] = completado, [i][3] = pto
-					historialS[i][j] = result.getString(i);
+					historialS[i][k] = result.getString(j);
+					k++;
 				}
 				i++;
 			}
@@ -55,11 +57,13 @@ public class GestorHistorial {
 			historialR = new String[result.getFetchSize()][columnas];
 			//mientras haya tuplas en la base de datos
 			while(result.next()){
+				int k = 0;
 				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=0;j<columnas;j++){
+				for(int j=1;j<=columnas;j++){
 					//[i][0] = id_reto, [i][1] = nombre_retador, [i][2] = nombre_retado, [i][3] = id_sudoku
 					//[i][4] = estado, [i][5] = fecha
-					historialR[i][j] = result.getString(i);
+					historialR[i][k] = result.getString(j);
+					k++;
 				}
 				i++;
 			}
@@ -80,10 +84,12 @@ public class GestorHistorial {
 			historialL = new String[result.getFetchSize()][columnas];
 			//mientras haya tuplas en la base de datos
 			while(result.next()){
+				int k = 0;
 				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=0;j<columnas;j++){
-					//[i][0] = descripcion, [i][1] = id_sudoku, [i][2] = fecha,
-					historialL[i][j] = result.getString(i);
+				for(int j=1;j<=columnas;j++){
+					//[i][0] = descripcion, [i][1] = id_sudoku, [i][2] = fecha
+					historialL[i][k] = result.getString(j);
+					k++;
 				}
 				i++;
 			}
