@@ -1,6 +1,5 @@
 package packVista;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,21 +10,20 @@ import java.awt.GridLayout;
 
 import javax.swing.JTabbedPane;
 
-import java.awt.FlowLayout;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JComboBox;
 
-public class VentanaHistorial extends JFrame {
+public class VentanaRanking extends JFrame {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static VentanaHistorial mVHistorial;
+	private static VentanaRanking mVHistorial;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
@@ -37,6 +35,7 @@ public class VentanaHistorial extends JFrame {
 	private JTextArea textArea_1;
 	private JButton btnVolver;
 	private JTextArea textArea;
+	private JComboBox ComboBoxSeleccionarSudoku;
 
 	/**
 	 * Launch the application.
@@ -45,7 +44,7 @@ public class VentanaHistorial extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaHistorial frame = new VentanaHistorial();
+					VentanaRanking frame = new VentanaRanking();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,13 +56,13 @@ public class VentanaHistorial extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public VentanaHistorial() {
+	public VentanaRanking() {
 		initialize();
 	}
 	
-	public static VentanaHistorial getVentanaHistorial(){
+	public static VentanaRanking getVentanaHistorial(){
 		if(mVHistorial==null){
-			mVHistorial = new VentanaHistorial();
+			mVHistorial = new VentanaRanking();
 		}
 		return mVHistorial;
 	}
@@ -71,7 +70,7 @@ public class VentanaHistorial extends JFrame {
 	private void initialize() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
-		setTitle("Historial");
+		setTitle("Ranking");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -82,9 +81,9 @@ public class VentanaHistorial extends JFrame {
 	private JTabbedPane getTabbedPane() {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-			tabbedPane.addTab("Sudokus", null, getPanel(), null);
+			tabbedPane.addTab("Puntuacion", null, getPanel(), null);
 			tabbedPane.addTab("Retos", null, getPanel_1(), null);
-			tabbedPane.addTab("Logros", null, getPanel_2(), null);
+			tabbedPane.addTab("Un sudoku", null, getPanel_2(), null);
 		}
 		return tabbedPane;
 	}
@@ -141,15 +140,22 @@ public class VentanaHistorial extends JFrame {
 			gl_panel_2.setHorizontalGroup(
 				gl_panel_2.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_2.createSequentialGroup()
-						.addContainerGap(330, Short.MAX_VALUE)
+						.addContainerGap(346, Short.MAX_VALUE)
 						.addComponent(getBtnVolver_2())
 						.addContainerGap())
-					.addComponent(getTextArea_2(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+					.addComponent(getTextArea_2(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+					.addGroup(gl_panel_2.createSequentialGroup()
+						.addGap(191)
+						.addComponent(getComboBoxSeleccionarSudoku(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(200, Short.MAX_VALUE))
 			);
 			gl_panel_2.setVerticalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
-						.addComponent(getTextArea_2(), GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
+				gl_panel_2.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panel_2.createSequentialGroup()
+						.addGap(6)
+						.addComponent(getComboBoxSeleccionarSudoku(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(getTextArea_2(), GroupLayout.PREFERRED_SIZE, 163, GroupLayout.PREFERRED_SIZE)
 						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 						.addComponent(getBtnVolver_2()))
 			);
@@ -195,5 +201,11 @@ public class VentanaHistorial extends JFrame {
 			textArea.setEditable(false);
 		}
 		return textArea;
+	}
+	private JComboBox getComboBoxSeleccionarSudoku() {
+		if (ComboBoxSeleccionarSudoku == null) {
+			ComboBoxSeleccionarSudoku = new JComboBox();
+		}
+		return ComboBoxSeleccionarSudoku;
 	}
 }
