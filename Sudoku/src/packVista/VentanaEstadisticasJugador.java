@@ -29,6 +29,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class VentanaEstadisticasJugador extends JFrame {
 
@@ -48,7 +49,9 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private static VentanaEstadisticasJugador mVent = null;
 	private JPanel panelDatosJugador;
 	private JPanel panelDatosSudoku;
-
+	private JScrollPane scrollPaneListSud;
+	private boolean estaCargado = false;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -80,13 +83,15 @@ public class VentanaEstadisticasJugador extends JFrame {
 		return mVent;
 	}
 	
-	private void cargarDatos(){
-		try {
-			this.setTitle("Estad\u00EDsticas del jugador: "+ GestorSesion.getGestor().getUserSesion());
-			this.getTextPaneDatosJugador().setText(GestorEstadisticas.getGestor().getHTMLEstadisticasJugadorSesion());
-			this.cargarSudokusEnLista();
-		} catch (ExcepcionConectarBD e) {
-			e.printStackTrace();
+	public void cargarDatos(){
+		if(!estaCargado){
+			try {
+				this.setTitle("Estad\u00EDsticas del jugador: "+ GestorSesion.getGestor().getUserSesion());
+				this.getTextPaneDatosJugador().setText(GestorEstadisticas.getGestor().getHTMLEstadisticasJugadorSesion());
+				this.cargarSudokusEnLista();
+			} catch (ExcepcionConectarBD e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -159,8 +164,8 @@ public class VentanaEstadisticasJugador extends JFrame {
 			panelSelectSudoku.setBackground(Color.WHITE);
 			panelSelectSudoku.setLayout(new BorderLayout(0, 0));
 			panelSelectSudoku.add(getLblNewLabel(), BorderLayout.NORTH);
-			panelSelectSudoku.add(getListSudokus(), BorderLayout.CENTER);
 			panelSelectSudoku.add(getBtnVerEst(), BorderLayout.SOUTH);
+			panelSelectSudoku.add(getScrollPaneListSud(), BorderLayout.CENTER);
 		}
 		return panelSelectSudoku;
 	}
@@ -214,6 +219,14 @@ public class VentanaEstadisticasJugador extends JFrame {
 			panelDatosSudoku.add(getTextPaneSelectSudoku());
 		}
 		return panelDatosSudoku;
+	}
+	
+	private JScrollPane getScrollPaneListSud() {
+		if (scrollPaneListSud == null) {
+			scrollPaneListSud = new JScrollPane();
+			scrollPaneListSud.setViewportView(getListSudokus());
+		}
+		return scrollPaneListSud;
 	}
 	
 	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{

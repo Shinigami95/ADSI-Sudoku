@@ -23,12 +23,14 @@ import packExcepciones.ExcepcionConectarBD;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JList;
 import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+import javax.swing.JScrollPane;
 
 public class VentanaEstadisticasAdministrador extends JFrame {
 
@@ -53,6 +55,9 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 	private JLabel lblJugadores;
 	private JButton btnVerEstJug;
 	private JList<String> listJugadores;
+	private boolean estaCargado = false; 
+	private JScrollPane scrollPaneListJug;
+	private JScrollPane scrollPaneListSud;
 
 	/**
 	 * Launch the application.
@@ -85,13 +90,16 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		return mVent;
 	}
 	
-	private void cargarDatos(){
-		try {
-			this.setTitle("Estad\u00EDsticas administrador");
-			this.cargarJugadoresEnLista();
-			this.cargarSudokusEnLista();
-		} catch (ExcepcionConectarBD e) {
-			e.printStackTrace();
+	public void cargarDatos(){
+		if(!estaCargado){
+			try {
+				this.setTitle("Estad\u00EDsticas administrador");
+				this.cargarJugadoresEnLista();
+				this.cargarSudokusEnLista();
+				estaCargado = true;
+			} catch (ExcepcionConectarBD e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -130,8 +138,8 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 	}
 	
 	private void initialize() {
+		addWindowListener(getControlador());
 		setBackground(Color.WHITE);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 790, 430);
 		setMinimumSize(new Dimension(790, 430));
 		contentPane = new JPanel();
@@ -179,8 +187,8 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 			panelSelectSudoku.setBackground(Color.WHITE);
 			panelSelectSudoku.setLayout(new BorderLayout(0, 0));
 			panelSelectSudoku.add(getLblSudokus(), BorderLayout.NORTH);
-			panelSelectSudoku.add(getListSudokus(), BorderLayout.CENTER);
 			panelSelectSudoku.add(getBtnVerEstSudoku(), BorderLayout.SOUTH);
+			panelSelectSudoku.add(getScrollPane_1(), BorderLayout.CENTER);
 		}
 		return panelSelectSudoku;
 	}
@@ -254,8 +262,8 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 			panelSelectJugador.setBackground(Color.WHITE);
 			panelSelectJugador.setLayout(new BorderLayout(0, 0));
 			panelSelectJugador.add(getLblJugadores(), BorderLayout.NORTH);
-			panelSelectJugador.add(getListJugadores(), BorderLayout.CENTER);
 			panelSelectJugador.add(getBtnVerEstJug(), BorderLayout.SOUTH);
+			panelSelectJugador.add(getScrollPaneListJug(), BorderLayout.CENTER);
 		}
 		return panelSelectJugador;
 	}
@@ -285,9 +293,31 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		return listJugadores;
 	}
 	
+	private JScrollPane getScrollPaneListJug() {
+		if (scrollPaneListJug == null) {
+			scrollPaneListJug = new JScrollPane();
+			scrollPaneListJug.setViewportView(getListJugadores());
+		}
+		return scrollPaneListJug;
+	}
+	
+	private JScrollPane getScrollPane_1() {
+		if (scrollPaneListSud == null) {
+			scrollPaneListSud = new JScrollPane();
+			scrollPaneListSud.setViewportView(getListSudokus());
+		}
+		return scrollPaneListSud;
+	}
+	
 	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
 		private String selItemSud = "";
 		private String selItemJug = "";
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			VentanaAdmin.getVentana().setVisible(true);
+			VentanaEstadisticasAdministrador.getVentana().setVisible(false);
+		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {

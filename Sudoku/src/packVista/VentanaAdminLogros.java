@@ -100,7 +100,7 @@ public class VentanaAdminLogros extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					getVentana();
+					getVentana().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -113,12 +113,11 @@ public class VentanaAdminLogros extends JFrame {
 	 * @throws ExcepcionConectarBD 
 	 * @throws SQLException 
 	 */
-	public static void getVentana() throws ExcepcionConectarBD, SQLException{
+	public static VentanaAdminLogros getVentana() throws ExcepcionConectarBD, SQLException{
 		if(ventana==null){
 			ventana = new VentanaAdminLogros();
-			
 		}
-		ventana.setVisible(true);
+		return ventana;
 	}
 	private VentanaAdminLogros() throws ExcepcionConectarBD, SQLException{
 		initialize();
@@ -129,8 +128,7 @@ public class VentanaAdminLogros extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 				ventana.setVisible(false);
-				VentanaAdmin.getVentana();
-				
+				VentanaAdmin.getVentana().setVisible(true);
 			}
 		});
 		setBounds(100, 100, 559, 361);

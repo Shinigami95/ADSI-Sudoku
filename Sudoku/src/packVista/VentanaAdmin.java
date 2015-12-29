@@ -9,9 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import packExcepciones.ExcepcionConectarBD;
+
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
 
 public class VentanaAdmin extends JFrame {
 
@@ -28,7 +32,7 @@ public class VentanaAdmin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					getVentana();
+					getVentana().setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -39,11 +43,11 @@ public class VentanaAdmin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public static void getVentana(){
+	public static VentanaAdmin getVentana(){
 		if(ventana==null){
 			ventana=new VentanaAdmin();
 		}
-		ventana.setVisible(true);
+		return ventana;
 	}
 	private VentanaAdmin(){
 		initialize();
@@ -76,8 +80,14 @@ public class VentanaAdmin extends JFrame {
 			btnNewButton_1 = new JButton("Administrar Logros");
 			btnNewButton_1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-						VentanaAdminLogros.main(null);
-						VentanaAdmin.this.setVisible(false);
+						try {
+							VentanaAdminLogros.getVentana().setVisible(true);
+							VentanaAdmin.getVentana().setVisible(false);
+						} catch (ExcepcionConectarBD e) {
+							e.printStackTrace();
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
 				}
 			});
 			btnNewButton_1.setBounds(129, 136, 200, 23);
@@ -87,7 +97,15 @@ public class VentanaAdmin extends JFrame {
 	private JButton getBtnNewButton_2() {
 		if (btnNewButton_2 == null) {
 			btnNewButton_2 = new JButton("Estad\u00EDsticas");
+			btnNewButton_2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+						VentanaEstadisticasAdministrador.getVentana().cargarDatos();
+						VentanaEstadisticasAdministrador.getVentana().setVisible(true);
+						VentanaAdmin.getVentana().setVisible(false);
+				}
+			});
 			btnNewButton_2.setBounds(129, 187, 200, 23);
+			
 		}
 		return btnNewButton_2;
 	}
