@@ -54,4 +54,22 @@ public class GestorSudokus {
 			return null;
 		}
 	}
+
+	public String[] getDificultades() throws ExcepcionConectarBD {
+		try{
+			String sql = "SELECT DIFICULTAD FROM SUDOKU GROUP BY DIFICULTAD;";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			result.last();
+			String[] data = new String[result.getRow()];
+			result.beforeFirst();
+			for(int i = 0;result.next();i++){
+				data[i] = String.valueOf(result.getInt("DIFICULTAD"));
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+			return data;
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+			return null;
+		}
+	}
 }

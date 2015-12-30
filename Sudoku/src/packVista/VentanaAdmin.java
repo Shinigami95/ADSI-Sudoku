@@ -1,7 +1,6 @@
 package packVista;
 
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -19,6 +18,10 @@ import java.sql.SQLException;
 
 public class VentanaAdmin extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JButton btnNewButton;
 	private JButton btnNewButton_1;
@@ -99,7 +102,6 @@ public class VentanaAdmin extends JFrame {
 			btnNewButton_2 = new JButton("Estad\u00EDsticas");
 			btnNewButton_2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-						VentanaEstadisticasAdministrador.getVentana().cargarDatos();
 						VentanaEstadisticasAdministrador.getVentana().setVisible(true);
 						VentanaAdmin.getVentana().setVisible(false);
 				}

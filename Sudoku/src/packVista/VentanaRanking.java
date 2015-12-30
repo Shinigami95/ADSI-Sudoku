@@ -7,15 +7,17 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.GridLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JTabbedPane;
-
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
+
 
 public class VentanaRanking extends JFrame {
 
@@ -36,7 +38,8 @@ public class VentanaRanking extends JFrame {
 	private JButton btnVolver;
 	private JTextArea textArea;
 	private JComboBox ComboBoxSeleccionarSudoku;
-
+	private Controlador controlador;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -60,7 +63,7 @@ public class VentanaRanking extends JFrame {
 		initialize();
 	}
 	
-	public static VentanaRanking getVentanaHistorial(){
+	public static VentanaRanking getVentana(){
 		if(mVHistorial==null){
 			mVHistorial = new VentanaRanking();
 		}
@@ -68,8 +71,8 @@ public class VentanaRanking extends JFrame {
 	}
 	
 	private void initialize() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		addWindowListener(getControlador());
+		setBounds(100, 100, 450, 320);
 		setTitle("Ranking");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -207,5 +210,21 @@ public class VentanaRanking extends JFrame {
 			ComboBoxSeleccionarSudoku = new JComboBox();
 		}
 		return ComboBoxSeleccionarSudoku;
+	}
+	
+	private Controlador getControlador(){
+		if(controlador==null){
+			controlador = new Controlador();
+		}
+		return controlador;
+	}
+	
+	private class Controlador extends WindowAdapter{
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			VentanaJugador.getVentana().setVisible(true);
+			VentanaRanking.getVentana().setVisible(false);
+		}
 	}
 }

@@ -55,7 +55,6 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 	private JLabel lblJugadores;
 	private JButton btnVerEstJug;
 	private JList<String> listJugadores;
-	private boolean estaCargado = false;
 	private JScrollPane scrollPaneListJug;
 	private JScrollPane scrollPaneListSud;
 
@@ -67,7 +66,6 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 			public void run() {
 				try {
 					VentanaEstadisticasAdministrador frame = VentanaEstadisticasAdministrador.getVentana();
-					VentanaEstadisticasAdministrador.getVentana().cargarDatos(); // cargar datos
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -86,20 +84,18 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 	public static VentanaEstadisticasAdministrador getVentana(){
 		if(mVent==null){
 			mVent = new VentanaEstadisticasAdministrador();
+			mVent.cargarDatos();
 		}
 		return mVent;
 	}
 	
-	public void cargarDatos(){
-		if(!estaCargado){
-			try {
-				this.setTitle("Estad\u00EDsticas administrador");
-				this.cargarJugadoresEnLista();
-				this.cargarSudokusEnLista();
-				estaCargado = true;
-			} catch (ExcepcionConectarBD e) {
-				e.printStackTrace();
-			}
+	private void cargarDatos(){
+		try {
+			this.setTitle("Estad\u00EDsticas administrador");
+			this.cargarJugadoresEnLista();
+			this.cargarSudokusEnLista();
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -119,7 +115,7 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		getListSudokus().setSelectedIndex(0);
 	}
 	
-	public void cargarDatosSudoku(String pIdSudoku){
+	private void cargarDatosSudoku(String pIdSudoku){
 		try {
 			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasSudoku(pIdSudoku);
 			this.getTextPaneDatosSudoku().setText(datosSud);
@@ -128,7 +124,7 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		}
 	}
 	
-	public void cargarDatosJugador(String pNombre){
+	private void cargarDatosJugador(String pNombre){
 		try {
 			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasJugador(pNombre);
 			this.getTextPaneDatosJugador().setText(datosSud);

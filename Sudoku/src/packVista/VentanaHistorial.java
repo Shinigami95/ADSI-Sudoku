@@ -12,12 +12,17 @@ import java.awt.GridLayout;
 import javax.swing.JTabbedPane;
 
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
 
 public class VentanaHistorial extends JFrame {
 
@@ -37,6 +42,7 @@ public class VentanaHistorial extends JFrame {
 	private JTextArea textArea_1;
 	private JButton btnVolver;
 	private JTextArea textArea;
+	private Controlador controlador;
 
 	/**
 	 * Launch the application.
@@ -61,7 +67,7 @@ public class VentanaHistorial extends JFrame {
 		initialize();
 	}
 	
-	public static VentanaHistorial getVentanaHistorial(){
+	public static VentanaHistorial getVentana(){
 		if(mVHistorial==null){
 			mVHistorial = new VentanaHistorial();
 		}
@@ -69,8 +75,8 @@ public class VentanaHistorial extends JFrame {
 	}
 	
 	private void initialize() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		addWindowListener(getControlador());
+		setBounds(100, 100, 465, 320);
 		setTitle("Historial");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -195,5 +201,21 @@ public class VentanaHistorial extends JFrame {
 			textArea.setEditable(false);
 		}
 		return textArea;
+	}
+	
+	private Controlador getControlador(){
+		if(controlador==null){
+			controlador = new Controlador();
+		}
+		return controlador;
+	}
+	
+	private class Controlador extends WindowAdapter{
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			VentanaJugador.getVentana().setVisible(true);
+			VentanaHistorial.getVentana().setVisible(false);
+		}
 	}
 }

@@ -23,12 +23,14 @@ import packExcepciones.ExcepcionConectarBD;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JList;
 import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+
 import javax.swing.JScrollPane;
 
 public class VentanaEstadisticasJugador extends JFrame {
@@ -50,7 +52,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private JPanel panelDatosJugador;
 	private JPanel panelDatosSudoku;
 	private JScrollPane scrollPaneListSud;
-	private boolean estaCargado = false;
 	
 	/**
 	 * Launch the application.
@@ -60,7 +61,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 			public void run() {
 				try {
 					VentanaEstadisticasJugador frame = VentanaEstadisticasJugador.getVentana();
-					VentanaEstadisticasJugador.getVentana().cargarDatos(); // cargar datos
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -79,19 +79,18 @@ public class VentanaEstadisticasJugador extends JFrame {
 	public static VentanaEstadisticasJugador getVentana(){
 		if(mVent==null){
 			mVent = new VentanaEstadisticasJugador();
+			mVent.cargarDatos();
 		}
 		return mVent;
 	}
 	
-	public void cargarDatos(){
-		if(!estaCargado){
-			try {
-				this.setTitle("Estad\u00EDsticas del jugador: "+ GestorSesion.getGestor().getUserSesion());
-				this.getTextPaneDatosJugador().setText(GestorEstadisticas.getGestor().getHTMLEstadisticasJugadorSesion());
-				this.cargarSudokusEnLista();
-			} catch (ExcepcionConectarBD e) {
-				e.printStackTrace();
-			}
+	private void cargarDatos(){
+		try {
+			this.setTitle("Estad\u00EDsticas del jugador: "+ GestorSesion.getGestor().getUserSesion());
+			this.getTextPaneDatosJugador().setText(GestorEstadisticas.getGestor().getHTMLEstadisticasJugadorSesion());
+			this.cargarSudokusEnLista();
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -103,7 +102,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 		getListSudokus().setSelectedIndex(0);
 	}
 	
-	public void cargarDatosSudoku(String pIdSudoku){
+	private void cargarDatosSudoku(String pIdSudoku){
 		try {
 			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasSudoku(pIdSudoku);
 			this.getPanelDatosSudoku().removeAll();
@@ -115,9 +114,9 @@ public class VentanaEstadisticasJugador extends JFrame {
 	}
 	
 	private void initialize() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 700, 430);
 		setMinimumSize(new Dimension(700, 430));
+		addWindowListener(getControlador());
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -231,6 +230,12 @@ public class VentanaEstadisticasJugador extends JFrame {
 	
 	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
 		private String selItem = "";
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			VentanaJugador.getVentana().setVisible(true);
+			VentanaEstadisticasJugador.getVentana().setVisible(false);
+		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
