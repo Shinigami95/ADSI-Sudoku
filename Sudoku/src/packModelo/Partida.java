@@ -82,7 +82,7 @@ public class Partida extends Observable{
 		return this.sudoku.esCorrecto();
 	}
 	
-	public String getId() {
+	public int getId() {
 		return this.sudoku.getId();
 	}
 	

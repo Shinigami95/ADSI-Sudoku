@@ -4,12 +4,14 @@ import java.util.Observer;
 
 public class Sudoku{
 
-	private String id;
+	private int id;
+	private int dif;
 	private MatrizSudoku solucion;
 	private MatrizSudoku inicial;
 
-	public Sudoku(String pID, String pSolucion, String pSinRes) {
+	public Sudoku(int pID, int pDif, String pSolucion, String pSinRes) {
 		this.id = pID;
+		this.dif = pDif;
 		this.solucion = new MatrizSudoku(pSolucion);
 		this.inicial = new MatrizSudoku(pSinRes);
 	}
@@ -38,18 +40,14 @@ public class Sudoku{
 		return this.solucion.getValor(pX, pY);
 	}
 	
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 	
-	public boolean tieneId(String pId) {
-		return this.id.equals(pId);
+	public boolean tieneId(int pId) {
+		return this.id == pId;
 	}
 	
-	public Sudoku clone(){
-		return new Sudoku(this.id,this.solucion.toString(),this.inicial.toString());
-	}
-
 	public String toStringMatrizInicial() {
 		return this.inicial.toStringValores();
 	}

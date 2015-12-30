@@ -1,10 +1,11 @@
 package packControladores;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Observer;
 
 import packExcepciones.ExcepcionConectarBD;
 import packExcepciones.ExcepcionNoHaySudokuCargado;
-import packModelo.Dificultad;
 import packModelo.Partida;
 import packModelo.Sudoku;
 
@@ -17,8 +18,6 @@ public class GestorPartida {
 	private GestorPartida() {
 		this.game = null;
 		this.borradorActivo = false;
-		this.cargarSudoku();
-		System.out.println("NUEVO GESTORPARTIDA");
 	}
 	
 	public static GestorPartida getGestor() {
@@ -36,7 +35,7 @@ public class GestorPartida {
 		return this.game.esCorrecto();
 	}
 
-	public String getSudokuId(){
+	public int getSudokuId(){
 		return this.game.getId();
 	}
 	
@@ -55,8 +54,43 @@ public class GestorPartida {
 	public void quitarValor(int pX, int pY) {
 		this.game.anadirNumero('0', pX, pY);
 	}
+	
+	public void cargarSudokuMANUAL() {
+		System.out.println("GestorPartida.cargarSudoku:");
+		int id = 111;
+		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
+		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
+		Sudoku sud = new Sudoku(id, 1, solSud, sinRes);
+		this.game = new Partida(sud, false, 0, 90, 5);
+	}
 
-	public void cargarSudParaUs(Dificultad pD, String pU) throws ExcepcionNoHaySudokuCargado{
+	public void cargarSudParaUs(int pD, String pU) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
+		//TODO
+		try{
+			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL FROM SUDOKU "
+						+ "WHERE ACTIVO='S' AND DIFICULTAD="+pD+" "
+						+ "AND ID_S NOT IN (SELECT ID_SUDOKU FROM JUGADO WHERE NOMBRE_JUG='"+pU+"') ";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			int idS, dif;
+			String mI, mS;
+			Sudoku sud;
+			Partida part;
+			if(result.next()){ // coge el primero, del resto pasa por ahora
+				idS = result.getInt("ID_S");
+				dif = result.getInt("DIFICULTAD");
+				mI = result.getString("M_INIC");
+				mS = result.getString("M_SOL");
+				sud = new Sudoku(idS, dif, mS, mI);
+			//TODO	part = new Partida(pSud, pEsReto, pT, pA, pC)
+				
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void cargarPartidaPendienteDelUsuario(String pU){
 		//TODO
 	}
 	
@@ -92,15 +126,6 @@ public class GestorPartida {
 		this.game.ayudar();
 	}
 
-	private void cargarSudoku() {
-		System.out.println("GestorPartida.cargarSudoku:");
-		String id = "1111";
-		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
-		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
-		Sudoku sud = new Sudoku(id, solSud, sinRes);
-		this.game = new Partida(sud, false, 0, 90, 5);
-	}
-
 	public void pausar() {
 		this.game.pausar();
 	}
@@ -118,7 +143,6 @@ public class GestorPartida {
 	}
 
 	public boolean comprobar(int pCorX, int pCorY) {
-		// TODO Auto-generated method stub
 		return this.game.comprobar(pCorX,pCorY);
 	}
 

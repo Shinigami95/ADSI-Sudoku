@@ -81,6 +81,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					GestorPartida.getGestor().cargarSudokuMANUAL();
 					VentanaSudoku frame = VentanaSudoku.getVentanaSudoku();
 					frame.setVisible(true);
 					frame.repaint();
