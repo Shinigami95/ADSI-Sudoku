@@ -16,7 +16,7 @@ import javax.swing.JButton;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
-public class VentanaError extends JDialog {
+public class VentanaExito extends JDialog {
 	private JPanel panel;
 	private JPanel panel_1;
 	private JTextArea textError;
@@ -30,7 +30,7 @@ public class VentanaError extends JDialog {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaError dialog = new VentanaError("ERROR DE PRUEBA");
+					VentanaExito dialog = new VentanaExito("EXITO DE PRUEBA");
 					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 					dialog.setVisible(true);
 				} catch (Exception e) {
@@ -43,12 +43,12 @@ public class VentanaError extends JDialog {
 	/**
 	 * Create the dialog.
 	 */
-	public VentanaError(String pError) {
+	public VentanaExito(String pError) {
 		initialize(pError);
 	}
 	private void initialize(String pError) {
 		setResizable(false);
-		setTitle("ERROR");
+		setTitle("EXITO");
 		setModal(true);
 		setBounds(100, 100, 398, 150);
 		getContentPane().add(getPanel(), BorderLayout.CENTER);

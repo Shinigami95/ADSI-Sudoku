@@ -116,12 +116,18 @@ public class VentanaRecuperarPass1 extends JDialog {
 			
 			if(arg0.getActionCommand().equals("OK")){
 				try{
-					String pregunta = GestorJugadores.getGestor().buscarPreguntaJugador(textUsuario.getText());
-					if(pregunta.length()>0){
-						new VentanaRecuperarPass2(pregunta,textUsuario.getText());
+					if(textUsuario.getText().length()==0){
+						new VentanaError("Introduzca un usuario.");
 					}
 					else{
-						new VentanaError("No existe ese usuario.");
+						String pregunta = GestorJugadores.getGestor().buscarPreguntaJugador(textUsuario.getText());
+						if(pregunta.length()>0){
+							dispose();
+							new VentanaRecuperarPass2(pregunta,textUsuario.getText());
+						}
+						else{
+							new VentanaError("No existe ese usuario.");
+						}
 					}
 				}
 				catch(Exception e){

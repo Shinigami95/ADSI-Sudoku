@@ -213,7 +213,7 @@ public class VentanaInicio extends JFrame {
 						System.out.println("JUGADOR");
 					}
 					else{
-						new VentanaError("Clave o usuario no correcto.");
+						new VentanaError("Clave o usuario incorrecto.");
 					}
 				}
 				catch(Exception e){

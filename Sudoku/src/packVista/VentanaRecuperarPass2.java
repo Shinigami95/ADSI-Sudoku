@@ -15,11 +15,11 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import packControladores.GestorJugadores;
-import packControladores.GestorSesion;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.SwingConstants;
+import javax.swing.JTextArea;
+import java.awt.Color;
 
 public class VentanaRecuperarPass2 extends JDialog {
 
@@ -29,8 +29,8 @@ public class VentanaRecuperarPass2 extends JDialog {
 	private JButton btnOK;
 	private JButton btnCancel;
 	private ControladorRecuperar controlador;
-	private JLabel lblPregunta;
 	private String usuario;
+	private JTextArea textPregunta;
 
 	/**
 	 * Launch the application.
@@ -66,25 +66,25 @@ public class VentanaRecuperarPass2 extends JDialog {
 				.addGroup(gl_contentPanel.createSequentialGroup()
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addGap(90)
+							.addGap(111)
 							.addComponent(getLblUsuario())
-							.addGap(65)
+							.addGap(35)
 							.addComponent(getTextUsuario(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_contentPanel.createSequentialGroup()
-							.addGap(69)
-							.addComponent(getLblPregunta(), GroupLayout.PREFERRED_SIZE, 234, GroupLayout.PREFERRED_SIZE)))
-					.addContainerGap(81, Short.MAX_VALUE))
+							.addGap(33)
+							.addComponent(getTextPregunta(), GroupLayout.PREFERRED_SIZE, 324, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap(27, Short.MAX_VALUE))
 		);
 		gl_contentPanel.setVerticalGroup(
 			gl_contentPanel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_contentPanel.createSequentialGroup()
-					.addGap(20)
-					.addComponent(getLblPregunta())
-					.addPreferredGap(ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+					.addContainerGap()
+					.addComponent(getTextPregunta(), GroupLayout.DEFAULT_SIZE, 63, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(getTextUsuario(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(getLblUsuario()))
-					.addGap(42))
+					.addGap(23))
 		);
 		contentPanel.setLayout(gl_contentPanel);
 		JPanel buttonPane = new JPanel();
@@ -93,7 +93,7 @@ public class VentanaRecuperarPass2 extends JDialog {
 		buttonPane.add(getBtnCancel());
 		buttonPane.add(getBtnOK());
 		addWindowListener(getControladorRecuperar());
-		lblPregunta.setText(pPregunta+"?");
+		textPregunta.setText(pPregunta+"?");
 		this.setVisible(true);
 	}
 	
@@ -131,12 +131,16 @@ public class VentanaRecuperarPass2 extends JDialog {
 		return btnCancel;
 	}
 	
-	private JLabel getLblPregunta() {
-		if (lblPregunta == null) {
-			lblPregunta = new JLabel("New label");
-			lblPregunta.setHorizontalAlignment(SwingConstants.CENTER);
+	private JTextArea getTextPregunta() {
+		if (textPregunta == null) {
+			textPregunta = new JTextArea();
+			textPregunta.setWrapStyleWord(true);
+			textPregunta.setForeground(Color.BLACK);
+			textPregunta.setLineWrap(true);
+			textPregunta.setEditable(false);
+			textPregunta.setOpaque(false);
 		}
-		return lblPregunta;
+		return textPregunta;
 	}
 	
 	private ControladorRecuperar getControladorRecuperar() {
@@ -153,21 +157,20 @@ public class VentanaRecuperarPass2 extends JDialog {
 			dispose();
 		}
 
-		public void actionPerformed(ActionEvent arg0){
-			
+		public void actionPerformed(ActionEvent arg0){	
 			if(arg0.getActionCommand().equals("OK")){
 				try{
-					String pregunta = GestorJugadores.getGestor().buscarPreguntaJugador(usuario);
-					if(pregunta.length()>0){
+					if(textRespuesta.getText().length()==0){
+						new VentanaError("Introduzca una respuesta.");
+					}
+					else{
 						if(GestorJugadores.getGestor().comprobarRespuesta(usuario, textRespuesta.getText())){
+							dispose();
 							new VentanaRecuperarPass3(usuario);
 						}
 						else{
 							new VentanaError("Respuesta incorrecta.");
 						}
-					}
-					else{
-						new VentanaError("No existe ese usuario.");
 					}
 				}
 				catch(Exception e){

@@ -223,9 +223,10 @@ public class VentanaRegistro extends JDialog {
 				else{
 					String pass= new String(textPass.getPassword());
 					try{
-						String respuesta=GestorJugadores.getGestor().registrarJugador(textUsuario.getText(), pass, textPregunta.getText(), textRespuesta.getText());
-						if(respuesta.length()>0){
-							new VentanaError("Bienvenido "+respuesta+".");
+						String nombre=GestorJugadores.getGestor().registrarJugador(textUsuario.getText(), pass, textPregunta.getText(), textRespuesta.getText());
+						if(nombre.length()>0){
+							dispose();
+							new VentanaExito("Bienvenido "+nombre+".");
 						}
 						else{
 							new VentanaError("Ya existe un usuario con ese nombre.");
