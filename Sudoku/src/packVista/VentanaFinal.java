@@ -9,11 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import java.awt.FlowLayout;
 import java.awt.event.MouseListener;
+import java.net.URISyntaxException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -23,7 +25,13 @@ import packControladores.ConexionBD;
 import packControladores.GestorLogros;
 import packControladores.GestorPartida;
 import packControladores.GestorSesion;
+import packControladores.GestorTiempo;
+import packControladores.GestorTwitter;
 import packExcepciones.ExcepcionConectarBD;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.io.IOException;
 
 public class VentanaFinal extends JFrame {
 
@@ -44,6 +52,8 @@ public class VentanaFinal extends JFrame {
 	private JLabel lblDescripcin;
 	private JLabel label_12;
 	private JLabel label_14;
+	private JButton btnCompartir;
+	private JButton btnCompartirLogro;
 
 	/**
 	 * Launch the application.
@@ -151,12 +161,13 @@ public class VentanaFinal extends JFrame {
 			panel.add(getLabel());
 			panel.add(getLabel_3());
 			panel.add(getLabel_2());
+			panel.add(getBtnCompartir());
 		}
 		return panel;
 	}
 	private JLabel getLabel() {
 		if (label == null) {
-			label = new JLabel("var tiempo");
+			label = new JLabel(GestorTiempo.getGestor().tiempoAString());
 			label.setBounds(0, 0, 51, 14);
 		}
 		return label;
@@ -170,7 +181,7 @@ public class VentanaFinal extends JFrame {
 	}
 	private JLabel getLabel_2() {
 		if (label_2 == null) {
-			label_2 = new JLabel("varpuntos");
+			label_2 = new JLabel(Integer.toString(GestorPartida.getGestor().calcularPuntuacion()));
 			label_2.setBounds(0, 0, 49, 14);
 		}
 		return label_2;
@@ -212,6 +223,7 @@ public class VentanaFinal extends JFrame {
 			panel_2.add(getLblDescripcin());
 			panel_2.add(getLabel_12());
 			panel_2.add(getLabel_14());
+			panel_2.add(getBtnCompartirLogro());
 		}
 		return panel_2;
 	}
@@ -220,7 +232,6 @@ public class VentanaFinal extends JFrame {
 			list_1 = new JList();
 			list_1.setVisibleRowCount(100);
 		}
-		//TODO Micky los puntos y el id del sudoku se cogen de la siguiente manera
 		list_1.setModel(GestorLogros.logrosConseguidos(GestorSesion.getGestor().getUserSesion(), GestorPartida.getGestor().getIdSud(), GestorPartida.getGestor().calcularPuntuacion()));
 		return list_1;
 	}
@@ -262,6 +273,45 @@ public class VentanaFinal extends JFrame {
 				label_14.setText(des);}
 		}
 		return label_14;
+	}
+	private JButton getBtnCompartir() {
+		if (btnCompartir == null) {
+			btnCompartir = new JButton("Compartir");
+			btnCompartir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					try {
+						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido "+label_2.getText()+
+								" puntos en el sudoku "+Integer.toString(GestorPartida.getGestor().getIdSud()));
+					} catch (IOException e) {
+						e.printStackTrace();
+					} catch (URISyntaxException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnCompartir;
+	}
+	private JButton getBtnCompartirLogro() {
+		if (btnCompartirLogro == null) {
+			btnCompartirLogro = new JButton("Compartir Logro");
+			btnCompartirLogro.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if(list_1.getSelectedIndex()>-1){
+					try {
+						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido el logro "+list_1.getSelectedValue().toString()+" por "+label_14.getText());
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}}else{JOptionPane.showMessageDialog(null, "Seleccione un logro de la lista para compartirlo.");}
+				}
+			});
+			btnCompartirLogro.setBounds(38, 151, 152, 23);
+		}
+		return btnCompartirLogro;
 	}
 }
 
