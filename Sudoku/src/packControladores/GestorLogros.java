@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.xml.bind.ParseConversionEvent;
 
 import packExcepciones.ExcepcionConectarBD;
@@ -59,21 +60,22 @@ public static Vector<String> metodoSudoku(){
 
 public static boolean datos(String iDLogro,String descripcion){
 	boolean flag=false;
-	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 ){
+	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 ){
 		flag=true;
 	}
+	else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
 	return flag;
 }
 
-public static DefaultListModel logrosConseguidos(String nick,String idSudoku,String puntos){
+public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pPuntos){
 	DefaultListModel logros=new DefaultListModel();
 	try{
-		ResultSet lista=ConexionBD.getConexionBD().consultaBD("SELECT ID_L FROM LOGRO WHERE ID_SUDOKU='"+Integer.parseInt(idSudoku)+"';");
+		ResultSet lista=ConexionBD.getConexionBD().consultaBD("SELECT ID_L FROM LOGRO WHERE ID_SUDOKU='"+idSudoku+"';");
 		while(lista.next()){
 			if(lista.getString(1).charAt(0)=='X'){
 				ResultSet x=ConexionBD.getConexionBD().consultaBD("SELECT PTO FROM LOGRO_PTOX WHERE ID_L='"+lista.getString(1)+"';");
 				x.next();
-				if(x.getInt(1)<=Integer.parseInt(puntos)){
+				if(x.getInt(1)<=pPuntos){
 					ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");
 					logros.addElement(lista.getString(1));
 				}
@@ -82,7 +84,7 @@ public static DefaultListModel logrosConseguidos(String nick,String idSudoku,Str
 			else if (lista.getString(1).charAt(0)=='Y') {
 				ResultSet y=ConexionBD.getConexionBD().consultaBD("SELECT PTO,NUM_JUG FROM LOGRO_PTOXY WHERE ID_L='"+lista.getString(1)+"';");
 				y.next();
-				if(y.getInt(1)<=Integer.parseInt(puntos)){
+				if(y.getInt(1)<=pPuntos){
 					if(y.getInt(2)>0){
 						int numjug=y.getInt(2)-1;
 						ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");

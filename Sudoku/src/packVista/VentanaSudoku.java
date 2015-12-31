@@ -25,6 +25,7 @@ import javax.swing.JButton;
 
 import packControladores.GestorPartida;
 import packControladores.GestorTiempo;
+import packExcepciones.ExcepcionConectarBD;
 import packModelo.Partida;
 
 import java.awt.event.ActionEvent;
@@ -32,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
+import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -559,7 +561,13 @@ public class VentanaSudoku extends JFrame implements Observer{
 	public void mostrarVentanaFinal(){
 		GestorTiempo.getGestor().pausar();
 		JOptionPane.showMessageDialog(this, "Enhorabuena has completado el sudoku.");
-		VentanaFinal.getVentana().setVisible(true);
+		try {
+			VentanaFinal.getVentana().setVisible(true);
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		this.dispose();
 	}
 	
