@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 
 import javax.swing.JComboBox;
 
@@ -49,6 +50,7 @@ public class VentanaJugador extends JFrame {
 	private Controlador controlador;
 	private static VentanaJugador mVent;
 	private JButton btnVerRetos;
+	private JButton btnContinuar;
 
 	/**
 	 * Launch the application.
@@ -75,10 +77,10 @@ public class VentanaJugador extends JFrame {
 	private void initialize() {
 		setTitle("Men\u00FA Jugador");
 		addWindowListener(getControlador());
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		setResizable(false);
 		contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
@@ -151,12 +153,13 @@ public class VentanaJugador extends JFrame {
 							.addComponent(getBtnVerRanking(), Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 							.addComponent(getBtnVerHistorial(), Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 129, GroupLayout.PREFERRED_SIZE))
 						.addGap(96)
-						.addGroup(gl_panelOpciones.createParallelGroup(Alignment.TRAILING)
+						.addGroup(gl_panelOpciones.createParallelGroup(Alignment.TRAILING, false)
 							.addGroup(gl_panelOpciones.createSequentialGroup()
 								.addComponent(getLblDificultad())
 								.addGap(18)
 								.addComponent(getComboBoxDif(), GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE))
-							.addComponent(getBtnJugar(), GroupLayout.PREFERRED_SIZE, 160, GroupLayout.PREFERRED_SIZE))
+							.addComponent(getBtnJugar(), GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+							.addComponent(getBtnContinuar(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
 						.addGap(25))
 			);
 			gl_panelOpciones.setVerticalGroup(
@@ -177,8 +180,10 @@ public class VentanaJugador extends JFrame {
 								.addComponent(getBtnVerRetos()))
 							.addGroup(gl_panelOpciones.createSequentialGroup()
 								.addGap(18)
-								.addComponent(getBtnJugar())))
-						.addContainerGap(40, Short.MAX_VALUE))
+								.addComponent(getBtnJugar())
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getBtnContinuar())))
+						.addContainerGap(65, Short.MAX_VALUE))
 			);
 			panelOpciones.setLayout(gl_panelOpciones);
 		}
@@ -241,15 +246,17 @@ public class VentanaJugador extends JFrame {
 	private class Controlador extends WindowAdapter implements ActionListener{
 
 		@Override
-		public void windowClosing(WindowEvent e) {
-			dispose();
-			VentanaInicio.getVentanaInicio().setVisible(true);
-		}
-		@Override
 		public void actionPerformed(ActionEvent e) {
 			if(e.getActionCommand().equals("PRESS_btnVerHistorial")){
-				VentanaHistorial.getVentana().setVisible(true);
-				VentanaJugador.getVentana().setVisible(false);
+				try {
+					VentanaHistorial.getVentanaHistorial().setVisible(true);
+					VentanaJugador.getVentana().setVisible(false);
+				} catch (ExcepcionConectarBD e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				
 			} else if(e.getActionCommand().equals("PRESS_btnVerEstadisticas")){
 				VentanaEstadisticasJugador.getVentana().setVisible(true);
 				VentanaJugador.getVentana().setVisible(false);
@@ -267,5 +274,11 @@ public class VentanaJugador extends JFrame {
 	public void jugar() {
 		//TODO Cargar sudoku para el usuario con la dificultad elegida si es posible
 		System.out.println(getComboBoxDif().getSelectedItem());
+	}
+	private JButton getBtnContinuar() {
+		if (btnContinuar == null) {
+			btnContinuar = new JButton("Continuar");
+		}
+		return btnContinuar;
 	}
 }
