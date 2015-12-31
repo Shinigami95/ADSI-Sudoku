@@ -242,7 +242,8 @@ public class VentanaJugador extends JFrame {
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			System.exit(0);
+			dispose();
+			VentanaInicio.getVentanaInicio().setVisible(true);
 		}
 		@Override
 		public void actionPerformed(ActionEvent e) {

@@ -21,6 +21,7 @@ import javax.swing.JPasswordField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import packControladores.GestorJugadores;
+import packControladores.GestorSesion;
 
 import java.awt.Font;
 
@@ -189,6 +190,11 @@ public class VentanaInicio extends JFrame {
 		return controlador;
 	}
 	
+	private void reiniciarVentana(){
+		textNombre.setText("");
+		textPass.setText("");
+	}
+	
 	private class ControladorInicio extends WindowAdapter implements ActionListener {
 
 		@Override
@@ -205,12 +211,17 @@ public class VentanaInicio extends JFrame {
 					String pass= new String(textPass.getPassword());
 					String tipoSesion=GestorJugadores.getGestor().identificarUsuario(textNombre.getText(), pass);
 					if(tipoSesion.compareTo("admin")==0){
-						//TODO: iniciarSesion y abrir VentanaAdmin
-						System.out.println("ADMIN");
+						GestorSesion.getGestor().iniciarSesion(textNombre.getText(), "admin");
+						VentanaAdmin.getVentana().setVisible(true);
+						VentanaInicio.getVentanaInicio().reiniciarVentana();
+						VentanaInicio.getVentanaInicio().setVisible(false);
 					}
 					else if(tipoSesion.compareTo("jugador")==0){
-						//TODO: iniciarSesion y abrir VentanaJugador
-						System.out.println("JUGADOR");
+						GestorSesion.getGestor().iniciarSesion(textNombre.getText(), "jugador");
+						VentanaJugador frame = VentanaJugador.getVentana();
+						frame.setVisible(true);
+						VentanaInicio.getVentanaInicio().reiniciarVentana();
+						VentanaInicio.getVentanaInicio().setVisible(false);
 					}
 					else{
 						new VentanaError("Clave o usuario incorrecto.");

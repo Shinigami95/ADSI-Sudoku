@@ -1,7 +1,5 @@
 package packModelo;
 
-import java.util.Observer;
-
 public class Sudoku{
 
 	private int id;
@@ -54,5 +52,9 @@ public class Sudoku{
 	
 	public String toStringMatrizSolucion() {
 		return this.solucion.toStringValores();
+	}
+	
+	public int getDificultad(){
+		return dif;
 	}
 }

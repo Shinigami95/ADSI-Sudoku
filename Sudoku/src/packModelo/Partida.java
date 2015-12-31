@@ -206,4 +206,30 @@ public class Partida extends Observable{
 		boolean result = mPartida.equals(mSol);
 		return result;
 	}
+	
+	//TODO definir mejor la formula
+	public int calcularPuntuacion(){
+		int tiempo = tiempoASegundos();
+		int dificultad = sudoku.getDificultad();
+		int pistasAyudas= (5-numAyudas)+(5-numComprobaciones);
+		double puntuacion = 9999*Math.exp(-(getPorcentajeDificultad()*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
+		return (int)puntuacion;
+	}
+	
+	//0,075 facil, 0,050 medio, 0,025 dificil
+	private double getPorcentajeDificultad(){
+		return 0.1-sudoku.getDificultad()*0.025;
+	}
+	
+	//100 facil, 50 medio, 25 dificil
+	private int getPorcentajePenalizacion(int pDificultad){
+		int penalizacion=100;
+		if(pDificultad==2){
+			penalizacion=50;
+		}
+		else if(pDificultad==3){
+			penalizacion=25;
+		}
+		return penalizacion;
+	}
 }

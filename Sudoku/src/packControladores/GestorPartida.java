@@ -152,7 +152,7 @@ public class GestorPartida {
 	
 	public void guardarPartida() throws ExcepcionConectarBD{
 		try{
-			game.guardarPartida();
+			this.game.guardarPartida();
 		}
 		catch(Exception e){
 			System.out.println(e.getMessage());
@@ -161,5 +161,10 @@ public class GestorPartida {
 
 	public boolean haTerminado() {
 		return this.game.haTerminado();
+	}
+	
+	//TODO elegir desde donde se llama a calcular puntuacion
+	public int calcularPuntuacion(){
+		return this.game.calcularPuntuacion();
 	}
 }
