@@ -243,6 +243,7 @@ public class VentanaJugador extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			dispose();
+			GestorSesion.getGestor().cerrarSesion();
 			VentanaInicio.getVentanaInicio().setVisible(true);
 		}
 		@Override

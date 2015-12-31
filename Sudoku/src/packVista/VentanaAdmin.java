@@ -9,11 +9,14 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import packControladores.GestorSesion;
 import packExcepciones.ExcepcionConectarBD;
 
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.SQLException;
 
 public class VentanaAdmin extends JFrame {
@@ -23,11 +26,12 @@ public class VentanaAdmin extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnNewButton;
-	private JButton btnNewButton_1;
-	private JButton btnNewButton_2;
+	private JButton btnAdminSud;
+	private JButton btnAdminLogros;
+	private JButton btnEstadisticas;
 	private JLabel lblHolaAdministrador;
 	private static VentanaAdmin ventana;
+	private Controlador controlador;
 	/**
 	 * Launch the application.
 	 */
@@ -56,60 +60,45 @@ public class VentanaAdmin extends JFrame {
 		initialize();
 	}
 	private void initialize() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setTitle("Men\u00FA administrador");
+		addWindowListener(getControlador());
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		contentPane.add(getBtnNewButton());
-		contentPane.add(getBtnNewButton_1());
-		contentPane.add(getBtnNewButton_2());
+		contentPane.add(getBtnAdminSud());
+		contentPane.add(getBtnAdminLogros());
+		contentPane.add(getBtnEstadisticas());
 		contentPane.add(getLblHolaAdministrador());
 	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("Administrar Sudokus");
-			btnNewButton.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-				}
-			});
-			btnNewButton.setBounds(129, 83, 200, 23);
+	private JButton getBtnAdminSud() {
+		if (btnAdminSud == null) {
+			btnAdminSud = new JButton("Administrar Sudokus");
+			btnAdminSud.setActionCommand("PRESS_btnAdminSud");
+			btnAdminSud.addActionListener(getControlador());
+			btnAdminSud.setBounds(129, 83, 200, 23);
 		}
-		return btnNewButton;
+		return btnAdminSud;
 	}
-	private JButton getBtnNewButton_1() {
-		if (btnNewButton_1 == null) {
-			btnNewButton_1 = new JButton("Administrar Logros");
-			btnNewButton_1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-						try {
-							VentanaAdminLogros.getVentana().setVisible(true);
-							VentanaAdmin.getVentana().setVisible(false);
-						} catch (ExcepcionConectarBD e) {
-							e.printStackTrace();
-						} catch (SQLException e) {
-							e.printStackTrace();
-						}
-				}
-			});
-			btnNewButton_1.setBounds(129, 136, 200, 23);
+	private JButton getBtnAdminLogros() {
+		if (btnAdminLogros == null) {
+			btnAdminLogros = new JButton("Administrar Logros");
+			btnAdminLogros.setActionCommand("PRESS_btnAdminLogros");
+			btnAdminLogros.addActionListener(getControlador());
+			btnAdminLogros.setBounds(129, 136, 200, 23);
 		}
-		return btnNewButton_1;
+		return btnAdminLogros;
 	}
-	private JButton getBtnNewButton_2() {
-		if (btnNewButton_2 == null) {
-			btnNewButton_2 = new JButton("Estad\u00EDsticas");
-			btnNewButton_2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-						VentanaEstadisticasAdministrador.getVentana().setVisible(true);
-						VentanaAdmin.getVentana().setVisible(false);
-				}
-			});
-			btnNewButton_2.setBounds(129, 187, 200, 23);
+	private JButton getBtnEstadisticas() {
+		if (btnEstadisticas == null) {
+			btnEstadisticas = new JButton("Estad\u00EDsticas");
+			btnEstadisticas.setActionCommand("PRESS_btnEstadisticas");
+			btnEstadisticas.addActionListener(getControlador());
+			btnEstadisticas.setBounds(129, 187, 200, 23);
 			
 		}
-		return btnNewButton_2;
+		return btnEstadisticas;
 	}
 	private JLabel getLblHolaAdministrador() {
 		if (lblHolaAdministrador == null) {
@@ -118,5 +107,42 @@ public class VentanaAdmin extends JFrame {
 			lblHolaAdministrador.setBounds(84, 11, 237, 50);
 		}
 		return lblHolaAdministrador;
+	}
+	
+	private Controlador getControlador(){
+		if(controlador==null){
+			controlador = new Controlador();
+		}
+		return controlador;
+	}
+	
+	private class Controlador extends WindowAdapter implements ActionListener{
+
+		@Override
+		public void windowClosing(WindowEvent e) {
+			dispose();
+			GestorSesion.getGestor().cerrarSesion();
+			VentanaInicio.getVentanaInicio().setVisible(true);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (e.getActionCommand().equals("PRESS_btnAdminSud")){
+				
+			} else if (e.getActionCommand().equals("PRESS_btnAdminLogros")){
+				try {
+					VentanaAdminLogros.getVentana().setVisible(true);
+					VentanaAdmin.getVentana().setVisible(false);
+				} catch (ExcepcionConectarBD e1) {
+					e1.printStackTrace();
+				} catch (SQLException e2) {
+					e2.printStackTrace();
+				}
+			} else if (e.getActionCommand().equals("PRESS_btnEstadisticas")){
+				VentanaEstadisticasAdministrador.getVentana().setVisible(true);
+				VentanaAdmin.getVentana().setVisible(false);
+			}
+		}
+		
 	}
 }

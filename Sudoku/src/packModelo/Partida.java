@@ -15,63 +15,17 @@ import packControladores.GestorSesion;
 import packExcepciones.ExcepcionConectarBD;
 
 public class Partida extends Observable{
-	private int tiempoSeg, tiempoMin, tiempoHor;
 	private int numAyudas, numComprobaciones;
-	private Timer timer;
 	private Sudoku sudoku;
 	private MatrizPartida matrizPartida;
-	private boolean pausado;
 	private boolean esReto;
 	
-	public Partida(Sudoku pSud, boolean pEsReto, int pT, int pA, int pC) {
+	public Partida(Sudoku pSud, boolean pEsReto, int pA, int pC) {
 		esReto = pEsReto;
-		pausado = false;
 		numAyudas = pA;
 		numComprobaciones = pC;
 		sudoku = pSud;
 		matrizPartida = new MatrizPartida(pSud.toStringMatrizInicial());
-		tiempoHor=pT/3600;
-		tiempoMin=(pT%3600)/60;
-		tiempoSeg=(pT%3600)%60;
-		TimerTask  timerTask = new TimerTask() {
-			@Override
-			public void run() {
-				updateSeconds();				
-			}
-		};
-		timer = new Timer();
-		timer.scheduleAtFixedRate(timerTask, 0, 1000);
-	}
-	
-	private void updateSeconds(){
-		if(!this.pausado){	
-			tiempoSeg++;
-			if(tiempoSeg==60){
-				tiempoMin++;
-				tiempoSeg=0;
-				if(tiempoMin==60){
-					tiempoHor++;
-					tiempoMin=0;
-				}
-			}
-			this.setChanged();
-			this.notifyObservers();
-		}
-	}
-	
-	public String tiempoAString(){
-		String ts =Integer.toString(tiempoSeg);
-		String tm =Integer.toString(tiempoMin);
-		String th =Integer.toString(tiempoHor);
-		if (tiempoSeg<10) ts = "0"+ts;
-		if (tiempoMin<10) tm = "0"+tm;
-		if (tiempoHor<10) th = "0"+th;
-		
-		return th +":"+ tm +":"+ ts;
-	}
-	
-	public int tiempoASegundos(){
-		return tiempoSeg + tiempoMin*60 + tiempoHor*3600;
 	}
 
 	public boolean estaPerfecto() {
@@ -82,8 +36,12 @@ public class Partida extends Observable{
 		return this.sudoku.esCorrecto();
 	}
 	
-	public int getId() {
+	public int getIdSud() {
 		return this.sudoku.getId();
+	}
+	
+	public int getDificultad() {
+		return this.sudoku.getDificultad();
 	}
 	
 	public void anadirBorrador(char pV, int pX, int pY) {
@@ -122,18 +80,12 @@ public class Partida extends Observable{
 		this.matrizPartida.addObserver(pO, pX, pY);
 	}
 
-	public void pausar() {
-		// TODO Auto-generated method stub
-		this.pausado = true;
-	}
-
-	public void reanudar() {
-		// TODO Auto-generated method stub
-		this.pausado = false;
-	}
-
 	public int getNumAyudas() {
 		return this.numAyudas;
+	}
+	
+	public int getNumComprobaciones() {
+		return this.numComprobaciones;
 	}
 	
 	public void ayudar(){
@@ -141,16 +93,14 @@ public class Partida extends Observable{
 			ArrayList<Point> listaPuntos = new ArrayList<Point>();
 			for(int i=0;i<9;i++){
 				for(int j=0;j<9;j++){
-					if(this.matrizPartida.getValor(i, j)=='0'){
+					if(this.matrizPartida.getValor(i, j)=='0' || this.matrizPartida.getValor(i, j)!=this.sudoku.getValorSolucion(i, j)){
 						listaPuntos.add(new Point(i,j));
-						System.out.print("("+i+","+j+")");
 					}
 				}
 			}
 			Random rn = new Random();
 			Point cas = listaPuntos.get(rn.nextInt(listaPuntos.size()));
 			char valor = this.sudoku.getValorSolucion(cas.x, cas.y);
-			System.out.println("\n("+cas.x+","+cas.y+") ->"+valor);
 			this.matrizPartida.anadirNumero(valor, cas.x, cas.y);
 			this.dcrAyudas();
 		}
@@ -167,37 +117,9 @@ public class Partida extends Observable{
 			return false;
 		}
 	}
-
-	public int getNumCompr() {
-		return this.numComprobaciones;
-	}
 	
-
-	private boolean getEsReto() {
+	public boolean getEsReto() {
 		return this.esReto;
-	}
-	
-	//falta revisarlo
-	//hay que modificar la BD para lo de RETO
-	public void guardarPartida() throws ExcepcionConectarBD{
-		String jugador = GestorSesion.getGestor().getUserSesion();
-		try{
-			ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';");
-			int reto=0;
-			if(getEsReto()){
-				reto=1;
-			}
-			if(!result.next()){
-				ConexionBD.getConexionBD().actualizarBD("INSERT INTO PARTIDA VALUES('"+jugador+"',"+sudoku.getId()+",'"+matrizPartida.toString()+"',"+numAyudas+","+numComprobaciones+","+tiempoASegundos()+","+reto+");");
-			}
-			else{
-				ConexionBD.getConexionBD().actualizarBD("UPDATE PARTIDA SET ID_SUDOKU="+sudoku.getId()+", MATRIZ_TABLERO='"+matrizPartida.toString()+"', NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numComprobaciones+", TIEMPO="+tiempoASegundos()+", RETO="+reto+" WHERE NOMBRE_JUG='"+jugador+"';");
-			}
-		}
-		catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-		
 	}
 
 	public boolean haTerminado() {
@@ -206,30 +128,8 @@ public class Partida extends Observable{
 		boolean result = mPartida.equals(mSol);
 		return result;
 	}
-	
-	//TODO definir mejor la formula
-	public int calcularPuntuacion(){
-		int tiempo = tiempoASegundos();
-		int dificultad = sudoku.getDificultad();
-		int pistasAyudas= (5-numAyudas)+(5-numComprobaciones);
-		double puntuacion = 9999*Math.exp(-(getPorcentajeDificultad()*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
-		return (int)puntuacion;
-	}
-	
-	//0,075 facil, 0,050 medio, 0,025 dificil
-	private double getPorcentajeDificultad(){
-		return 0.1-sudoku.getDificultad()*0.025;
-	}
-	
-	//100 facil, 50 medio, 25 dificil
-	private int getPorcentajePenalizacion(int pDificultad){
-		int penalizacion=100;
-		if(pDificultad==2){
-			penalizacion=50;
-		}
-		else if(pDificultad==3){
-			penalizacion=25;
-		}
-		return penalizacion;
+
+	public String toStringMatrizPartida() {
+		return this.matrizPartida.toStringCasillas();
 	}
 }

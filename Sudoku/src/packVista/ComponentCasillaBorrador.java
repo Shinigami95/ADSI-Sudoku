@@ -36,6 +36,5 @@ public class ComponentCasillaBorrador extends ComponentCasillaGenerica{
 		for(int i = 0; i<listaTextField.length; i++){
 			listaTextField[i].setText(pTexto.charAt(i)+"");
 		}
-		System.out.println("Borrador -> Escribir");
 	}
 }

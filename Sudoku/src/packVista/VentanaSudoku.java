@@ -24,6 +24,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 import packControladores.GestorPartida;
+import packControladores.GestorTiempo;
 import packModelo.Partida;
 
 import java.awt.event.ActionEvent;
@@ -82,7 +83,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 			public void run() {
 				try {
 					GestorPartida.getGestor().cargarSudokuMANUAL();
-					VentanaSudoku frame = VentanaSudoku.getVentanaSudoku();
+					VentanaSudoku frame = VentanaSudoku.getVentana();
 					frame.setVisible(true);
 					frame.repaint();
 				} catch (Exception e) {
@@ -97,11 +98,10 @@ public class VentanaSudoku extends JFrame implements Observer{
 	 */
 	private VentanaSudoku() {
 		initialize();
-		cargarSudoku();
 	}
 	
 	private void cargarSudoku() {
-		System.out.println("Cargando");
+		GestorTiempo.getGestor().addObserver(this);
 		GestorPartida.getGestor().addObserver(this);
 		
 		for(int i=0; i<this.getMatrizCasillas().length;i++){
@@ -109,12 +109,23 @@ public class VentanaSudoku extends JFrame implements Observer{
 				GestorPartida.getGestor().addObserver(this.getCasillaSud(i, j),i,j);
 			}
 		}
-		System.out.println("Observando");
+		//tiempo
+		String tiempo = GestorTiempo.getGestor().tiempoAString();
+		getLabelTiempoValor().setText("     "+tiempo);
+		//ayudas
+		int nayud = GestorPartida.getGestor().getNumAyudas();
+		if (nayud<=0) getBtnAyuda().setEnabled(false);
+		else getBtnAyuda().setEnabled(true);
+		getLabelAyudasValor().setText("     "+nayud);
+		//comprobaciones
+		int ncompr = GestorPartida.getGestor().getNumComprobaciones();
+		getLabelComprValor().setText("     "+ncompr);
 	}
 
-	public static VentanaSudoku getVentanaSudoku(){
+	public static VentanaSudoku getVentana(){
 		if(mVSudoku==null){
 			mVSudoku = new VentanaSudoku();
+			mVSudoku.cargarSudoku();
 		}
 		return mVSudoku;
 	}
@@ -131,6 +142,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		contentPane.add(getPan_sudoku(), BorderLayout.CENTER);
 		contentPane.add(getPan_titulo(), BorderLayout.NORTH);
 		contentPane.add(getPan_botones(), BorderLayout.WEST);
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(getControlador());
 	}
 	
@@ -411,16 +423,21 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private class Controlador extends WindowAdapter implements ActionListener, MouseListener, PopupMenuListener {
 
 		@Override
+		public void windowClosing(java.awt.event.WindowEvent e) {
+			VentanaSudoku.getVentana().rendirse();
+		}
+		
+		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			String action = arg0.getActionCommand();
 			if(action.equals("PRESS_chckbxBorrador")){
-				VentanaSudoku.getVentanaSudoku().switchBorrador();
+				VentanaSudoku.getVentana().switchBorrador();
 			} else if(action.equals("PRESS_btnParar")){
-				VentanaSudoku.getVentanaSudoku().pausar();
+				VentanaSudoku.getVentana().pausar();
 			} else if(action.equals("PRESS_btnRendirse")){
-				VentanaSudoku.getVentanaSudoku().rendirse();
+				VentanaSudoku.getVentana().rendirse();
 			} else if(action.equals("PRESS_btnAyuda")){
-				VentanaSudoku.getVentanaSudoku().ayudar();
+				VentanaSudoku.getVentana().ayudar();
 			}
 		}
 
@@ -438,16 +455,16 @@ public class VentanaSudoku extends JFrame implements Observer{
 			JMenuItem menuItem = (JMenuItem) e.getSource();
 			ComponentCasillaGenerica cas = (ComponentCasillaGenerica)getMiPopupMenu().getInvoker();
 		    if (menuItem.getActionCommand().equalsIgnoreCase("asignarValor")){    	
-		    	VentanaSudoku.getVentanaSudoku().setValorCasilla(e, cas);
+		    	VentanaSudoku.getVentana().setValorCasilla(e, cas);
 		    }
 		    else if(menuItem.getActionCommand().equalsIgnoreCase("quitarValor")){
-		    	VentanaSudoku.getVentanaSudoku().quitarValorCasilla(e, cas);
+		    	VentanaSudoku.getVentana().quitarValorCasilla(e, cas);
 		    }
 		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
-		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e, cas);
+		    	VentanaSudoku.getVentana().comprobarValorCasilla(e, cas);
 		    }
 		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
-		    	VentanaSudoku.getVentanaSudoku().comprobarValorCasilla(e, cas);
+		    	VentanaSudoku.getVentana().comprobarValorCasilla(e, cas);
 		    }
 		}
 
@@ -463,32 +480,32 @@ public class VentanaSudoku extends JFrame implements Observer{
 		@Override
 		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 			ComponentCasillaGenerica cas = (ComponentCasillaGenerica)getMiPopupMenu().getInvoker();
-			System.out.println(cas);
 			char valorCas = GestorPartida.getGestor().getValorCasillaSudoku(cas.getCorX(), cas.getCorY());
-			if (cas.esBorrador() || valorCas=='0' || GestorPartida.getGestor().getNumCompr() == 0){
-				VentanaSudoku.getVentanaSudoku().getSeparador2().setVisible(false);
-				VentanaSudoku.getVentanaSudoku().getJmiComprobarValor().setVisible(false);
+			if (cas.esBorrador() || valorCas=='0' || GestorPartida.getGestor().getNumComprobaciones() == 0){
+				VentanaSudoku.getVentana().getSeparador2().setVisible(false);
+				VentanaSudoku.getVentana().getJmiComprobarValor().setVisible(false);
 			} 
 			else {
-				VentanaSudoku.getVentanaSudoku().getSeparador2().setVisible(true);
-				VentanaSudoku.getVentanaSudoku().getJmiComprobarValor().setVisible(true);
+				VentanaSudoku.getVentana().getSeparador2().setVisible(true);
+				VentanaSudoku.getVentana().getJmiComprobarValor().setVisible(true);
 			}
 		}
 	}
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		if(arg0 instanceof Partida){
+		if(arg0 instanceof GestorTiempo){
 			//tiempo
-			String tiempo = GestorPartida.getGestor().tiempoAString();
+			String tiempo = GestorTiempo.getGestor().tiempoAString();
 			getLabelTiempoValor().setText("     "+tiempo);
+		} else if(arg0 instanceof Partida) {
 			//ayudas
 			int nayud = GestorPartida.getGestor().getNumAyudas();
 			if (nayud<=0) getBtnAyuda().setEnabled(false);
 			else getBtnAyuda().setEnabled(true);
 			getLabelAyudasValor().setText("     "+nayud);
 			//comprobacion
-			int ncompr = GestorPartida.getGestor().getNumCompr();
+			int ncompr = GestorPartida.getGestor().getNumComprobaciones();
 			getLabelComprValor().setText("     "+ncompr);
 		}
 	}
@@ -496,7 +513,8 @@ public class VentanaSudoku extends JFrame implements Observer{
 	public void rendirse() {
 		int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea rendirse?", "Rendirse", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if(respuesta == JOptionPane.YES_OPTION){
-			//TODO ir a ventana jugador
+			//TODO ir a ventana jugador y anadir sudoku ha jugado com completado = N
+			GestorTiempo.getGestor().pausar();
 			JOptionPane.showMessageDialog(this, ">.< Rendido >.<");
 			this.dispose();
 		}
@@ -521,14 +539,12 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 
 	public void quitarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
-		System.out.println("VentSud.quitarValor -> ("+cas.getCorX()+","+cas.getCorY()+")");
         GestorPartida.getGestor().quitarValor(cas.getCorX(), cas.getCorY());
 	}
 
 	public void setValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		JMenuItem menuItem = (JMenuItem) e.getComponent();
 		char valor= menuItem.getText().charAt(0);
-		System.out.println("VentSud.setValorCasilla -> ("+cas.getCorX()+","+cas.getCorY()+")");
 		if(GestorPartida.getGestor().getBorradorActivo()){
 			GestorPartida.getGestor().setValor(valor, cas.getCorX(), cas.getCorY());
 		} else{
@@ -541,6 +557,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 
 	public void mostrarVentanaFinal(){
+		GestorTiempo.getGestor().pausar();
 		JOptionPane.showMessageDialog(this, "Enhorabuena has completado el sudoku.");
 		VentanaFinal.getVentana().setVisible(true);
 		this.dispose();
@@ -548,15 +565,13 @@ public class VentanaSudoku extends JFrame implements Observer{
 	
 	public void switchBorrador() {
 		GestorPartida.getGestor().switchBorrador();
-		if(GestorPartida.getGestor().estaActivoBorrador()==true) System.out.println("Borrador Activado");
-		else System.out.println("Borrador Desactivado");
 	}
 	
 	public void pausar() {
-		GestorPartida.getGestor().pausar();
+		GestorTiempo.getGestor().pausar();
 		this.setVisible(false);
 		JOptionPane.showMessageDialog(this, "PAUSA");
 		this.setVisible(true);
-		GestorPartida.getGestor().reanudar();
+		GestorTiempo.getGestor().reanudar();
 	}
 }

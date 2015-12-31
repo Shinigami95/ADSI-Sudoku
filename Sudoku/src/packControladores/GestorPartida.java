@@ -35,8 +35,8 @@ public class GestorPartida {
 		return this.game.esCorrecto();
 	}
 
-	public int getSudokuId(){
-		return this.game.getId();
+	public int getIdSud(){
+		return this.game.getIdSud();
 	}
 	
 	public boolean getBorradorActivo(){
@@ -56,12 +56,13 @@ public class GestorPartida {
 	}
 	
 	public void cargarSudokuMANUAL() {
-		System.out.println("GestorPartida.cargarSudoku:");
 		int id = 111;
 		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
 		Sudoku sud = new Sudoku(id, 1, solSud, sinRes);
-		this.game = new Partida(sud, false, 0, 90, 5);
+		this.game = new Partida(sud, false, 90, 5);
+		GestorTiempo.getGestor().setTiempo(0);
+		GestorTiempo.getGestor().reanudar();
 	}
 
 	public void cargarSudParaUs(int pD, String pU) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
@@ -126,18 +127,6 @@ public class GestorPartida {
 		this.game.ayudar();
 	}
 
-	public void pausar() {
-		this.game.pausar();
-	}
-
-	public void reanudar() {
-		this.game.reanudar();
-	}
-
-	public String tiempoAString() {
-		return this.game.tiempoAString();
-	}
-
 	public int getNumAyudas() {
 		return this.game.getNumAyudas();
 	}
@@ -146,25 +135,60 @@ public class GestorPartida {
 		return this.game.comprobar(pCorX,pCorY);
 	}
 
-	public int getNumCompr() {
-		return this.game.getNumCompr();
-	}
-	
-	public void guardarPartida() throws ExcepcionConectarBD{
-		try{
-			this.game.guardarPartida();
-		}
-		catch(Exception e){
-			System.out.println(e.getMessage());
-		}
+	public int getNumComprobaciones() {
+		return this.game.getNumComprobaciones();
 	}
 
 	public boolean haTerminado() {
 		return this.game.haTerminado();
 	}
 	
-	//TODO elegir desde donde se llama a calcular puntuacion
+	//falta revisarlo
+	//hay que modificar la BD para lo de RETO
+	public void guardarPartida() throws ExcepcionConectarBD{
+		String jugador = GestorSesion.getGestor().getUserSesion();
+		try{
+			ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';");
+			int reto=0;
+			if(this.game.getEsReto()){
+				reto=1;
+			}
+			if(!result.next()){
+				ConexionBD.getConexionBD().actualizarBD("INSERT INTO PARTIDA VALUES('"+jugador+"',"+this.game.getIdSud()+",'"+this.game.toStringMatrizPartida()+"',"+this.game.getNumAyudas()+","+this.game.getNumComprobaciones()+","+GestorTiempo.getGestor().tiempoASegundos()+","+reto+");");
+			}
+			else{
+				ConexionBD.getConexionBD().actualizarBD("UPDATE PARTIDA SET ID_SUDOKU="+this.game.getIdSud()+", MATRIZ_TABLERO='"+this.game.toStringMatrizPartida()+"', NUM_AYUDAS="+this.game.getNumAyudas()+", NUM_COMPR="+this.game.getNumComprobaciones()+", TIEMPO="+GestorTiempo.getGestor().tiempoASegundos()+", RETO="+reto+" WHERE NOMBRE_JUG='"+jugador+"';");
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+		}
+		catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+
+	//TODO definir mejor la formula
 	public int calcularPuntuacion(){
-		return this.game.calcularPuntuacion();
+		int tiempo = GestorTiempo.getGestor().tiempoASegundos();
+		int dificultad = this.game.getDificultad();
+		int pistasAyudas= (5-this.game.getNumAyudas())+(5-this.game.getNumComprobaciones());
+		double puntuacion = 9999*Math.exp(-(getPorcentajeDificultad()*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
+		return (int)puntuacion;
+	}
+	
+	//0,075 facil, 0,050 medio, 0,025 dificil
+	private double getPorcentajeDificultad(){
+		return 0.1-this.game.getDificultad()*0.025;
+	}
+	
+	//100 facil, 50 medio, 25 dificil
+	private int getPorcentajePenalizacion(int pDificultad){
+		int penalizacion=100;
+		if(pDificultad==2){
+			penalizacion=50;
+		}
+		else if(pDificultad==3){
+			penalizacion=25;
+		}
+		return penalizacion;
 	}
 }

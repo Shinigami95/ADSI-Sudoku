@@ -17,8 +17,6 @@ public abstract class IFazCasilla extends Observable{
 		super.deleteObservers();
 		super.addObserver(pO);
 		this.observ = pO;
-		//this.setChanged();
-		//this.notifyObservers(this.toStringValores());
 	}
 	
 	public Observer getObserver(){

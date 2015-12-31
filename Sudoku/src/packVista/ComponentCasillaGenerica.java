@@ -49,7 +49,6 @@ public class ComponentCasillaGenerica extends JPanel implements Observer{
 	
 	@Override
 	public void update(Observable o, Object arg) {
-System.out.println("CasillaGenerica.update: "+o.toString());
 		if(o instanceof Casilla){
 			Casilla cas = (Casilla) o;
 			if(cas.esInicial() && !(mCasilla instanceof ComponentCasillaInicial)){
@@ -62,7 +61,6 @@ System.out.println("CasillaGenerica.update: "+o.toString());
 		}
 		else if(o instanceof Borrador && !(mCasilla instanceof ComponentCasillaBorrador)){
 			this.setCasilla(new ComponentCasillaBorrador());
-			System.out.println("A que te borro");
 		}
 		this.escribirTexto((String)arg);
 	}
