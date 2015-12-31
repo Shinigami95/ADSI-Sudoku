@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.xml.bind.ParseConversionEvent;
 
 import packExcepciones.ExcepcionConectarBD;
@@ -59,9 +60,10 @@ public static Vector<String> metodoSudoku(){
 
 public static boolean datos(String iDLogro,String descripcion){
 	boolean flag=false;
-	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 ){
+	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 ){
 		flag=true;
 	}
+	else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
 	return flag;
 }
 
