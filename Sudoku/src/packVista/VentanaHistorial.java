@@ -1,6 +1,7 @@
 package packVista;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -12,37 +13,46 @@ import java.awt.GridLayout;
 import javax.swing.JTabbedPane;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.MouseListener;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JButton;
+import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JScrollPane;
 
+import packControladores.ConexionBD;
+import packControladores.GestorLogros;
+import packControladores.GestorSesion;
+import packExcepciones.ExcepcionConectarBD;
+
+import javax.swing.JLabel;
+
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class VentanaHistorial extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	private static VentanaHistorial mVHistorial;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
-	private JButton btnVolver_2;
-	private JTextArea textArea_2;
-	private JButton btnVolver_1;
 	private JTextArea textArea_1;
-	private JButton btnVolver;
 	private JTextArea textArea;
-	private Controlador controlador;
+	private JScrollPane scrollPane;
+	private JPanel panel_3;
+	private JList list_1;
+	private JLabel lblSudoku;
+	private JLabel lblDescripcin;
+	private JLabel label;
+	private JLabel label_1;
+	
 
 	/**
 	 * Launch the application.
@@ -62,21 +72,36 @@ public class VentanaHistorial extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ExcepcionConectarBD 
+	 * @throws SQLException 
 	 */
-	public VentanaHistorial() {
+	public VentanaHistorial() throws ExcepcionConectarBD, SQLException {
 		initialize();
 	}
 	
-	public static VentanaHistorial getVentana(){
+	public static VentanaHistorial getVentanaHistorial() throws ExcepcionConectarBD, SQLException{
 		if(mVHistorial==null){
 			mVHistorial = new VentanaHistorial();
 		}
+
 		return mVHistorial;
 	}
 	
-	private void initialize() {
-		addWindowListener(getControlador());
-		setBounds(100, 100, 465, 320);
+	private void initialize() throws ExcepcionConectarBD, SQLException {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				try {
+					getVentanaHistorial().setVisible(false);
+					VentanaJugador.getVentana();
+				} catch (ExcepcionConectarBD e) {
+					e.printStackTrace();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		setBounds(100, 100, 450, 300);
 		setTitle("Historial");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -85,7 +110,7 @@ public class VentanaHistorial extends JFrame {
 		contentPane.add(getTabbedPane());
 	}
 
-	private JTabbedPane getTabbedPane() {
+	private JTabbedPane getTabbedPane() throws ExcepcionConectarBD, SQLException {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.addTab("Sudokus", null, getPanel(), null);
@@ -99,19 +124,14 @@ public class VentanaHistorial extends JFrame {
 			panel = new JPanel();
 			GroupLayout gl_panel = new GroupLayout(panel);
 			gl_panel.setHorizontalGroup(
-					gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
-							.addContainerGap(330, Short.MAX_VALUE)
-							.addComponent(getBtnVolver())
-							.addContainerGap())
-						.addComponent(getTextArea(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
-				);
-			gl_panel.setVerticalGroup(
 				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+					.addComponent(getTextArea(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+			);
+			gl_panel.setVerticalGroup(
+				gl_panel.createParallelGroup(Alignment.TRAILING)
+					.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
 						.addComponent(getTextArea(), GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(getBtnVolver()))
+						.addContainerGap(29, Short.MAX_VALUE))
 			);
 			panel.setLayout(gl_panel);
 		}
@@ -123,64 +143,26 @@ public class VentanaHistorial extends JFrame {
 			GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 			gl_panel_1.setHorizontalGroup(
 				gl_panel_1.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_1.createSequentialGroup()
-						.addContainerGap(330, Short.MAX_VALUE)
-						.addComponent(getBtnVolver_1())
-						.addContainerGap())
-					.addComponent(getTextArea_1(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
+					.addComponent(getTextArea_1(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 			);
 			gl_panel_1.setVerticalGroup(
-				gl_panel_1.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+				gl_panel_1.createParallelGroup(Alignment.TRAILING)
+					.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
 						.addComponent(getTextArea_1(), GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(getBtnVolver_1()))
+						.addContainerGap(29, Short.MAX_VALUE))
 			);
 			panel_1.setLayout(gl_panel_1);
 		}
 		return panel_1;
 	}
-	private JPanel getPanel_2() {
+	private JPanel getPanel_2() throws ExcepcionConectarBD, SQLException {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
-			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
-			gl_panel_2.setHorizontalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel_2.createSequentialGroup()
-						.addContainerGap(330, Short.MAX_VALUE)
-						.addComponent(getBtnVolver_2())
-						.addContainerGap())
-					.addComponent(getTextArea_2(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 429, Short.MAX_VALUE)
-			);
-			gl_panel_2.setVerticalGroup(
-				gl_panel_2.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel_2.createSequentialGroup()
-						.addComponent(getTextArea_2(), GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-						.addComponent(getBtnVolver_2()))
-			);
-			panel_2.setLayout(gl_panel_2);
+			panel_2.setLayout(new BorderLayout(0, 0));
+			panel_2.add(getScrollPane(), BorderLayout.WEST);
+			panel_2.add(getPanel_3(), BorderLayout.CENTER);
 		}
 		return panel_2;
-	}
-	private JButton getBtnVolver_2() {
-		if (btnVolver_2 == null) {
-			btnVolver_2 = new JButton("Volver");
-		}
-		return btnVolver_2;
-	}
-	private JTextArea getTextArea_2() {
-		if (textArea_2 == null) {
-			textArea_2 = new JTextArea();
-			textArea_2.setEditable(false);
-		}
-		return textArea_2;
-	}
-	private JButton getBtnVolver_1() {
-		if (btnVolver_1 == null) {
-			btnVolver_1 = new JButton("Volver");
-		}
-		return btnVolver_1;
 	}
 	private JTextArea getTextArea_1() {
 		if (textArea_1 == null) {
@@ -189,12 +171,6 @@ public class VentanaHistorial extends JFrame {
 		}
 		return textArea_1;
 	}
-	private JButton getBtnVolver() {
-		if (btnVolver == null) {
-			btnVolver = new JButton("Volver");
-		}
-		return btnVolver;
-	}
 	private JTextArea getTextArea() {
 		if (textArea == null) {
 			textArea = new JTextArea();
@@ -202,20 +178,117 @@ public class VentanaHistorial extends JFrame {
 		}
 		return textArea;
 	}
-	
-	private Controlador getControlador(){
-		if(controlador==null){
-			controlador = new Controlador();
+	private JScrollPane getScrollPane() throws ExcepcionConectarBD {
+		if (scrollPane == null) {
+			scrollPane = new JScrollPane();
+			scrollPane.setPreferredSize(new Dimension(200, 300));
+			scrollPane.setViewportView(getList_1());
+			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			list_1.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mousePressed(java.awt.event.MouseEvent e) {
+					try {
+						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+						tes.next();
+						String ses=tes.getString("ID_SUDOKU");
+						ConexionBD.getConexionBD().closeResult(tes);
+						label.setText(ses);
+						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+						res.next();
+						String des=res.getString("DESCRIPCION");
+						ConexionBD.getConexionBD().closeResult(res);
+						label_1.setText(des);
+						
+						
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					};
+					
+				}
+				
+				@Override
+				public void mouseExited(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseEntered(java.awt.event.MouseEvent e) {
+				}
+				
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+				}
+			});
 		}
-		return controlador;
+		return scrollPane;
+	
+		}
+		
+	
+	private JPanel getPanel_3() throws ExcepcionConectarBD, SQLException {
+		if (panel_3 == null) {
+			panel_3 = new JPanel();
+			panel_3.setLayout(null);
+			panel_3.add(getLblSudoku());
+			panel_3.add(getLblDescripcin());
+			panel_3.add(getLabel());
+			panel_3.add(getLabel_1());
+		}
+		return panel_3;
 	}
 	
-	private class Controlador extends WindowAdapter{
-
-		@Override
-		public void windowClosing(WindowEvent e) {
-			VentanaJugador.getVentana().setVisible(true);
-			VentanaHistorial.getVentana().setVisible(false);
+	private JList getList_1() throws ExcepcionConectarBD {
+		if (list_1 == null) {
+			list_1 = new JList();
+			list_1.setVisibleRowCount(100);
 		}
+		list_1.setModel(GestorLogros.verLogros(GestorSesion.getGestor().getUserSesion()));
+		return list_1;
+	}
+	private JLabel getLblSudoku() {
+		if (lblSudoku == null) {
+			lblSudoku = new JLabel("Sudoku:");
+			lblSudoku.setBounds(10, 11, 46, 14);
+		}
+		return lblSudoku;
+	}
+	private JLabel getLblDescripcin() {
+		if (lblDescripcin == null) {
+			lblDescripcin = new JLabel("Descripci\u00F3n:");
+			lblDescripcin.setBounds(10, 48, 74, 14);
+		}
+		return lblDescripcin;
+	}
+	private JLabel getLabel() throws ExcepcionConectarBD, SQLException {
+		if (label == null) {
+			label = new JLabel("");
+			label.setBounds(66, 11, 46, 14);
+			if(list_1.getSelectedValue()!=null){
+				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+				res.next();
+				String des=res.getString("ID_SUDOKU");
+				ConexionBD.getConexionBD().closeResult(res);
+				label.setText(des);}
+		}
+		return label;
+	}
+	private JLabel getLabel_1() throws ExcepcionConectarBD, SQLException {
+		if (label_1 == null) {
+			label_1 = new JLabel("");
+			label_1.setBounds(10, 73, 46, 14);
+			if(list_1.getSelectedValue()!=null){
+				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
+				res.next();
+				String des=res.getString("DESCRPCION");
+				ConexionBD.getConexionBD().closeResult(res);
+				label.setText(des);}
+		}
+		return label_1;
 	}
 }
