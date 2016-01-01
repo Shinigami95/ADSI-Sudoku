@@ -57,4 +57,8 @@ public class Sudoku{
 	public int getDificultad(){
 		return dif;
 	}
+	
+	public boolean comprobarSudoku(){
+		return false;
+	}
 }
