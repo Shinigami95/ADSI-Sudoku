@@ -216,14 +216,13 @@ public class VentanaAdminLogros extends JFrame {
 			btnAadir = new JButton("A\u00F1adir");
 			btnAadir.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(GestorLogros.datos(textField.getText(),textField_3.getText())){
+					if(GestorLogros.datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
 						try {
 							GestorLogros.anadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
 							getList_1();
 							getList_2();
 						} catch (ExcepcionConectarBD e) {
 							e.printStackTrace();
-							JOptionPane.showMessageDialog(null, "Los datos no son correctos.");
 						}
 					}
 				}

@@ -58,10 +58,12 @@ public static Vector<String> metodoSudoku(){
 	return vec;
 }
 
-public static boolean datos(String iDLogro,String descripcion){
+public static boolean datos(String iDLogro,String descripcion,String puntos,String jug){
 	boolean flag=false;
-	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 ){
-		flag=true;
+	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 && puntos.length()>0 && jug.length()>0 ){
+		if (Integer.parseInt(puntos)<Integer.parseInt(jug) || Integer.parseInt(puntos)>Integer.parseInt(jug)){
+		flag=true;}
+		else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
 	}
 	else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
 	return flag;
