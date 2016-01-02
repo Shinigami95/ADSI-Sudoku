@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JScrollPane;
 import javax.swing.GroupLayout;
@@ -23,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
+
 
 
 
@@ -221,6 +223,7 @@ public class VentanaAdminLogros extends JFrame {
 							getList_2();
 						} catch (ExcepcionConectarBD e) {
 							e.printStackTrace();
+							JOptionPane.showMessageDialog(null, "Los datos no son correctos.");
 						}
 					}
 				}
@@ -304,6 +307,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField getTextField_1() {
 		if (textField_1 == null) {
 			textField_1 = new JTextField();
+			textField_1.setText("0");
 			textField_1.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
@@ -324,6 +328,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField getTextField_2() {
 		if (textField_2 == null) {
 			textField_2 = new JTextField();
+			textField_2.setText("0");
 			textField_2.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
