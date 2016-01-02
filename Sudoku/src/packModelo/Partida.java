@@ -132,4 +132,8 @@ public class Partida extends Observable{
 	public String toStringMatrizPartida() {
 		return this.matrizPartida.toStringCasillas();
 	}
+
+	public void setMatrizPartida(String mtab) {
+		this.matrizPartida.setValues(mtab);
+	}
 }

@@ -173,16 +173,36 @@ public class GestorPartida {
 			
 			String sql = "SELECT PARTIDA.ID_SUDOKU AS IDS, PARTIDA.MATRIZ_TABLERO AS MTAB, PARTIDA.NUM_AYUDAS AS NA, "
 						+ "PARTIDA.NUM_COMPR AS NC, PARTIDA.TIEMPO AS TS, PARTIDA.RETO AS RT, "
-						+ "SUDOKU.DIFICULTAD AS DIF, SUDOKU.M_INIC AS MI, SUDOKU.M_SOL AS MS"
-						+ "FROM PARTIDA INNER JOIN PARTIDA ON PARTIDA.ID_SUDOKU=SUDOKU.ID_S "
+						+ "SUDOKU.DIFICULTAD AS DIF, SUDOKU.M_INIC AS MI, SUDOKU.M_SOL AS MS "
+						+ "FROM PARTIDA INNER JOIN SUDOKU ON PARTIDA.ID_SUDOKU=SUDOKU.ID_S "
 						+ "WHERE PARTIDA.NOMBRE_JUG='"+user+"'";
 			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
 			if(result.next()){
 				//TODO me voy a cenar ahora sigo
+				int ids = result.getInt("IDS");
+				String mtab = result.getString("MTAB");
+				int na = result.getInt("NA");
+				int nc = result.getInt("NC");
+				int ts = result.getInt("TS");
+				Integer rt = result.getInt("RT");
+				int dif = result.getInt("DIF");
+				String mi = result.getString("MI");
+				String ms = result.getString("MS");
+				ConexionBD.getConexionBD().closeResult(result);
+				if(rt==0) rt=null;
+				Sudoku sud = new Sudoku(ids, dif, ms, mi, true);
+				Partida part = new Partida(sud, rt, na, nc);
+				part.setMatrizPartida(mtab);
+				this.game = part;
+				GestorTiempo.getGestor().setTiempo(ts);
+				GestorTiempo.getGestor().reanudar();
+			} else {
+				throw new ExcepcionNoHaySudokuCargado();
 			}
-			ConexionBD.getConexionBD().closeResult(result);
-		}catch(SQLException e){
+		} catch (SQLException e){
 			System.out.println(e.getMessage());
+		} catch (NoValidoException e) {
+			e.printStackTrace();
 		}
 	}
 	

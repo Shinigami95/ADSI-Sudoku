@@ -76,4 +76,12 @@ public class MatrizPartida{
 	public void addObserver(Observer pO, int pX, int pY){
 		this.casillas[pX][pY].addObserver(pO);
 	}
+
+	public void setValues(String mtab) {
+		for (int i=0; i<MAX_FIL; i++){
+			for (int j=0; j<MAX_COL; j++){
+				casillas[i][j].setValor(mtab.charAt(i*MAX_FIL + j));
+			}
+		}
+	}
 }
