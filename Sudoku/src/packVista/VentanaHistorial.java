@@ -12,17 +12,14 @@ import java.awt.GridLayout;
 
 import javax.swing.JTabbedPane;
 
-import java.awt.FlowLayout;
 import java.awt.event.MouseListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
-import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JTextArea;
-import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JScrollPane;
 
 import packControladores.ConexionBD;
@@ -37,6 +34,10 @@ import java.awt.event.WindowEvent;
 
 public class VentanaHistorial extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private static VentanaHistorial mVHistorial;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
