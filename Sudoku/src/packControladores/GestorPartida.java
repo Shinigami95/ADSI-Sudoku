@@ -181,23 +181,30 @@ public class GestorPartida {
 		int tiempo = GestorTiempo.getGestor().tiempoASegundos();
 		int dificultad = this.game.getDificultad();
 		int pistasAyudas= (5-this.game.getNumAyudas())+(5-this.game.getNumComprobaciones());
-		double puntuacion = 9999*Math.exp(-(getPorcentajeDificultad()*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
+		double puntuacion = 9999*Math.exp(-(getPorcentajeDificultad(dificultad)*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
 		return (int)puntuacion;
 	}
 	
-	//0,075 facil, 0,050 medio, 0,025 dificil
-	private double getPorcentajeDificultad(){
-		return 0.1-this.game.getDificultad()*0.025;
+	//0,0018 facil, 0,0009 medio, 0,0005 dificil
+	private double getPorcentajeDificultad(int pDificultad){
+		double porcentaje=0.0018;
+		if(pDificultad==2){
+			porcentaje=0.0009;
+		}
+		else if(pDificultad==3){
+			porcentaje=0.0005;
+		}
+		return porcentaje;
 	}
 	
-	//100 facil, 50 medio, 25 dificil
+	//100 facil, 75 medio, 50 dificil
 	private int getPorcentajePenalizacion(int pDificultad){
 		int penalizacion=100;
 		if(pDificultad==2){
-			penalizacion=50;
+			penalizacion=75;
 		}
 		else if(pDificultad==3){
-			penalizacion=25;
+			penalizacion=50;
 		}
 		return penalizacion;
 	}
