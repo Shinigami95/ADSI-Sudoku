@@ -45,7 +45,7 @@ import javax.swing.SwingConstants;
 public class VentanaSudoku extends JFrame implements Observer{
 
 	private static final long serialVersionUID = 1L;
-	private static VentanaSudoku mVSudoku;
+	private static VentanaSudoku mVent;
 	private JPanel contentPane;
 	private JPanel pan_titulo;
 	private JLabel lblTitulo;
@@ -106,6 +106,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		GestorTiempo.getGestor().addObserver(this);
 		GestorPartida.getGestor().addObserver(this);
 		
+		getLblIdSud().setText(GestorPartida.getGestor().getIdSud()+"");
 		for(int i=0; i<this.getMatrizCasillas().length;i++){
 			for(int j=0; j<this.getMatrizCasillas()[i].length;j++){
 				GestorPartida.getGestor().addObserver(this.getCasillaSud(i, j),i,j);
@@ -125,11 +126,11 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 
 	public static VentanaSudoku getVentana(){
-		if(mVSudoku==null){
-			mVSudoku = new VentanaSudoku();
-			mVSudoku.cargarSudoku();
+		if(mVent==null){
+			mVent = new VentanaSudoku();
+			mVent.cargarSudoku();
 		}
-		return mVSudoku;
+		return mVent;
 	}
 
 	private void initialize() {
@@ -513,12 +514,19 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 
 	public void rendirse() {
-		int respuesta = JOptionPane.showConfirmDialog(this, "¿Desea rendirse?", "Rendirse", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+		int respuesta = JOptionPane.showConfirmDialog(this, "\u00BFDesea rendirse?", "Rendirse", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if(respuesta == JOptionPane.YES_OPTION){
-			//TODO ir a ventana jugador y anadir sudoku ha jugado com completado = N
+			//TODO ir a ventana jugador
 			GestorTiempo.getGestor().pausar();
 			JOptionPane.showMessageDialog(this, ">.< Rendido >.<");
-			this.dispose();
+			try {
+				GestorPartida.getGestor().guardarPartida();
+				this.dispose();
+				mVent = null;
+				VentanaJugador.getVentana().setVisible(true);
+			} catch (ExcepcionConectarBD e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -28,6 +28,10 @@ public class GestorPartida {
 		return mGestor;
 	}
 
+	private void setPartida(Partida pGame){
+		this.game = pGame;
+	}
+	
 	public boolean estaPerfectoSudoku(){
 		return this.game.estaPerfecto();
 	}
@@ -54,59 +58,6 @@ public class GestorPartida {
 	
 	public void quitarValor(int pX, int pY) {
 		this.game.anadirNumero('0', pX, pY);
-	}
-	
-	public void cargarSudokuMANUAL() {
-		int id = 111;
-		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
-		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
-		Sudoku sud;
-		try {
-			sud = new Sudoku(id, 1, solSud, sinRes, true);
-			this.game = new Partida(sud, false, 90, 5);
-			GestorTiempo.getGestor().setTiempo(0);
-			GestorTiempo.getGestor().reanudar();
-		} catch (NoValidoException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void cargarSudParaUs(int pD, String pU) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
-		//TODO
-		try{
-			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL FROM SUDOKU "
-						+ "WHERE ACTIVO='S' AND DIFICULTAD="+pD+" "
-						+ "AND ID_S NOT IN (SELECT ID_SUDOKU FROM JUGADO WHERE NOMBRE_JUG='"+pU+"') ";
-			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
-			int idS, dif;
-			String mI, mS;
-			Sudoku sud;
-			Partida part;
-			if(result.next()){ // coge el primero, del resto pasa por ahora
-				idS = result.getInt("ID_S");
-				dif = result.getInt("DIFICULTAD");
-				mI = result.getString("M_INIC");
-				mS = result.getString("M_SOL");
-				try {
-					sud = new Sudoku(idS, dif, mS, mI, true);
-				} catch (NoValidoException e) {
-					e.printStackTrace();
-				}
-			//TODO	part = new Partida(pSud, pEsReto, pT, pA, pC)
-				
-			}
-			ConexionBD.getConexionBD().closeResult(result);
-		}catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-	}
-	
-	public void cargarPartidaPendienteDelUsuario(String pU){
-		//TODO
-	}
-	
-	public void anadirSudokuAUsuario(){
-		//TODO
 	}
 	
 	public char getValorCasillaSudoku(int pX, int pY){
@@ -153,21 +104,129 @@ public class GestorPartida {
 		return this.game.haTerminado();
 	}
 	
+	public void cargarSudokuMANUAL() {
+		int id = 111;
+		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
+		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
+		Sudoku sud;
+		try {
+			sud = new Sudoku(id, 1, solSud, sinRes, true);
+			this.game = new Partida(sud, null, 90, 5);
+			GestorTiempo.getGestor().setTiempo(0);
+			GestorTiempo.getGestor().reanudar();
+		} catch (NoValidoException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void cargarSudParaUsSesion(int pD) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
+		try{
+			String user = GestorSesion.getGestor().getUserSesion();
+			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL FROM SUDOKU "
+						+ "WHERE ACTIVO='S' AND DIFICULTAD="+pD+" "
+						+ "AND ID_S NOT IN ("
+						+ "SELECT ID_SUDOKU FROM JUGADO WHERE NOMBRE_JUG='"+user+"' "
+						+ "UNION "
+						+ "SELECT ID_SUDOKU FROM RETO WHERE NOMBRE_RETADO='"+user+"' AND ESTADO<>'R')";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			int idS, dif;
+			String mI, mS;
+			if(result.next()){
+				idS = result.getInt("ID_S");
+				dif = result.getInt("DIFICULTAD");
+				mI = result.getString("M_INIC");
+				mS = result.getString("M_SOL");
+				try {
+					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
+					this.setPartida(new Partida(sud, null, 5, 5));
+					GestorTiempo.getGestor().reanudar();		
+				} catch (NoValidoException e) {
+					e.printStackTrace();
+				}
+				
+			} else {
+				throw new ExcepcionNoHaySudokuCargado();
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public boolean tienePartidaPendienteUserSesion() throws ExcepcionConectarBD{
+		try{
+			String user = GestorSesion.getGestor().getUserSesion();
+			String sql = "SELECT * FROM PARTIDA WHERE NOMBRE_JUG='"+user+"'";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			boolean hayPartida = result.next();
+			ConexionBD.getConexionBD().closeResult(result);
+			return hayPartida;
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return false;
+	}
+	
+	public void cargarPartidaPendienteParaUsSesion() throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
+		try{
+			String user = GestorSesion.getGestor().getUserSesion();
+			
+			String sql = "SELECT PARTIDA.ID_SUDOKU AS IDS, PARTIDA.MATRIZ_TABLERO AS MTAB, PARTIDA.NUM_AYUDAS AS NA, "
+						+ "PARTIDA.NUM_COMPR AS NC, PARTIDA.TIEMPO AS TS, PARTIDA.RETO AS RT, "
+						+ "SUDOKU.DIFICULTAD AS DIF, SUDOKU.M_INIC AS MI, SUDOKU.M_SOL AS MS"
+						+ "FROM PARTIDA INNER JOIN PARTIDA ON PARTIDA.ID_SUDOKU=SUDOKU.ID_S "
+						+ "WHERE PARTIDA.NOMBRE_JUG='"+user+"'";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			if(result.next()){
+				//TODO me voy a cenar ahora sigo
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
+	
+	public void anadirSudokuAUsuario(){
+		//TODO
+	}
+	
 	//falta revisarlo
 	//hay que modificar la BD para lo de RETO
 	public void guardarPartida() throws ExcepcionConectarBD{
 		String jugador = GestorSesion.getGestor().getUserSesion();
 		try{
-			ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';");
-			int reto=0;
-			if(this.game.getEsReto()){
-				reto=1;
-			}
-			if(!result.next()){
-				ConexionBD.getConexionBD().actualizarBD("INSERT INTO PARTIDA VALUES('"+jugador+"',"+this.game.getIdSud()+",'"+this.game.toStringMatrizPartida()+"',"+this.game.getNumAyudas()+","+this.game.getNumComprobaciones()+","+GestorTiempo.getGestor().tiempoASegundos()+","+reto+");");
-			}
-			else{
-				ConexionBD.getConexionBD().actualizarBD("UPDATE PARTIDA SET ID_SUDOKU="+this.game.getIdSud()+", MATRIZ_TABLERO='"+this.game.toStringMatrizPartida()+"', NUM_AYUDAS="+this.game.getNumAyudas()+", NUM_COMPR="+this.game.getNumComprobaciones()+", TIEMPO="+GestorTiempo.getGestor().tiempoASegundos()+", RETO="+reto+" WHERE NOMBRE_JUG='"+jugador+"';");
+			String sql = "SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';";
+			ResultSet result=ConexionBD.getConexionBD().consultaBD(sql);
+			Integer reto = this.game.getReto();
+			int idSud = this.game.getIdSud();
+			String mPartida = this.game.toStringMatrizPartida();
+			int numAyudas = this.game.getNumAyudas();
+			int numCompr = this.game.getNumComprobaciones();
+			int seg = GestorTiempo.getGestor().tiempoASegundos();
+			if(reto == null){
+				if(!result.next()){
+					sql = "INSERT INTO PARTIDA(NOMBRE_JUG, ID_SUDOKU, MATRIZ_TABLERO, NUM_AYUDAS, NUM_COMPR, TIEMPO) "
+						+ "VALUES('"+jugador+"',"+idSud+",'"+mPartida+"',"+numAyudas+","+numCompr+","+seg+");";
+					ConexionBD.getConexionBD().actualizarBD(sql);
+				}
+				else{
+					sql = "UPDATE PARTIDA SET ID_SUDOKU="+idSud+", MATRIZ_TABLERO='"+mPartida+"',"
+						+ " NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numCompr+", TIEMPO="+seg
+						+ " WHERE NOMBRE_JUG='"+jugador+"';";
+					ConexionBD.getConexionBD().actualizarBD(sql);
+				}
+			} else {
+				if(!result.next()){
+					sql = "INSERT INTO PARTIDA(NOMBRE_JUG, ID_SUDOKU, MATRIZ_TABLERO, NUM_AYUDAS, NUM_COMPR, TIEMPO, RETO) "
+						+ "VALUES('"+jugador+"',"+idSud+",'"+mPartida+"',"+numAyudas+","+numCompr+","+seg+","+reto+");";
+					ConexionBD.getConexionBD().actualizarBD(sql);
+				}
+				else{
+					sql = "UPDATE PARTIDA SET ID_SUDOKU="+idSud+", MATRIZ_TABLERO='"+mPartida+"',"
+						+ " NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numCompr+", TIEMPO="+seg+", RETO="+reto
+						+ " WHERE NOMBRE_JUG='"+jugador+"';";
+					ConexionBD.getConexionBD().actualizarBD(sql);
+				}
 			}
 			ConexionBD.getConexionBD().closeResult(result);
 		}

@@ -13,12 +13,15 @@ import java.awt.Color;
 
 import javax.swing.JButton;
 
+import packControladores.GestorPartida;
 import packControladores.GestorSesion;
 import packControladores.GestorSudokus;
 import packExcepciones.ExcepcionConectarBD;
+import packExcepciones.ExcepcionNoHaySudokuCargado;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.JOptionPane;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
 import java.awt.Font;
@@ -76,6 +79,7 @@ public class VentanaJugador extends JFrame {
 	}
 	private void initialize() {
 		setTitle("Men\u00FA Jugador");
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(getControlador());
 		setBounds(100, 100, 450, 300);
 		setResizable(false);
@@ -98,6 +102,8 @@ public class VentanaJugador extends JFrame {
 		String nombre = GestorSesion.getGestor().getUserSesion();
 		this.getLblNombreJug().setText(nombre);
 		try {
+			boolean hayPartidaPendiente = GestorPartida.getGestor().tienePartidaPendienteUserSesion();
+			getBtnContinuar().setEnabled(hayPartidaPendiente);
 			String[] dificultades = GestorSudokus.getGestor().getDificultades();
 			for (int i = 0; i < dificultades.length; i++) {
 				this.getComboBoxDif().addItem(dificultades[i]);
@@ -242,11 +248,21 @@ public class VentanaJugador extends JFrame {
 		return btnVerRetos;
 	}
 	
+	private JButton getBtnContinuar() {
+		if (btnContinuar == null) {
+			btnContinuar = new JButton("Continuar");
+			btnContinuar.setActionCommand("PRESS_btnContinuar");
+			btnContinuar.addActionListener(getControlador());
+		}
+		return btnContinuar;
+	}
+	
 	private class Controlador extends WindowAdapter implements ActionListener{
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			dispose();
+			VentanaJugador.getVentana().dispose();
+			mVent=null;
 			GestorSesion.getGestor().cerrarSesion();
 			VentanaInicio.getVentanaInicio().setVisible(true);
 		}
@@ -273,18 +289,44 @@ public class VentanaJugador extends JFrame {
 				
 			} else if(e.getActionCommand().equals("PRESS_btnJugar")){
 				VentanaJugador.getVentana().jugar();
+			} else if(e.getActionCommand().equals("PRESS_btnContinuar")){
+				VentanaJugador.getVentana().continuar();
 			}
 		}
 	}
 
 	public void jugar() {
 		//TODO Cargar sudoku para el usuario con la dificultad elegida si es posible
-		System.out.println(getComboBoxDif().getSelectedItem());
-	}
-	private JButton getBtnContinuar() {
-		if (btnContinuar == null) {
-			btnContinuar = new JButton("Continuar");
+		String dif = (String) getComboBoxDif().getSelectedItem();
+		try {
+			GestorPartida.getGestor().cargarSudParaUsSesion(Integer.parseInt(dif));
+			VentanaSudoku.getVentana().setVisible(true);
+			dispose();
+			mVent=null;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (ExcepcionNoHaySudokuCargado e) {
+			String msg = "No hay sudokus disponibles de esa dificultad, pruebe en otro nivel o busque retos pendientes.";
+			JOptionPane.showMessageDialog(this, msg);
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
 		}
-		return btnContinuar;
+	}
+	
+	public void continuar() {
+		//TODO Cargar sudoku para el usuario con la dificultad elegida si es posible
+		try {
+			GestorPartida.getGestor().cargarPartidaPendienteParaUsSesion();
+			VentanaSudoku.getVentana().setVisible(true);
+			dispose();
+			mVent=null;
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (ExcepcionNoHaySudokuCargado e) {
+			String msg = "No hay sudokus disponibles de esa dificultad, pruebe en otro nivel o busque retos pendientes.";
+			JOptionPane.showMessageDialog(this, msg);
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		}
 	}
 }

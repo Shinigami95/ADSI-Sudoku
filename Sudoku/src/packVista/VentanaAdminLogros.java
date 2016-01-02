@@ -133,6 +133,7 @@ public class VentanaAdminLogros extends JFrame {
 				VentanaAdmin.getVentana().setVisible(true);
 			}
 		});
+		setTitle("Administrar logros");
 		setBounds(100, 100, 559, 361);
 		setSize(800,500);
 		setResizable(false);

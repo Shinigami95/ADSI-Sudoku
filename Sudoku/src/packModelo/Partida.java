@@ -18,10 +18,10 @@ public class Partida extends Observable{
 	private int numAyudas, numComprobaciones;
 	private Sudoku sudoku;
 	private MatrizPartida matrizPartida;
-	private boolean esReto;
+	private Integer reto;
 	
-	public Partida(Sudoku pSud, boolean pEsReto, int pA, int pC) {
-		esReto = pEsReto;
+	public Partida(Sudoku pSud, Integer pReto, int pA, int pC) {
+		reto = null;
 		numAyudas = pA;
 		numComprobaciones = pC;
 		sudoku = pSud;
@@ -118,8 +118,8 @@ public class Partida extends Observable{
 		}
 	}
 	
-	public boolean getEsReto() {
-		return this.esReto;
+	public Integer getReto() {
+		return this.reto;
 	}
 
 	public boolean haTerminado() {
