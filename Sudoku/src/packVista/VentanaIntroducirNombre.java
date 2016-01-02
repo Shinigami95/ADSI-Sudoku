@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JLabel;
@@ -58,11 +59,13 @@ public class VentanaIntroducirNombre extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws SQLException 
+	 * @throws ExcepcionConectarBD 
 	 */
-	public VentanaIntroducirNombre() {
+	public VentanaIntroducirNombre() throws ExcepcionConectarBD, SQLException {
 		initialize();
 	}
-	private void initialize() {
+	private void initialize() throws ExcepcionConectarBD, SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -73,7 +76,7 @@ public class VentanaIntroducirNombre extends JFrame {
 		contentPane.add(getPanel(), BorderLayout.CENTER);
 	}
 
-	private JScrollPane getScrollPane() {
+	private JScrollPane getScrollPane() throws ExcepcionConectarBD, SQLException {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setPreferredSize(new Dimension(200, 300));
@@ -168,10 +171,16 @@ public class VentanaIntroducirNombre extends JFrame {
 		}
 		return btnVolver;
 	}
-	private JList<String> getList() {
+	private JList<String> getList() throws ExcepcionConectarBD, SQLException {
 		if (list == null) {
-			list = new JList<String>();
-			list.setVisibleRowCount(100);
+			DefaultListModel<String> listModel = new DefaultListModel<String>();
+			ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO;");
+			while(res.next()){
+				String nombre = res.getString("NOMBRE");
+				listModel.addElement(nombre);
+			}
+			list = new JList<String>(listModel);
+			list.setVisibleRowCount(listModel.getSize());
 		}
 		return list;
 	}
