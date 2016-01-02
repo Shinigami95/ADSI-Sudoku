@@ -32,11 +32,13 @@ import packExcepciones.ExcepcionConectarBD;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class VentanaFinal extends JFrame {
 
 	private JPanel contentPane;
-	private static VentanaFinal mVentana = null;
+	private static VentanaFinal mVentana;
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JLabel label;
@@ -63,8 +65,7 @@ public class VentanaFinal extends JFrame {
 			public void run() {
 				try {
 					GestorPartida.getGestor().cargarSudokuMANUAL();
-					VentanaFinal frame = new VentanaFinal();
-					frame.setVisible(true);
+					getVentana().setVisible(true);;
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -82,7 +83,13 @@ public class VentanaFinal extends JFrame {
 	}
 	
 	private void initialize() throws ExcepcionConectarBD, SQLException {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent arg0) {
+					dispose();
+					VentanaJugador.getVentana().setVisible(true);
+			}
+		});
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -106,7 +113,6 @@ public class VentanaFinal extends JFrame {
 			scrollPane.setPreferredSize(new Dimension(200, 300));
 			scrollPane.setViewportView(getList_1());
 			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
-			// TODO no lo hagas así, mira como controlo las listas en la ventana de estadisticas
 			list_1.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -212,6 +218,11 @@ public class VentanaFinal extends JFrame {
 	private JButton getBtnFinalizar() {
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
+			btnFinalizar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+							dispose();
+							VentanaJugador.getVentana().setVisible(true);	
+				}});
 		}
 		return btnFinalizar;
 	}
@@ -301,10 +312,8 @@ public class VentanaFinal extends JFrame {
 					try {
 						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido el logro "+list_1.getSelectedValue().toString()+" por "+label_14.getText());
 					} catch (IOException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					} catch (URISyntaxException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}}else{JOptionPane.showMessageDialog(null, "Seleccione un logro de la lista para compartirlo.");}
 				}

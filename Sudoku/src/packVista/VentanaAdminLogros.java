@@ -129,7 +129,7 @@ public class VentanaAdminLogros extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				ventana.setVisible(false);
+				dispose();
 				VentanaAdmin.getVentana().setVisible(true);
 			}
 		});

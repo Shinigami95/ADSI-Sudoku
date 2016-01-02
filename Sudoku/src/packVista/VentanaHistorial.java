@@ -91,14 +91,8 @@ public class VentanaHistorial extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-				try {
-					getVentanaHistorial().setVisible(false);
-					VentanaJugador.getVentana();
-				} catch (ExcepcionConectarBD e) {
-					e.printStackTrace();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+					dispose();
+					VentanaJugador.getVentana().setVisible(true);;
 			}
 		});
 		setBounds(100, 100, 450, 300);
