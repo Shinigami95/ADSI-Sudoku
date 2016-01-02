@@ -1,17 +1,29 @@
 package packModelo;
 
+import packExcepciones.NoValidoException;
+
 public class Sudoku{
 
 	private int id;
 	private int dif;
 	private MatrizSudoku solucion;
 	private MatrizSudoku inicial;
+	private boolean estaActivo;
 
-	public Sudoku(int pID, int pDif, String pSolucion, String pSinRes) {
+	public Sudoku(int pID, int pDif, String pSolucion, String pSinRes, boolean pAct) throws NoValidoException {
 		this.id = pID;
 		this.dif = pDif;
-		this.solucion = new MatrizSudoku(pSolucion);
-		this.inicial = new MatrizSudoku(pSinRes);
+		this.estaActivo = pAct;
+		if(pSolucion.length()==81 && pSinRes.length()==81){
+			this.solucion = new MatrizSudoku(pSolucion);
+			this.inicial = new MatrizSudoku(pSinRes);
+			if(!this.estaBienFormadoSudoku()){
+				throw new NoValidoException();
+			}
+		}
+		else{
+			throw new NoValidoException();
+		}
 	}
 
 	public boolean estaPerfecto() {
@@ -58,7 +70,17 @@ public class Sudoku{
 		return dif;
 	}
 	
-	public boolean comprobarSudoku(){
-		return false;
+	private boolean estaBienFormadoSudoku(){
+		if(!this.compararConSolucion()){
+			return false;
+		}
+		if(!this.esCorrecto()){
+			return false;
+		}
+		return true;
+	}
+
+	public boolean getEstaActivo() {
+		return estaActivo;
 	}
 }

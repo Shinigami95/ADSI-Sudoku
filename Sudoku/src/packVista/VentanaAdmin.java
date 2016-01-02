@@ -128,7 +128,8 @@ public class VentanaAdmin extends JFrame {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			if (e.getActionCommand().equals("PRESS_btnAdminSud")){
-				
+				VentanaAdminSudoku.getVentana().setVisible(true);
+				VentanaAdmin.getVentana().setVisible(false);
 			} else if (e.getActionCommand().equals("PRESS_btnAdminLogros")){
 				try {
 					VentanaAdminLogros.getVentana().setVisible(true);

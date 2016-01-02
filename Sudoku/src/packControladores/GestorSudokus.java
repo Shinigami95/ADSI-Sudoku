@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import packExcepciones.ExcepcionConectarBD;
+import packExcepciones.NoValidoException;
+import packModelo.Sudoku;
 
 public class GestorSudokus {
 	
@@ -71,5 +73,53 @@ public class GestorSudokus {
 			System.out.println(e.getMessage());
 			return null;
 		}
+	}
+	
+	public boolean existeSudoku(String pCompleta, String pInCompleta){
+		String sql = "SELECT * FROM SUDOKU WHERE M_SOL='"+pCompleta+"' AND M_INIC='"+pInCompleta+"';";
+		try {
+			ResultSet rs = ConexionBD.getConexionBD().consultaBD(sql);
+			if(rs.next()){
+				//Si existe
+				ConexionBD.getConexionBD().closeResult(rs);
+				return true;				
+			}else{
+				//Si no existe
+				ConexionBD.getConexionBD().closeResult(rs);
+				return false;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+		
+	public Sudoku buscarSudokuPorCodigo(int pCodigo){
+		String sql = "SELECT * FROM SUDOKU WHERE ID_S="+pCodigo;
+		ResultSet rs;
+		Sudoku s = null;
+		try {
+			rs = ConexionBD.getConexionBD().consultaBD(sql);
+			if(!rs.next()) return null;
+			int dificultad = rs.getInt("DIFICULTAD");		
+			String completa = rs.getString("M_SOL");
+			String incompleta = rs.getString("M_INIC");
+			String activo = rs.getString("ACTIVO");
+			boolean estaActivo = activo.equals("S");
+			try {
+				s = new Sudoku(pCodigo,dificultad,completa,incompleta, estaActivo);
+			} catch (NoValidoException e) {
+				e.printStackTrace();
+			}
+			rs.close();
+		} catch (ExcepcionConectarBD e1) {
+			e1.printStackTrace();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}	
+		return s;
 	}
 }

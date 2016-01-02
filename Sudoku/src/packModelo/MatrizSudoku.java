@@ -1,8 +1,5 @@
 package packModelo;
 
-import java.util.Observable;
-import java.util.Observer;
-
 public class MatrizSudoku{
 
 	private Casilla[][] casillas;

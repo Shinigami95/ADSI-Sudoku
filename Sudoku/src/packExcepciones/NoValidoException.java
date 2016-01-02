@@ -3,7 +3,12 @@ package packExcepciones;
 public class NoValidoException extends Exception {
 
 	
-	public NoValidoException(String message) {
-		super(message);
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public NoValidoException() {
+		super();
 	}
 }

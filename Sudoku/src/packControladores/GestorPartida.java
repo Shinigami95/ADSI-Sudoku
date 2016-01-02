@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import packExcepciones.ExcepcionConectarBD;
 import packExcepciones.ExcepcionNoHaySudokuCargado;
+import packExcepciones.NoValidoException;
 import packModelo.Partida;
 import packModelo.Sudoku;
 
@@ -59,10 +60,15 @@ public class GestorPartida {
 		int id = 111;
 		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
 		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
-		Sudoku sud = new Sudoku(id, 1, solSud, sinRes);
-		this.game = new Partida(sud, false, 90, 5);
-		GestorTiempo.getGestor().setTiempo(0);
-		GestorTiempo.getGestor().reanudar();
+		Sudoku sud;
+		try {
+			sud = new Sudoku(id, 1, solSud, sinRes, true);
+			this.game = new Partida(sud, false, 90, 5);
+			GestorTiempo.getGestor().setTiempo(0);
+			GestorTiempo.getGestor().reanudar();
+		} catch (NoValidoException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void cargarSudParaUs(int pD, String pU) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
@@ -81,7 +87,11 @@ public class GestorPartida {
 				dif = result.getInt("DIFICULTAD");
 				mI = result.getString("M_INIC");
 				mS = result.getString("M_SOL");
-				sud = new Sudoku(idS, dif, mS, mI);
+				try {
+					sud = new Sudoku(idS, dif, mS, mI, true);
+				} catch (NoValidoException e) {
+					e.printStackTrace();
+				}
 			//TODO	part = new Partida(pSud, pEsReto, pT, pA, pC)
 				
 			}
