@@ -302,7 +302,6 @@ public class VentanaJugador extends JFrame {
 	}
 
 	public void jugar() {
-		//TODO Cargar sudoku para el usuario con la dificultad elegida si es posible
 		String dif = (String) getComboBoxDif().getSelectedItem();
 		try {
 			boolean hayPartidaPendiente = GestorPartida.getGestor().tienePartidaPendienteUserSesion();
@@ -330,7 +329,6 @@ public class VentanaJugador extends JFrame {
 	}
 	
 	public void continuar() {
-		//TODO Cargar sudoku para el usuario con la dificultad elegida si es posible
 		try {
 			GestorPartida.getGestor().cargarPartidaPendienteParaUsSesion();
 			VentanaSudoku.getVentana().setVisible(true);
