@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.GridLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -18,11 +20,18 @@ import javax.swing.JButton;
 import javax.swing.JTextArea;
 
 import java.awt.BorderLayout;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JScrollPane;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.LayoutStyle.ComponentPlacement;
+
+import packControladores.ConexionBD;
+import packControladores.GestorRanking;
+import packExcepciones.ExcepcionConectarBD;
 
 
 public class VentanaRanking extends JFrame {
@@ -31,7 +40,7 @@ public class VentanaRanking extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static VentanaRanking mVHistorial;
+	private static VentanaRanking mVRanking;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
 	private JPanel panel;
@@ -40,7 +49,7 @@ public class VentanaRanking extends JFrame {
 	private Controlador controlador;
 	private JScrollPane scrollPane;
 	private JPanel panel_3;
-	private JList list;
+	private JList<Integer> list;
 	private JLabel lblidSudoku;
 	private JLabel lblidSudoku2;
 	private JLabel lblDificultad;
@@ -48,9 +57,9 @@ public class VentanaRanking extends JFrame {
 	private JLabel lblActivo;
 	private JLabel lblActivo2;
 	private JLabel lblEstasEnLaPos;
-	private JLabel label_1;
+	private JLabel lblEstasEnLaPos2;
 	private JLabel lblRanking;
-	private JLabel label_2;
+	private JLabel lblRanking2;
 	private JTextArea textArea;
 	private JTextArea textArea_1;
 	private JButton btnVolver;
@@ -75,19 +84,21 @@ public class VentanaRanking extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ExcepcionConectarBD 
+	 * @throws SQLException 
 	 */
-	public VentanaRanking() {
+	public VentanaRanking() throws ExcepcionConectarBD, SQLException {
 		initialize();
 	}
 	
-	public static VentanaRanking getVentana(){
-		if(mVHistorial==null){
-			mVHistorial = new VentanaRanking();
+	public static VentanaRanking getVentana() throws ExcepcionConectarBD, SQLException{
+		if(mVRanking==null){
+			mVRanking = new VentanaRanking();
 		}
-		return mVHistorial;
+		return mVRanking;
 	}
 	
-	private void initialize() {
+	private void initialize() throws ExcepcionConectarBD, SQLException {
 		addWindowListener(getControlador());
 		setBounds(100, 100, 600, 600);
 		setTitle("Ranking");
@@ -98,12 +109,73 @@ public class VentanaRanking extends JFrame {
 		contentPane.add(getTabbedPane());
 	}
 
-	private JTabbedPane getTabbedPane() {
+	private JTabbedPane getTabbedPane() throws ExcepcionConectarBD, SQLException {
 		if (tabbedPane == null) {
 			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 			tabbedPane.addTab("Puntuacion", null, getPanel(), null);
 			tabbedPane.addTab("Retos", null, getPanel_1(), null);
 			tabbedPane.addTab("Un sudoku", null, getPanel_2(), null);
+			tabbedPane.addMouseListener(new MouseListener(){
+
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					String[][] ranking;
+					//Si la pestaña seleccionada es "Puntuacion"
+					if(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()).equals("Puntuacion")){
+						try {
+							ranking = GestorRanking.getGestorRanking().obtenerRankingPuntuacion();
+							if(ranking.length > 0){
+								for(int i=0;i<ranking.length;i++){
+									textArea_1.append(ranking[i][0] + " ---> " + ranking[i][1] +"\n");
+								}
+							}else{
+								textArea_1.setText("¡No hay nadie en el ranking de puntos!");
+							}
+						} catch (ExcepcionConectarBD e) {
+							e.printStackTrace();
+						}
+					}//Si la pestaña seleccionada es "Retos"
+					else if(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()).equals("Retos")){
+						try {
+							ranking = GestorRanking.getGestorRanking().obtenerRankingRetos();
+							if(ranking.length > 0){
+								for(int i=0;i<ranking.length;i++){
+									textArea.append("En el reto de " + ranking[i][0] + ", " + ranking[i][1] + " ha tardado " + ranking[i][3] + " en hacer el sudoku " + ranking[i][2]+ "\n");
+								}
+							}else{
+								textArea.setText("¡No hay nadie en el ranking de retos!");
+							}
+						} catch (ExcepcionConectarBD e) {
+							e.printStackTrace();
+						}
+					}
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				
+			});
 		}
 		return tabbedPane;
 	}
@@ -159,7 +231,7 @@ public class VentanaRanking extends JFrame {
 		}
 		return panel_1;
 	}
-	private JPanel getPanel_2() {
+	private JPanel getPanel_2() throws ExcepcionConectarBD, SQLException {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
 			panel_2.setLayout(new BorderLayout(0, 0));
@@ -180,14 +252,63 @@ public class VentanaRanking extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			VentanaJugador.getVentana().setVisible(true);
-			VentanaRanking.getVentana().setVisible(false);
+			try {
+				VentanaRanking.getVentana().setVisible(false);
+			} catch (ExcepcionConectarBD e1) {
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
-	private JScrollPane getScrollPane() {
+	private JScrollPane getScrollPane() throws ExcepcionConectarBD, SQLException {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setPreferredSize(new Dimension(200, 300));
 			scrollPane.setViewportView(getList());
+			list.addMouseListener(new MouseListener(){
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseEntered(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+
+				@Override
+				public void mouseExited(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+				//seleccionamos un id del sudoku para ver su ranking
+				@Override
+				public void mousePressed(MouseEvent arg0) {
+					int idSudoku = list.getSelectedValue().intValue();
+					try {
+						String[][] ranking = GestorRanking.getGestorRanking().obtenerRankingUnSudoku(idSudoku);
+						if(ranking.length > 0){
+							for(int i=0;i<ranking.length;i++){
+								lblRanking2.setText("En el sudoku " + ranking[i][0] + ", " + ranking[i][1] + " ha conseguido " + ranking[i][2] + " puntos\n");
+							}
+						}else{
+							lblRanking2.setText("¡No hay nadie en el ranking de este sudoku!");
+						}
+					} catch (ExcepcionConectarBD e) {
+						e.printStackTrace();
+					}
+					
+				}
+
+				@Override
+				public void mouseReleased(MouseEvent arg0) {
+					// TODO Auto-generated method stub
+					
+				}
+			});
 		}
 		return scrollPane;
 	}
@@ -202,16 +323,23 @@ public class VentanaRanking extends JFrame {
 			panel_3.add(getLblActivo());
 			panel_3.add(getLblActivo2());
 			panel_3.add(getLblEstasEnLaPos());
-			panel_3.add(getLabel_1());
+			panel_3.add(getLblEstasEnLaPos2());
 			panel_3.add(getLblRanking());
-			panel_3.add(getLabel_2());
+			panel_3.add(getLblRanking2());
 			panel_3.add(getBtnVolver_2());
 		}
 		return panel_3;
 	}
-	private JList getList() {
+	private JList<Integer> getList() throws ExcepcionConectarBD, SQLException {
 		if (list == null) {
-			list = new JList();
+			DefaultListModel<Integer> listModel = new DefaultListModel<Integer>();
+			ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT ID_S FROM SUDOKU;");
+			while(res.next()){
+				int id = Integer.parseInt(res.getString("ID_S"));
+				listModel.addElement(id);
+			}
+			list = new JList<Integer>(listModel);
+			list.setVisibleRowCount(listModel.getSize());
 		}
 		return list;
 	}
@@ -264,12 +392,12 @@ public class VentanaRanking extends JFrame {
 		}
 		return lblEstasEnLaPos;
 	}
-	private JLabel getLabel_1() {
-		if (label_1 == null) {
-			label_1 = new JLabel("");
-			label_1.setBounds(135, 98, 46, 14);
+	private JLabel getLblEstasEnLaPos2() {
+		if (lblEstasEnLaPos2 == null) {
+			lblEstasEnLaPos2 = new JLabel("");
+			lblEstasEnLaPos2.setBounds(135, 98, 46, 14);
 		}
-		return label_1;
+		return lblEstasEnLaPos2;
 	}
 	private JLabel getLblRanking() {
 		if (lblRanking == null) {
@@ -278,20 +406,22 @@ public class VentanaRanking extends JFrame {
 		}
 		return lblRanking;
 	}
-	private JLabel getLabel_2() {
-		if (label_2 == null) {
-			label_2 = new JLabel("");
-			label_2.setBounds(10, 157, 214, 148);
+	private JLabel getLblRanking2() {
+		if (lblRanking2 == null) {
+			lblRanking2 = new JLabel("");
+			lblRanking2.setBounds(10, 157, 214, 148);
 		}
-		return label_2;
+		return lblRanking2;
 	}
 	private JTextArea getTextArea() {
+		//Retos
 		if (textArea == null) {
 			textArea = new JTextArea();
 		}
 		return textArea;
 	}
 	private JTextArea getTextArea_1() {
+		//Puntuacion
 		if (textArea_1 == null) {
 			textArea_1 = new JTextArea();
 		}

@@ -73,10 +73,10 @@ public class GestorRanking {
 		return rankingR;
 	}
 	
-	public String[][] obtenerRankingUnSudoku(String pIdSudoku) throws ExcepcionConectarBD{
+	public String[][] obtenerRankingUnSudoku(int pIdSudoku) throws ExcepcionConectarBD{
 		int i = 0; //contador de tuplas
 		String[][] rankingR = null;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_JUG,PTO FROM JUGADO WHERE ID_SUDOKU='"+pIdSudoku+"' ORDER BY PTO;");
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,NOMBRE_JUG,PTO FROM JUGADO WHERE ID_SUDOKU='"+pIdSudoku+"' ORDER BY PTO;");
 		try{
 			//Cogemos las columnas que tiene la tupla
 			int columnas = result.getMetaData().getColumnCount();
@@ -87,7 +87,7 @@ public class GestorRanking {
 				int k = 0; //contador de valores por tupla
 				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
 				for(int j=1;j<=columnas;j++){
-					//[i][0] = nombre_jug, [i][1] = id_sudoku, [i][2] = pto
+					//[i][0] = id_sudoku, [i][1] = nombre_jug, [i][2] = pto
 					rankingR[i][k] = result.getString(j);
 					k++;
 				}

@@ -283,7 +283,13 @@ public class VentanaJugador extends JFrame {
 				VentanaEstadisticasJugador.getVentana().setVisible(true);
 				VentanaJugador.getVentana().setVisible(false);
 			} else if(e.getActionCommand().equals("PRESS_btnVerRanking")){
-				VentanaRanking.getVentana().setVisible(true);
+				try {
+					VentanaRanking.getVentana().setVisible(true);
+				} catch (ExcepcionConectarBD e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
 				VentanaJugador.getVentana().setVisible(false);
 			} else if(e.getActionCommand().equals("PRESS_btnVerRetos")){
 				
