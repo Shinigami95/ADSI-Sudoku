@@ -20,7 +20,6 @@ public class GestorRanking {
 		return miGestorRanking;
 	}
 	
-	//Se ejecutara cada uno de los metodos en cada pestaña de la ventana
 	public String obtenerRankingPuntuacion() throws ExcepcionConectarBD{
 		String rankingP = "";
         int puesto = 1;
