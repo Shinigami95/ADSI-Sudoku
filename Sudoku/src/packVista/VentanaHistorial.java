@@ -23,7 +23,9 @@ import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
 import packControladores.ConexionBD;
+import packControladores.GestorHistorial;
 import packControladores.GestorLogros;
+import packControladores.GestorRanking;
 import packControladores.GestorSesion;
 import packExcepciones.ExcepcionConectarBD;
 
@@ -31,6 +33,11 @@ import javax.swing.JLabel;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class VentanaHistorial extends JFrame {
 
@@ -53,6 +60,9 @@ public class VentanaHistorial extends JFrame {
 	private JLabel lblDescripcin;
 	private JLabel label;
 	private JLabel label_1;
+	private JButton btnVolver;
+	private JButton btnVolver1;
+	private JButton btnVolver2;
 	
 
 	/**
@@ -78,6 +88,10 @@ public class VentanaHistorial extends JFrame {
 	 */
 	public VentanaHistorial() throws ExcepcionConectarBD, SQLException {
 		initialize();
+		textArea.setEditable(false);
+        obtenerHistorialSudokus();
+        textArea_1.setEditable(false);
+        obtenerHistorialRetos();
 	}
 	
 	public static VentanaHistorial getVentanaHistorial() throws ExcepcionConectarBD, SQLException{
@@ -121,12 +135,18 @@ public class VentanaHistorial extends JFrame {
 			gl_panel.setHorizontalGroup(
 				gl_panel.createParallelGroup(Alignment.LEADING)
 					.addComponent(getTextArea(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+						.addContainerGap(333, Short.MAX_VALUE)
+						.addComponent(getBtnVolver2(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap())
 			);
 			gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.TRAILING)
-					.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-						.addComponent(getTextArea(), GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(29, Short.MAX_VALUE))
+				gl_panel.createParallelGroup(Alignment.LEADING)
+					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+						.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+						.addGap(18)
+						.addComponent(getBtnVolver2())
+						.addContainerGap())
 			);
 			panel.setLayout(gl_panel);
 		}
@@ -139,12 +159,18 @@ public class VentanaHistorial extends JFrame {
 			gl_panel_1.setHorizontalGroup(
 				gl_panel_1.createParallelGroup(Alignment.LEADING)
 					.addComponent(getTextArea_1(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+					.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+						.addContainerGap()
+						.addComponent(getBtnVolver1(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+						.addGap(10))
 			);
 			gl_panel_1.setVerticalGroup(
-				gl_panel_1.createParallelGroup(Alignment.TRAILING)
-					.addGroup(Alignment.LEADING, gl_panel_1.createSequentialGroup()
-						.addComponent(getTextArea_1(), GroupLayout.PREFERRED_SIZE, 195, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(29, Short.MAX_VALUE))
+				gl_panel_1.createParallelGroup(Alignment.LEADING)
+					.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+						.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+						.addGap(18)
+						.addComponent(getBtnVolver1())
+						.addContainerGap())
 			);
 			panel_1.setLayout(gl_panel_1);
 		}
@@ -234,6 +260,7 @@ public class VentanaHistorial extends JFrame {
 			panel_3.add(getLblDescripcin());
 			panel_3.add(getLabel());
 			panel_3.add(getLabel_1());
+			panel_3.add(getBtnVolver());
 		}
 		return panel_3;
 	}
@@ -286,4 +313,89 @@ public class VentanaHistorial extends JFrame {
 		}
 		return label_1;
 	}
+	private JButton getBtnVolver() {
+		if (btnVolver == null) {
+			btnVolver = new JButton("Volver");
+			btnVolver.setBounds(120, 190, 89, 23);
+			btnVolver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					try {
+						VentanaHistorial.getVentanaHistorial().setVisible(false);
+						VentanaJugador.getVentana().setVisible(true);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnVolver;
+	}
+	private JButton getBtnVolver1() {
+		if (btnVolver1 == null) {
+			btnVolver1 = new JButton("Volver");
+			btnVolver1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					try {
+						VentanaHistorial.getVentanaHistorial().setVisible(false);
+						VentanaJugador.getVentana().setVisible(true);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnVolver1;
+	}
+	private JButton getBtnVolver2() {
+		if (btnVolver2 == null) {
+			btnVolver2 = new JButton("Volver");
+			btnVolver2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					try {
+						VentanaHistorial.getVentanaHistorial().setVisible(false);
+						VentanaJugador.getVentana().setVisible(true);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
+		}
+		return btnVolver2;
+	}
+	private void obtenerHistorialSudokus(){
+        String historial;
+        try {
+        	String jugador = GestorSesion.getGestor().getUserSesion();
+        	historial = GestorHistorial.getGestorHistorial().obtenerHistorialSudokus(jugador);
+            if(historial.length() > 0){
+                textArea.setText(historial);
+            }else{
+                textArea.setText("¡No has jugado ningún sudoku!");
+            }
+        } catch (ExcepcionConectarBD e) {
+            e.printStackTrace();
+        }
+    }
+	private void obtenerHistorialRetos(){
+        String historial;
+        try {
+        	historial = GestorRanking.getGestorRanking().obtenerRankingPuntuacion();
+            if(historial.length() > 0){
+                textArea_1.setText(historial);
+            }else{
+                textArea_1.setText("¡No has participado en ningún reto!");
+            }
+        } catch (ExcepcionConectarBD e) {
+            e.printStackTrace();
+        }
+    }
 }
