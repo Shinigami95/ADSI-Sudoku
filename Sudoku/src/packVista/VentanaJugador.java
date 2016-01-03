@@ -305,6 +305,16 @@ public class VentanaJugador extends JFrame {
 		//TODO Cargar sudoku para el usuario con la dificultad elegida si es posible
 		String dif = (String) getComboBoxDif().getSelectedItem();
 		try {
+			boolean hayPartidaPendiente = GestorPartida.getGestor().tienePartidaPendienteUserSesion();
+			if(hayPartidaPendiente){
+				String msg1 = "Ya hay una partida empezada, si empieza un sudoku nuevo se borrar\u00E1n los datos de la misma.";
+				int respuesta = JOptionPane.showConfirmDialog(this, msg1);
+				if(respuesta!=JOptionPane.OK_OPTION){
+					return;
+				} else {
+					GestorPartida.getGestor().borrarPartidaUsuarioSesion();
+				}	
+			}
 			GestorPartida.getGestor().cargarSudParaUsSesion(Integer.parseInt(dif));
 			VentanaSudoku.getVentana().setVisible(true);
 			dispose();
@@ -312,8 +322,8 @@ public class VentanaJugador extends JFrame {
 		} catch (NumberFormatException e) {
 			e.printStackTrace();
 		} catch (ExcepcionNoHaySudokuCargado e) {
-			String msg = "No hay sudokus disponibles de esa dificultad, pruebe en otro nivel o busque retos pendientes.";
-			JOptionPane.showMessageDialog(this, msg);
+			String msg2 = "No hay sudokus disponibles de esa dificultad, pruebe en otro nivel o busque retos pendientes.";
+			JOptionPane.showMessageDialog(this, msg2);
 		} catch (ExcepcionConectarBD e) {
 			e.printStackTrace();
 		}

@@ -178,7 +178,6 @@ public class GestorPartida {
 						+ "WHERE PARTIDA.NOMBRE_JUG='"+user+"'";
 			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
 			if(result.next()){
-				//TODO me voy a cenar ahora sigo
 				int ids = result.getInt("IDS");
 				String mtab = result.getString("MTAB");
 				int na = result.getInt("NA");
@@ -206,7 +205,7 @@ public class GestorPartida {
 		}
 	}
 	
-	public void anadirSudokuAUsuario(){
+	public void anadirSudokuJugadoAUsuarioSesion(){
 		//TODO
 	}
 	
@@ -225,13 +224,13 @@ public class GestorPartida {
 			int seg = GestorTiempo.getGestor().tiempoASegundos();
 			if(reto == null){
 				if(!result.next()){
-					sql = "INSERT INTO PARTIDA(NOMBRE_JUG, ID_SUDOKU, MATRIZ_TABLERO, NUM_AYUDAS, NUM_COMPR, TIEMPO) "
-						+ "VALUES('"+jugador+"',"+idSud+",'"+mPartida+"',"+numAyudas+","+numCompr+","+seg+");";
+					sql = "INSERT INTO PARTIDA(NOMBRE_JUG, ID_SUDOKU, MATRIZ_TABLERO, NUM_AYUDAS, NUM_COMPR, TIEMPO, RETO) "
+						+ "VALUES('"+jugador+"',"+idSud+",'"+mPartida+"',"+numAyudas+","+numCompr+","+seg+",NULL);";
 					ConexionBD.getConexionBD().actualizarBD(sql);
 				}
 				else{
 					sql = "UPDATE PARTIDA SET ID_SUDOKU="+idSud+", MATRIZ_TABLERO='"+mPartida+"',"
-						+ " NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numCompr+", TIEMPO="+seg
+						+ " NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numCompr+", TIEMPO="+seg+", RETO=NULL"
 						+ " WHERE NOMBRE_JUG='"+jugador+"';";
 					ConexionBD.getConexionBD().actualizarBD(sql);
 				}
@@ -286,5 +285,31 @@ public class GestorPartida {
 			penalizacion=50;
 		}
 		return penalizacion;
+	}
+
+	public void borrarPartidaUsuarioSesion() {
+		try {
+			String jugador = GestorSesion.getGestor().getUserSesion();
+			String sql = "SELECT ID_SUDOKU, RETO FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			if(result.next()){
+				String ids = result.getInt("ID_SUDOKU")+"";
+				int reto = result.getInt("RETO");
+				ConexionBD.getConexionBD().closeResult(result);
+				if(reto != 0){
+					sql = "UPDATE RETO SET ESTADO='T' WHERE ID_R="+reto+";";
+					ConexionBD.getConexionBD().actualizarBD(sql);
+				}
+				sql = "DELETE FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';";
+				ConexionBD.getConexionBD().actualizarBD(sql);
+				sql = "INSERT INTO JUGADO (NOMBRE_JUG, ID_SUDOKU, COMPLETADO, PTO, SEGUNDOS)"
+					+ " VALUES ('"+jugador+"', "+ids+", 'N', 0, 0);";
+				ConexionBD.getConexionBD().actualizarBD(sql);
+			}
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 }
