@@ -20,25 +20,12 @@ public class GestorHistorial {
 		return miGestorHistorial;
 	}
 	
-	public String[][] obtenerHistorialSudokus(String pJugador) throws ExcepcionConectarBD {
-		int i = 0; //contador de tuplas
+	public String obtenerHistorialSudokus(String pJugador) throws ExcepcionConectarBD {
 		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,FECHA,COMPLETADO,PTO FROM JUGADO WHERE NOMBRE_JUG = '"+pJugador+"' ORDER BY FECHA;");
-		String[][] historialS = null;
+		String historialS = "";
 		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			historialS = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
 			while(result.next()){
-				int k = 0;
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = id_sudoku, [i][1] = fecha, [i][2] = completado, [i][3] = pto
-					historialS[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
+				historialS += "Sudoku: " + result.getString("ID_SUDOKU") + ", Completado: " + result.getString("COMPLETADO") + ", Puntos: " + result.getString("PTO") + ", Fecha: " + result.getString("FECHA");
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
@@ -46,56 +33,16 @@ public class GestorHistorial {
 		return historialS;
 	}
 	
-	public String[][] obtenerHistorialRetos(String pJugador) throws ExcepcionConectarBD{
-		int i = 0; //contador de tuplas
+	public String obtenerHistorialRetos(String pJugador) throws ExcepcionConectarBD{
 		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_R,NOMBRE_RETADOR,NOMBRE_RETADO,ID_SUDOKU,ESTADO,FECHA FROM RETO WHERE NOMBRE_RETADOR ='"+pJugador+"' AND NOMBRE_RETADO = '"+pJugador+"' ORDER BY FECHA;");
-		String[][] historialR = null;
+		String historialR = "";
 		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			historialR = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
 			while(result.next()){
-				int k = 0;
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = id_reto, [i][1] = nombre_retador, [i][2] = nombre_retado, [i][3] = id_sudoku
-					//[i][4] = estado, [i][5] = fecha
-					historialR[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
+				historialR += "Reto: " + result.getString("ID_R") + ", Retador: " + result.getString("NOMBRE_RETADOR") + ", Retado: " + result.getString("NOMBRE_RETADO") + ", SudokuJugado: " + result.getString("ID_SUDOKU") + ", Estado: " + result.getString("ESTADO") + ", Fecha: " + result.getString("FECHA");
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
 		}
 		return historialR;
-	}
-	
-	public String[][] obtenerHistorialLogros(String pJugador) throws ExcepcionConectarBD{
-		int i = 0; //contador de tuplas
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION,ID_SUDOKU,FECHA FROM LOGRO INNER JOIN JUGADO WHERE NOMBRE_JUG = '"+pJugador+"' ORDER BY FECHA;");
-		String[][] historialL = null;
-		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			historialL = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
-			while(result.next()){
-				int k = 0;
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = descripcion, [i][1] = id_sudoku, [i][2] = fecha
-					historialL[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
-			}
-		}catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-		return historialL;
 	}
 }
