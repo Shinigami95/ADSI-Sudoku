@@ -32,6 +32,8 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 import packControladores.ConexionBD;
 import packControladores.GestorRanking;
 import packExcepciones.ExcepcionConectarBD;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 
 public class VentanaRanking extends JFrame {
@@ -59,12 +61,12 @@ public class VentanaRanking extends JFrame {
 	private JLabel lblEstasEnLaPos;
 	private JLabel lblEstasEnLaPos2;
 	private JLabel lblRanking;
-	private JLabel lblRanking2;
 	private JTextArea textArea;
 	private JTextArea textArea_1;
 	private JButton btnVolver;
 	private JButton button;
 	private JButton button_1;
+	private JTextArea textArea_2;
 	
 	/**
 	 * Launch the application.
@@ -89,6 +91,10 @@ public class VentanaRanking extends JFrame {
 	 */
 	public VentanaRanking() throws ExcepcionConectarBD, SQLException {
 		initialize();
+		textArea_1.setEditable(false);
+        obtenerRankingPuntos();
+        textArea.setEditable(false);
+        obtenerRankingRetos();
 	}
 	
 	public static VentanaRanking getVentana() throws ExcepcionConectarBD, SQLException{
@@ -115,67 +121,6 @@ public class VentanaRanking extends JFrame {
 			tabbedPane.addTab("Puntuacion", null, getPanel(), null);
 			tabbedPane.addTab("Retos", null, getPanel_1(), null);
 			tabbedPane.addTab("Un sudoku", null, getPanel_2(), null);
-			tabbedPane.addMouseListener(new MouseListener(){
-
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-
-				@Override
-				public void mousePressed(MouseEvent arg0) {
-					String[][] ranking;
-					//Si la pestaña seleccionada es "Puntuacion"
-					if(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()).equals("Puntuacion")){
-						try {
-							ranking = GestorRanking.getGestorRanking().obtenerRankingPuntuacion();
-							if(ranking.length > 0){
-								for(int i=0;i<ranking.length;i++){
-									textArea_1.append(ranking[i][0] + " ---> " + ranking[i][1] +"\n");
-								}
-							}else{
-								textArea_1.setText("¡No hay nadie en el ranking de puntos!");
-							}
-						} catch (ExcepcionConectarBD e) {
-							e.printStackTrace();
-						}
-					}//Si la pestaña seleccionada es "Retos"
-					else if(tabbedPane.getTitleAt(tabbedPane.getSelectedIndex()).equals("Retos")){
-						try {
-							ranking = GestorRanking.getGestorRanking().obtenerRankingRetos();
-							if(ranking.length > 0){
-								for(int i=0;i<ranking.length;i++){
-									textArea.append("En el reto de " + ranking[i][0] + ", " + ranking[i][1] + " ha tardado " + ranking[i][3] + " en hacer el sudoku " + ranking[i][2]+ "\n");
-								}
-							}else{
-								textArea.setText("¡No hay nadie en el ranking de retos!");
-							}
-						} catch (ExcepcionConectarBD e) {
-							e.printStackTrace();
-						}
-					}
-				}
-
-				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
-				
-			});
 		}
 		return tabbedPane;
 	}
@@ -289,13 +234,11 @@ public class VentanaRanking extends JFrame {
 				public void mousePressed(MouseEvent arg0) {
 					int idSudoku = list.getSelectedValue().intValue();
 					try {
-						String[][] ranking = GestorRanking.getGestorRanking().obtenerRankingUnSudoku(idSudoku);
-						if(ranking.length > 0){
-							for(int i=0;i<ranking.length;i++){
-								lblRanking2.setText("En el sudoku " + ranking[i][0] + ", " + ranking[i][1] + " ha conseguido " + ranking[i][2] + " puntos\n");
-							}
+						String ranking = GestorRanking.getGestorRanking().obtenerRankingUnSudoku(idSudoku);
+						if(ranking.length() > 0){
+							textArea_2.setText(ranking);
 						}else{
-							lblRanking2.setText("¡No hay nadie en el ranking de este sudoku!");
+							textArea_2.setText("¡No hay nadie en el ranking de este sudoku!");
 						}
 					} catch (ExcepcionConectarBD e) {
 						e.printStackTrace();
@@ -325,8 +268,8 @@ public class VentanaRanking extends JFrame {
 			panel_3.add(getLblEstasEnLaPos());
 			panel_3.add(getLblEstasEnLaPos2());
 			panel_3.add(getLblRanking());
-			panel_3.add(getLblRanking2());
 			panel_3.add(getBtnVolver_2());
+			panel_3.add(getTextArea_2());
 		}
 		return panel_3;
 	}
@@ -406,13 +349,6 @@ public class VentanaRanking extends JFrame {
 		}
 		return lblRanking;
 	}
-	private JLabel getLblRanking2() {
-		if (lblRanking2 == null) {
-			lblRanking2 = new JLabel("");
-			lblRanking2.setBounds(10, 157, 214, 148);
-		}
-		return lblRanking2;
-	}
 	private JTextArea getTextArea() {
 		//Retos
 		if (textArea == null) {
@@ -430,20 +366,68 @@ public class VentanaRanking extends JFrame {
 	private JButton getBtnVolver() {
 		if (btnVolver == null) {
 			btnVolver = new JButton("Volver");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					//TODO todos llevaran a la ventana principal del jugador o el sudoku
+				}
+			});
 		}
 		return btnVolver;
 	}
 	private JButton getBtnVolver_1() {
 		if (button == null) {
 			button = new JButton("Volver");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
 		}
 		return button;
 	}
 	private JButton getBtnVolver_2() {
 		if (button_1 == null) {
 			button_1 = new JButton("Volver");
+			button_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					
+				}
+			});
 			button_1.setBounds(268, 490, 91, 23);
 		}
 		return button_1;
+	}
+	private void obtenerRankingPuntos(){
+        String ranking;
+        try {
+            ranking = GestorRanking.getGestorRanking().obtenerRankingPuntuacion();
+            if(ranking.length() > 0){
+                textArea_1.setText(ranking);
+            }else{
+                textArea_1.setText("¡No hay nadie en el ranking de puntos!");
+            }
+        } catch (ExcepcionConectarBD e) {
+            e.printStackTrace();
+        }
+    }
+	private void obtenerRankingRetos(){
+		String ranking;
+		try{
+			ranking = GestorRanking.getGestorRanking().obtenerRankingRetos();
+            if(ranking.length() > 0){
+                textArea.setText(ranking);
+            }else{
+                textArea.setText("¡No hay nadie en el ranking de retos!");
+            }
+        } catch (ExcepcionConectarBD e) {
+            e.printStackTrace();
+        }
+	}
+	private JTextArea getTextArea_2() {
+		if (textArea_2 == null) {
+			textArea_2 = new JTextArea();
+			textArea_2.setBounds(10, 152, 232, 325);
+		}
+		return textArea_2;
 	}
 }

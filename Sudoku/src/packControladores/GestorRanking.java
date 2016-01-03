@@ -21,51 +21,31 @@ public class GestorRanking {
 	}
 	
 	//Se ejecutara cada uno de los metodos en cada pestaña de la ventana
-	public String[][] obtenerRankingPuntuacion() throws ExcepcionConectarBD{
-		int i = 0; //contador de tuplas
-		String[][] rankingP = null;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE,PTO_TOTAL FROM JUGADOR ORDER BY PTO_TOTAL;");
-		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			rankingP = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
-			while(result.next()){
-				int k = 0; //contador de valores por tupla
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = nombre, [i][1] = pto_total
-					rankingP[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
-			}
-		}catch(SQLException e){
-			System.out.println(e.getMessage());
-		}
-		return rankingP;
+	public String obtenerRankingPuntuacion() throws ExcepcionConectarBD{
+		String rankingP = "";
+        int puesto = 1;
+        ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE,PTO_TOTAL FROM JUGADOR ORDER BY PTO_TOTAL DESC;");
+        try{
+            //sacamos solo los 10 primeros
+            while(result.next()&&puesto<11){
+                rankingP += puesto + "- " + result.getString("NOMBRE") + ": " + result.getShort("PTO_TOTAL") + "\n";
+                puesto++;
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return rankingP;
 	}
 	
-	public String[][] obtenerRankingRetos() throws ExcepcionConectarBD{
-		int i = 0; //contador de tuplas
-		String[][] rankingR = null;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR,NOMBRE_RETADO,ID_SUDOKU,TIEMPO FROM RETO INNER JOIN PARTIDA ON RETO.ID_SUDOKU=PARTIDA.ID_SUDOKU WHERE ESTADO=’A’ ORDER BY TIEMPO;");
+	public String obtenerRankingRetos() throws ExcepcionConectarBD{
+		String rankingR = "";
+		int puesto = 1;
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADO,ID_SUDOKU,TIEMPO FROM RETO INNER JOIN PARTIDA ON RETO.ID_SUDOKU=PARTIDA.ID_SUDOKU WHERE ESTADO=’A’ ORDER BY TIEMPO DESC;");
 		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			rankingR = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
-			while(result.next()){
-				int k = 0; //contador de valores por tupla
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = nombre_retador, [i][1] = nombre_retado, [i][2] = id_sudoku, [i][3] = tiempo
-					rankingR[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
+			//Los 10 primeros
+			while(result.next()&&puesto<11){
+				rankingR+=puesto + "- "+ result.getString("NOMBRE_RETADO")+ " ha tardado " + result.getShort("TIEMPO") + " en resolver " + result.getString("ID_SUDOKU") + "\n";
+				puesto++;
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
@@ -73,29 +53,19 @@ public class GestorRanking {
 		return rankingR;
 	}
 	
-	public String[][] obtenerRankingUnSudoku(int pIdSudoku) throws ExcepcionConectarBD{
-		int i = 0; //contador de tuplas
-		String[][] rankingR = null;
+	public String obtenerRankingUnSudoku(int pIdSudoku) throws ExcepcionConectarBD{
+		String rankingUS = "";
+		int puesto = 1;
 		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,NOMBRE_JUG,PTO FROM JUGADO WHERE ID_SUDOKU='"+pIdSudoku+"' ORDER BY PTO;");
 		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			rankingR = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
-			while(result.next()){
-				int k = 0; //contador de valores por tupla
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = id_sudoku, [i][1] = nombre_jug, [i][2] = pto
-					rankingR[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
+			//Los 10 primeros
+			while(result.next()&&puesto<11){
+				rankingUS+=puesto + "- "+ result.getString("NOMBRE_JUG")+ " ha conseguido " + result.getShort("TIEMPO") + " en " + result.getShort("ID_SUDOKU");
+				puesto++;
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
 		}
-		return rankingR;
+		return rankingUS;
 	}
 }
