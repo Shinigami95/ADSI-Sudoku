@@ -29,30 +29,17 @@ public class GestorRetos {
 		}
 	}
 	
-	public String[][] obtenerListadoRetos(String pRetado) throws ExcepcionConectarBD{
-		int i = 0; //contador de tuplas
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_R,NOMBRE_RETADO,RETO.ID_SUDOKU,RETO.FECHA FROM RETO INNER JOIN JUGADO WHERE NOMBRE_JUG='"+pRetado+"' AND ESTADO = 'P' ORDER BY FECHA;");
-		String[][] historialLR = null;
+	public String obtenerListadoRetos(String pRetado) throws ExcepcionConectarBD{
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR FROM RETO INNER JOIN JUGADO WHERE NOMBRE_JUG='"+pRetado+"' AND ESTADO = 'P' ORDER BY FECHA DESC;");
+		String listaRetos = "";
 		try{
-			//Cogemos las columnas que tiene la tupla
-			int columnas = result.getMetaData().getColumnCount();
-			//Obtenemos el tamaño del array doble con las tuplas y las columnas
-			historialLR = new String[result.getFetchSize()][columnas];
-			//mientras haya tuplas en la base de datos
 			while(result.next()){
-				int k = 0;
-				//vamos cogiendo las filas de cada tupla y guardando la informacion en el array
-				for(int j=1;j<=columnas;j++){
-					//[i][0] = id_reto, [i][1] = nombre_retado, [i][2] = id_sudoku, [i][3] = fecha, 
-					historialLR[i][k] = result.getString(j);
-					k++;
-				}
-				i++;
+				listaRetos += result.getString("NOMBRE_RETADOR") + "\n";
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
 		}
-		return historialLR;
+		return listaRetos;
 	}
 	
 	public void aceptarReto(int pIdReto) throws ExcepcionConectarBD{

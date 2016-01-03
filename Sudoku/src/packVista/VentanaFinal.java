@@ -212,6 +212,17 @@ public class VentanaFinal extends JFrame {
 	private JButton getBtnRetar() {
 		if (btnRetar == null) {
 			btnRetar = new JButton("Retar");
+			btnRetar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					try {
+						VentanaIntroducirNombre.getVentana().setVisible(true);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+				}
+			});
 		}
 		return btnRetar;
 	}

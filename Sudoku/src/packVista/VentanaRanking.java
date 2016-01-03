@@ -281,7 +281,7 @@ public class VentanaRanking extends JFrame {
 				int id = Integer.parseInt(res.getString("ID_S"));
 				listModel.addElement(id);
 			}
-			list = new JList<Integer>(listModel);
+			list.setModel(listModel);
 			list.setVisibleRowCount(listModel.getSize());
 		}
 		return list;

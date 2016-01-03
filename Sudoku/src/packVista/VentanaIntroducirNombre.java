@@ -32,6 +32,7 @@ public class VentanaIntroducirNombre extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static VentanaIntroducirNombre mVIN;
 	private JPanel contentPane;
 	private JScrollPane scrollPane;
 	private JPanel panel;
@@ -75,7 +76,12 @@ public class VentanaIntroducirNombre extends JFrame {
 		contentPane.add(getScrollPane(), BorderLayout.WEST);
 		contentPane.add(getPanel(), BorderLayout.CENTER);
 	}
-
+	public static VentanaIntroducirNombre getVentana() throws ExcepcionConectarBD, SQLException{
+		if(mVIN==null){
+			mVIN = new VentanaIntroducirNombre();
+		}
+		return mVIN;
+	}
 	private JScrollPane getScrollPane() throws ExcepcionConectarBD, SQLException {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -164,7 +170,15 @@ public class VentanaIntroducirNombre extends JFrame {
 			btnVolver = new JButton("Volver");
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO no se a que ventana redirige
+					dispose();
+					try {
+						VentanaIntroducirNombre.getVentana().setVisible(false);
+						VentanaFinal.getVentana().setVisible(true);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
 				}
 			});
 			btnVolver.setBounds(125, 126, 89, 23);
@@ -179,7 +193,7 @@ public class VentanaIntroducirNombre extends JFrame {
 				String nombre = res.getString("NOMBRE");
 				listModel.addElement(nombre);
 			}
-			list = new JList<String>(listModel);
+			list.setModel(listModel);
 			list.setVisibleRowCount(listModel.getSize());
 		}
 		return list;
