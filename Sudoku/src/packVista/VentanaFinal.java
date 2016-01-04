@@ -84,6 +84,7 @@ public class VentanaFinal extends JFrame {
 	
 	private void initialize() throws ExcepcionConectarBD, SQLException {
 		addWindowListener(new WindowAdapter() {
+			//Al cerrar la ventana se nos lleva a la ventanaJugador
 			@Override
 			public void windowClosed(WindowEvent arg0) {
 					dispose();
@@ -113,6 +114,8 @@ public class VentanaFinal extends JFrame {
 			scrollPane.setPreferredSize(new Dimension(200, 300));
 			scrollPane.setViewportView(getList_1());
 			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			//Esta lista tiene un Listener que al seleccionar el id de un logro actualiza dos de los textFields para que aparezca el ID del sudoku
+			//al que pertenece y la descripcion del logro.
 			list_1.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -122,6 +125,7 @@ public class VentanaFinal extends JFrame {
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					try {
+						if(list_1.getSelectedIndex()>-1){btnCompartirLogro.setEnabled(true);
 						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
 						tes.next();
 						String ses=tes.getString("ID_SUDOKU");
@@ -132,7 +136,7 @@ public class VentanaFinal extends JFrame {
 						String des=res.getString("DESCRIPCION");
 						ConexionBD.getConexionBD().closeResult(res);
 						label_14.setText(des);
-						
+						}
 						
 					} catch (ExcepcionConectarBD e1) {
 						e1.printStackTrace();
@@ -172,6 +176,7 @@ public class VentanaFinal extends JFrame {
 		return panel;
 	}
 	private JLabel getLabel() {
+		//En este label se añade el tiempo que ha tardado en hacer el ultimo sudoku
 		if (label == null) {
 			label = new JLabel(GestorTiempo.getGestor().tiempoAString());
 			label.setBounds(0, 0, 51, 14);
@@ -186,6 +191,7 @@ public class VentanaFinal extends JFrame {
 		return label_1;
 	}
 	private JLabel getLabel_2() {
+		//En esté label se mete los puntos que se han conseguido en el ultimo sudoku
 		if (label_2 == null) {
 			label_2 = new JLabel(Integer.toString(GestorPartida.getGestor().calcularPuntuacion()));
 			label_2.setBounds(0, 0, 49, 14);
@@ -210,6 +216,7 @@ public class VentanaFinal extends JFrame {
 		return panel_1;
 	}
 	private JButton getBtnRetar() {
+		//Este boton llama a la ventana que permite retar a otros usuarios
 		if (btnRetar == null) {
 			btnRetar = new JButton("Retar");
 			btnRetar.addActionListener(new ActionListener() {
@@ -227,6 +234,7 @@ public class VentanaFinal extends JFrame {
 		return btnRetar;
 	}
 	private JButton getBtnFinalizar() {
+		//Este boton nos lleva a la ventanaJugador
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
 			btnFinalizar.addActionListener(new ActionListener() {
@@ -250,6 +258,7 @@ public class VentanaFinal extends JFrame {
 		return panel_2;
 	}
 	private JList getList_1() throws ExcepcionConectarBD {
+		//La lista se llena con los IDs de los logros existentes
 		if (list_1 == null) {
 			list_1 = new JList();
 			list_1.setVisibleRowCount(100);
@@ -272,6 +281,7 @@ public class VentanaFinal extends JFrame {
 		return lblDescripcin;
 	}
 	private JLabel getLabel_12() throws SQLException, ExcepcionConectarBD {
+		//Este label se llena con el ID del sudoku al cual pertenece el logro que se ha seleccionado en la lista
 		if (label_12 == null) {
 			label_12 = new JLabel("");
 			if(list_1.getSelectedValue()!=null){
@@ -285,6 +295,7 @@ public class VentanaFinal extends JFrame {
 		return label_12;
 	}
 	private JLabel getLabel_14() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con la descripcion del logro que se ha seleccionado en la lista
 		if (label_14 == null) {
 			label_14 = new JLabel("");
 			if(list_1.getSelectedValue()!=null){
@@ -297,6 +308,7 @@ public class VentanaFinal extends JFrame {
 		return label_14;
 	}
 	private JButton getBtnCompartir() {
+		//Lama al metodo que comparte la puntuacion en Twitter
 		if (btnCompartir == null) {
 			btnCompartir = new JButton("Compartir");
 			btnCompartir.addActionListener(new ActionListener() {
@@ -315,13 +327,15 @@ public class VentanaFinal extends JFrame {
 		return btnCompartir;
 	}
 	private JButton getBtnCompartirLogro() {
+		//Lama al metodo que comparte el logro que se ha seleccionado en Twitter
 		if (btnCompartirLogro == null) {
 			btnCompartirLogro = new JButton("Compartir Logro");
+			btnCompartirLogro.setEnabled(false);
 			btnCompartirLogro.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					if(list_1.getSelectedIndex()>-1){
 					try {
-						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido el logro "+list_1.getSelectedValue().toString()+" por "+label_14.getText());
+						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido el logro "+list_1.getSelectedValue().toString()+" por: "+label_14.getText());
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					} catch (URISyntaxException e1) {
