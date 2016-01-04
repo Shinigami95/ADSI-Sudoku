@@ -309,7 +309,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea.setText(historial);
             }else{
-                textArea.setText("¡No has jugado ningún sudoku!");
+                textArea.setText("Â¡No has jugado ningÃºn sudoku!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
@@ -322,7 +322,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea_1.setText(historial);
             }else{
-                textArea_1.setText("¡No has participado en ningún reto!");
+                textArea_1.setText("Â¡No has participado en ningÃºn reto!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
