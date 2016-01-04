@@ -43,9 +43,6 @@ import java.awt.event.WindowEvent;
 
 public class VentanaAdminLogros extends JFrame {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTabbedPane tabbedPane;
@@ -219,7 +216,7 @@ public class VentanaAdminLogros extends JFrame {
 		if (btnAadir == null) {
 			btnAadir = new JButton("A\u00F1adir");
 			btnAadir.addActionListener(new ActionListener() {
-				/*Al hacer clic en el boton añadir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
+				/*Al hacer clic en el boton aÃ±adir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
 				 * Si es asi se meten en la base de datos y junto con la actualizacion de las listas sale un mensaje que indica que todo ha ido bien.*/
 				public void actionPerformed(ActionEvent arg0) {
 					if(GestorLogros.datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
