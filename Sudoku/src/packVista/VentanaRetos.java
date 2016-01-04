@@ -18,9 +18,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import packControladores.ConexionBD;
+import packControladores.GestorPartida;
 import packControladores.GestorRetos;
 import packControladores.GestorSesion;
+import packControladores.GestorSudokus;
 import packExcepciones.ExcepcionConectarBD;
+import packExcepciones.ExcepcionNoHaySudokuCargado;
+import packModelo.Sudoku;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -205,14 +209,14 @@ public class VentanaRetos extends JFrame {
 						int idR = Integer.parseInt(lblReto2.getText());
 						try {
 							GestorRetos.getGestorRetos().aceptarReto(idR);
-							ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT DIFICULTAD,M_INIC FROM SUDOKU WHERE ID_S='"+idS+"';");
-							res.next();
-							String sudoku = res.getString("M_INIC");
-							int dificultad = Integer.parseInt(res.getString("DIFICULTAD"));
-							//TODO SE ESCOGERA EL SUDOKU Y SE JUGARA
+							Sudoku sudoku = GestorSudokus.getGestor().buscarSudokuPorCodigo(idS);
+							int dif = sudoku.getDificultad();
+							GestorPartida.getGestor().cargarRetoParaUsSesion(dif, idR);
+							VentanaSudoku.getVentana().setVisible(true);
+							dispose();
 						} catch (ExcepcionConectarBD e1) {
 							e1.printStackTrace();
-						} catch (SQLException e1) {
+						} catch (ExcepcionNoHaySudokuCargado e1) {
 							e1.printStackTrace();
 						}
 					}else{

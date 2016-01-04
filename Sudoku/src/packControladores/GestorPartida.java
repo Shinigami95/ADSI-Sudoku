@@ -312,4 +312,38 @@ public class GestorPartida {
 			e.printStackTrace();
 		}
 	}
+	
+	public void cargarRetoParaUsSesion(int pD, int pIdReto) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
+		try{
+			String user = GestorSesion.getGestor().getUserSesion();
+			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL FROM SUDOKU "
+						+ "WHERE ACTIVO='S' AND DIFICULTAD="+pD+" "
+						+ "AND ID_S NOT IN ("
+						+ "SELECT ID_SUDOKU FROM JUGADO WHERE NOMBRE_JUG='"+user+"' "
+						+ "UNION "
+						+ "SELECT ID_SUDOKU FROM RETO WHERE NOMBRE_RETADO='"+user+"' AND ESTADO<>'R')";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			int idS, dif;
+			String mI, mS;
+			if(result.next()){
+				idS = result.getInt("ID_S");
+				dif = result.getInt("DIFICULTAD");
+				mI = result.getString("M_INIC");
+				mS = result.getString("M_SOL");
+				try {
+					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
+					this.setPartida(new Partida(sud, pIdReto, 5, 5));
+					GestorTiempo.getGestor().reanudar();		
+				} catch (NoValidoException e) {
+					e.printStackTrace();
+				}
+				
+			} else {
+				throw new ExcepcionNoHaySudokuCargado();
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+	}
 }
