@@ -84,11 +84,10 @@ public class VentanaFinal extends JFrame {
 	
 	private void initialize() throws ExcepcionConectarBD, SQLException {
 		addWindowListener(new WindowAdapter() {
-			//Al cerrar la ventana se nos lleva a la ventanaJugador
 			@Override
-			public void windowClosed(WindowEvent arg0) {
-					dispose();
-					VentanaJugador.getVentana().setVisible(true);
+			public void windowClosing(WindowEvent e) {
+				dispose();
+				VentanaJugador.getVentana().setVisible(true);
 			}
 		});
 		setBounds(100, 100, 450, 300);
@@ -263,7 +262,7 @@ public class VentanaFinal extends JFrame {
 			list_1 = new JList();
 			list_1.setVisibleRowCount(100);
 		}
-		list_1.setModel(GestorLogros.logrosConseguidos(GestorSesion.getGestor().getUserSesion(), GestorPartida.getGestor().getIdSud(), GestorPartida.getGestor().calcularPuntuacion()));
+		list_1.setModel(GestorLogros.logrosConseguidos(GestorSesion.getGestor().getUserSesion(), Integer.toString(GestorPartida.getGestor().getIdSud()), Integer.toString(GestorPartida.getGestor().calcularPuntuacion())));
 		return list_1;
 	}
 	private JLabel getLblSudoku() {

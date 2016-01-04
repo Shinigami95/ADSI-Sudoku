@@ -90,7 +90,7 @@ public static boolean datos(String iDLogro,String descripcion,String puntos,Stri
 /*Precondicion: Se le pasa un usuario y un sudoku que estan en la bd.
  *Postcondicion: Se ha asociado el usuario con el logro conseguido.
  * */
-public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pPuntos){
+public static DefaultListModel logrosConseguidos(String nick,String idSudoku,String pPuntos){
 	//Primero se crea la lista a devolver.
 	DefaultListModel logros=new DefaultListModel();
 	try{//Se cogen de la bd los logros asociados al sudoku que se ha hecho.
@@ -104,7 +104,7 @@ public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pP
 				ResultSet x=ConexionBD.getConexionBD().consultaBD("SELECT PTO FROM LOGRO_PTOX WHERE ID_L='"+lista.getString(1)+"';");
 				x.next();
 				//Se comprueba que el usuario ha conseguido la puntuacion necesaria para conseguir el logro.
-				if(x.getInt(1)<=pPuntos){
+				if(x.getInt(1)<=Integer.parseInt(pPuntos)){
 					//Si es asi se mete la relacion del logro con el usuario en la base de datos para saber que lo ha conseguido.
 					ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");
 					//Por ultimo se aÃ±ade el logro a la lista que se devolvera luego.
@@ -117,7 +117,7 @@ public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pP
 				ResultSet y=ConexionBD.getConexionBD().consultaBD("SELECT PTO,NUM_JUG FROM LOGRO_PTOXY WHERE ID_L='"+lista.getString(1)+"';");
 				y.next();
 				//Despues de coger el logro y comprobar que ha superado la puntuacion necesaria se comprueba que el numero de jugadores a los que se le puede dar sea mayor que 0.
-				if(y.getInt(1)<=pPuntos){
+				if(y.getInt(1)<=Integer.parseInt(pPuntos)){
 					if(y.getInt(2)>0){
 						//Si es asi a parte de aÃ±adir la relacion a la bd se modifica el logro restando 1 a la cantidad de jugadores que pueden conseguirlo. 
 						//De esta manera controlo que se le de al numero adecuado de usuarios.
