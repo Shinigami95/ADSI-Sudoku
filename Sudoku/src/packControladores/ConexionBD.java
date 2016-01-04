@@ -18,10 +18,10 @@ public class ConexionBD {
 	private String pass;
 	public static ConexionBD miConexion;
 	
-	public static void main(String args[]) throws ExcepcionConectarBD{
-		ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('JORGE','123456');");
-	}
-	
+	//Rellena las varibles con los datos para conectarse a la bd
+	/*Precondicion:
+	 *Postcondicion:
+	 * */
 	private ConexionBD(){
 		driver="com.mysql.jdbc.Driver";
 		url="jdbc:mysql://galan.ehu.eus/Xmalboniga002_SUDOKU_BD";
@@ -29,6 +29,10 @@ public class ConexionBD {
 		pass="mqDNfeYCa";
 	}
 	
+	//Singelton
+	/*Precondicion:
+	 *Postcondicion:
+	 * */
 	public static ConexionBD getConexionBD(){
 		if (miConexion==null){
 			miConexion = new ConexionBD();
@@ -36,6 +40,10 @@ public class ConexionBD {
 		return miConexion;
 	}
 	
+	//A este metodo se le pasa un String con la consulta y nos devuelve el resultado de esta.
+	/*Precondicion: Poner una consulta SQL sin errores.
+	 *Postcondicion:
+	 * */
 	public ResultSet consultaBD(String consulta) throws ExcepcionConectarBD{
 		ResultSet result=null;
 		try{
@@ -52,7 +60,10 @@ public class ConexionBD {
 		}
 		return result;
 	}
-	
+	//Este metodo se llama despues de hacer una consulta. Cierra la conexion que habia quedado abierta.
+	/*Precondicion: Pasarle el resultado de una consulta que se habia hecho.
+	 *Postcondicion: La conexion a la bd queda cerrada.
+	 * */
 	public void closeResult(ResultSet result){
 		try {
 			result.getStatement().getConnection().close();
@@ -60,6 +71,10 @@ public class ConexionBD {
 			e.printStackTrace();
 		}
 	}
+	//Metodo al que se le pasan sentencias SQL que impliquen modificaciones en la bd(añadir,eliminar o modificar).
+	/*Precondicion: Pasarle una sentencia SQL valida.
+	 *Postcondicion: La bd se ha actualizado correctamente.
+	 * */
 	public void actualizarBD(String sentencia)throws ExcepcionConectarBD{
 		try{
 			Class.forName(driver);
