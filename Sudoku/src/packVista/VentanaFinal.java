@@ -176,7 +176,7 @@ public class VentanaFinal extends JFrame {
 		return panel;
 	}
 	private JLabel getLabel() {
-		//En este label se añade el tiempo que ha tardado en hacer el ultimo sudoku
+		//En este label se aÃ±ade el tiempo que ha tardado en hacer el ultimo sudoku
 		if (label == null) {
 			label = new JLabel(GestorTiempo.getGestor().tiempoAString());
 			label.setBounds(0, 0, 51, 14);
@@ -191,7 +191,7 @@ public class VentanaFinal extends JFrame {
 		return label_1;
 	}
 	private JLabel getLabel_2() {
-		//En esté label se mete los puntos que se han conseguido en el ultimo sudoku
+		//En estÃ© label se mete los puntos que se han conseguido en el ultimo sudoku
 		if (label_2 == null) {
 			label_2 = new JLabel(Integer.toString(GestorPartida.getGestor().calcularPuntuacion()));
 			label_2.setBounds(0, 0, 49, 14);
