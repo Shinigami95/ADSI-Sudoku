@@ -107,7 +107,7 @@ public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pP
 				if(x.getInt(1)<=pPuntos){
 					//Si es asi se mete la relacion del logro con el usuario en la base de datos para saber que lo ha conseguido.
 					ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");
-					//Por ultimo se añade el logro a la lista que se devolvera luego.
+					//Por ultimo se aÃ±ade el logro a la lista que se devolvera luego.
 					logros.addElement(lista.getString(1));
 				}
 				ConexionBD.getConexionBD().closeResult(x);
@@ -119,7 +119,7 @@ public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pP
 				//Despues de coger el logro y comprobar que ha superado la puntuacion necesaria se comprueba que el numero de jugadores a los que se le puede dar sea mayor que 0.
 				if(y.getInt(1)<=pPuntos){
 					if(y.getInt(2)>0){
-						//Si es asi a parte de añadir la relacion a la bd se modifica el logro restando 1 a la cantidad de jugadores que pueden conseguirlo. 
+						//Si es asi a parte de aÃ±adir la relacion a la bd se modifica el logro restando 1 a la cantidad de jugadores que pueden conseguirlo. 
 						//De esta manera controlo que se le de al numero adecuado de usuarios.
 						int numjug=y.getInt(2)-1;
 						ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");
