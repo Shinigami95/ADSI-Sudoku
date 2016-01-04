@@ -126,6 +126,7 @@ public class VentanaAdminLogros extends JFrame {
 	}
 	
 	private void initialize() throws ExcepcionConectarBD, SQLException {
+		//Al cerrar la ventana lleva al usuario a la ventana administrador.
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
@@ -185,11 +186,13 @@ public class VentanaAdminLogros extends JFrame {
 		if (btnEliminar == null) {
 			btnEliminar = new JButton("Eliminar");
 			btnEliminar.addActionListener(new ActionListener() {
+				//Al seleccionar un logro de la lista y dar a eliminar este se elimina de la base de datos y se actualizan las listas de la ventana.
 				public void actionPerformed(ActionEvent arg0) {
 					try {
 						GestorLogros.eliminar(list_1.getSelectedValue().toString());
 						getList_1();
 						getList_2();
+						JOptionPane.showMessageDialog(null, "Se ha eliminado correctamente.");
 					} catch (ExcepcionConectarBD e) {
 						e.printStackTrace();
 					}
@@ -216,12 +219,15 @@ public class VentanaAdminLogros extends JFrame {
 		if (btnAadir == null) {
 			btnAadir = new JButton("A\u00F1adir");
 			btnAadir.addActionListener(new ActionListener() {
+				/*Al hacer clic en el boton añadir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
+				 * Si es asi se meten en la base de datos y junto con la actualizacion de las listas sale un mensaje que indica que todo ha ido bien.*/
 				public void actionPerformed(ActionEvent arg0) {
 					if(GestorLogros.datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
 						try {
 							GestorLogros.anadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
 							getList_1();
 							getList_2();
+							JOptionPane.showMessageDialog(null, "Se ha a\u00F1adido corectamente.");
 						} catch (ExcepcionConectarBD e) {
 							e.printStackTrace();
 						}
@@ -305,6 +311,7 @@ public class VentanaAdminLogros extends JFrame {
 		return lblPuntuacin;
 	}
 	private JTextField getTextField_1() {
+		//Al crear este textField se mete un 0 como inicial y tiene un KeyListener que obliga a meter solo caracteres numericos.
 		if (textField_1 == null) {
 			textField_1 = new JTextField();
 			textField_1.setText("0");
@@ -326,6 +333,7 @@ public class VentanaAdminLogros extends JFrame {
 		return lblNumJugadores;
 	}
 	private JTextField getTextField_2() {
+		//Al crear este textField se mete un 0 como inicial y tiene un KeyListener que obliga a meter solo caracteres numericos.
 		if (textField_2 == null) {
 			textField_2 = new JTextField();
 			textField_2.setText("0");
@@ -361,6 +369,7 @@ public class VentanaAdminLogros extends JFrame {
 		return lblCodsudoku;
 	}
 	private JComboBox getComboBox() {
+		//Este comboBox se rellena con los IDs de los sudokus existentes.No se mira que esten activos o no.
 		if (comboBox == null) {
 			DefaultComboBoxModel mdl=new DefaultComboBoxModel(GestorLogros.metodoSudoku());
 			comboBox = new JComboBox(mdl);
@@ -384,6 +393,8 @@ public class VentanaAdminLogros extends JFrame {
 			scrollPane_1.setPreferredSize(new Dimension(200, 300));
 			scrollPane_1.setViewportView(getList_2());
 			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			//Esta lista tiene un Listener que al seleccionar el id de un logro actualiza dos de los textFields para que aparezca el ID del sudoku
+			//al que pertenece y la descripcion del logro. 
 			list_2.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -392,7 +403,7 @@ public class VentanaAdminLogros extends JFrame {
 				
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
-					try {
+					try {if(list_2.getSelectedIndex()>-1){
 						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
 						tes.next();
 						String ses=tes.getString("ID_SUDOKU");
@@ -402,7 +413,7 @@ public class VentanaAdminLogros extends JFrame {
 						res.next();
 						String des=res.getString("DESCRIPCION");
 						ConexionBD.getConexionBD().closeResult(res);
-						lblVarDescripcin.setText(des);
+						lblVarDescripcin.setText(des);}
 					} catch (ExcepcionConectarBD e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
@@ -521,6 +532,7 @@ public class VentanaAdminLogros extends JFrame {
 		return lblCodsudoku_1;
 	}
 	private JLabel getLblVarSudoku() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con el ID del sudoku al cual pertenece el logro que se ha seleccionado en la lista
 		if (lblVarSudoku == null) {
 			lblVarSudoku = new JLabel();
 			if(list_2.getSelectedValue()!=null){
@@ -539,6 +551,7 @@ public class VentanaAdminLogros extends JFrame {
 		return lblDescripcin_2;
 	}
 	private JLabel getLblVarDescripcin() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con la descripcion del logro que se ha seleccionado en la lista
 		if (lblVarDescripcin == null) {
 			lblVarDescripcin = new JLabel();
 			if(list_2.getSelectedValue()!=null){
@@ -552,15 +565,19 @@ public class VentanaAdminLogros extends JFrame {
 		return lblVarDescripcin;
 	}
 	private JButton getBtnModificar() {
+		/*Al hacer clic en el boton modificar se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
+		 * Si es asi se meten en la base de datos y junto con la actualizacion de las listas sale un mensaje que indica que todo ha ido bien.*/
 		if (btnModificar == null) {
 			btnModificar = new JButton("Modificar");
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-				try {
-					GestorLogros.modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
-				} catch (ExcepcionConectarBD e) {
-					e.printStackTrace();
-				}
+					if(GestorLogros.datos(list_2.getSelectedValue().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText())){
+						try {
+							GestorLogros.modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
+							JOptionPane.showMessageDialog(null, "Se ha modificado corectamente.");
+						} catch (ExcepcionConectarBD e) {
+							e.printStackTrace();
+						}}
 				}
 			});
 		}
@@ -573,6 +590,7 @@ public class VentanaAdminLogros extends JFrame {
 		return label_5;
 	}
 	private JComboBox getComboBox_5() {
+		//Este comboBox se rellena con los IDs de los sudokus existentes.No se mira que esten activos o no.
 		if (comboBox_5 == null) {
 			DefaultComboBoxModel mdl=new DefaultComboBoxModel(GestorLogros.metodoSudoku());
 			comboBox_5 = new JComboBox(mdl);
@@ -586,8 +604,10 @@ public class VentanaAdminLogros extends JFrame {
 		return label_6;
 	}
 	private JTextField getTextField_6() {
+		//Al crear este textField se mete un 0 como inicial y tiene un KeyListener que obliga a meter solo caracteres numericos.
 		if (textField_6 == null) {
 			textField_6 = new JTextField();
+			textField_6.setText("0");
 			textField_6.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
@@ -606,8 +626,10 @@ public class VentanaAdminLogros extends JFrame {
 		return label_7;
 	}
 	private JTextField getTextField_7() {
+		//Al crear este textField se mete un 0 como inicial y tiene un KeyListener que obliga a meter solo caracteres numericos.
 		if (textField_7 == null) {
 			textField_7 = new JTextField();
+			textField_7.setText("0");
 			textField_7.addKeyListener(new KeyAdapter() {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
@@ -651,6 +673,8 @@ public class VentanaAdminLogros extends JFrame {
 			scrollPane.setPreferredSize(new Dimension(200, 300));
 			scrollPane.setViewportView(getList_1());
 			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			//Esta lista tiene un Listener que al seleccionar el id de un logro actualiza dos de los textFields para que aparezca el ID del sudoku
+			//al que pertenece y la descripcion del logro. 
 			list_1.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -659,7 +683,7 @@ public class VentanaAdminLogros extends JFrame {
 				
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
-					try {
+					try {if(list_1.getSelectedIndex()>-1){
 						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
 						tes.next();
 						String ses=tes.getString("ID_SUDOKU");
@@ -670,7 +694,7 @@ public class VentanaAdminLogros extends JFrame {
 						String des=res.getString("DESCRIPCION");
 						ConexionBD.getConexionBD().closeResult(res);
 						label_14.setText(des);
-						
+					}
 						
 					} catch (ExcepcionConectarBD e1) {
 						e1.printStackTrace();
@@ -740,6 +764,7 @@ public class VentanaAdminLogros extends JFrame {
 		return lblCdigoSudoku;
 	}
 	private JLabel getLabel_12_1() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con el ID del sudoku al cual pertenece el logro que se ha seleccionado en la lista
 		if (label_12 == null) {
 			label_12 = new JLabel();
 			if(list_1.getSelectedValue()!=null){
@@ -758,6 +783,7 @@ public class VentanaAdminLogros extends JFrame {
 		return label_13;
 	}
 	private JLabel getLabel_14_1() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con la descripcion del logro que se ha seleccionado en la lista
 		if (label_14 == null) {
 			label_14 = new JLabel();
 			if(list_1.getSelectedValue()!=null){
@@ -769,11 +795,9 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return label_14;
 	}
-	//https://www.youtube.com/watch?v=AXFTgbYsxK8
-	//Kevin Arnold Arias Figueroa
-	//http://javiergarbedo.es/31-apuntes-java/arrays/326-cargar-un-jlist-con-los-datos-de-un-arraylist
-	//Javier Garcia Escobedo
+
 	private JList getList_1() throws ExcepcionConectarBD {
+		//La lista se llena con los IDs de los logros existentes
 		if (list_1 == null) {
 			list_1 = new JList();
 			list_1.setVisibleRowCount(100);
@@ -782,6 +806,7 @@ public class VentanaAdminLogros extends JFrame {
 		return list_1;
 	}
 	private JList getList_2() {
+		//La lista se llena con los IDs de los logros existentes
 		if (list_2 == null) {
 			list_2 = new JList();
 			list_2.setVisibleRowCount(100);
