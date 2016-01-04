@@ -21,7 +21,7 @@ public class Logros {
 			if(Integer.parseInt(numJug)<1){
 				//En tal caso hacemos que el ID del logro tenga un primer caracter X que me ayuda a clasificarlo en otros metodos.
 				log="X"+log;
-				//Ahora se añade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionX
+				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionX
 				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
 				LogrosPuntuacionX.logrosPuntuacionX(log, puntos);
 			}
@@ -29,7 +29,7 @@ public class Logros {
 			else{
 				//En tal caso hacemos que el ID del logro tenga un primer caracter Y que me ayuda a clasificarlo en otros metodos.
 				log="Y"+log;
-				//Ahora se añade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionXY
+				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionXY
 				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
 				LogrosPuntuacionXY.logrosPuntuacionXY(log, puntos, numJug); 
 			}
@@ -38,7 +38,7 @@ public class Logros {
 		else{
 			//En tal caso hacemos que el ID del logro tenga un primer caracter R que me ayuda a clasificarlo en otros metodos.
 			log="R"+log;
-			//Ahora se añade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroResolucion
+			//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroResolucion
 			ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
 			LogrosResolucion.logrosResolucion(log, numJug);
 		}
