@@ -38,6 +38,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class VentanaHistorial extends JFrame {
 
@@ -243,11 +244,37 @@ public class VentanaHistorial extends JFrame {
 	private JPanel getPanel_3() throws ExcepcionConectarBD, SQLException {
 		if (panel_3 == null) {
 			panel_3 = new JPanel();
-			panel_3.setLayout(null);
-			panel_3.add(getLblSudoku());
-			panel_3.add(getLblDescripcin());
-			panel_3.add(getLabel());
-			panel_3.add(getLabel_1());
+			GroupLayout gl_panel_3 = new GroupLayout(panel_3);
+			gl_panel_3.setHorizontalGroup(
+				gl_panel_3.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_3.createSequentialGroup()
+						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_3.createSequentialGroup()
+								.addGap(10)
+								.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+									.addComponent(getLblSudoku(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblDescripcin(), GroupLayout.PREFERRED_SIZE, 74, GroupLayout.PREFERRED_SIZE)))
+							.addGroup(gl_panel_3.createSequentialGroup()
+								.addGap(90)
+								.addComponent(getLabel_1()))
+							.addGroup(gl_panel_3.createSequentialGroup()
+								.addGap(66)
+								.addComponent(getLabel())))
+						.addContainerGap(129, Short.MAX_VALUE))
+			);
+			gl_panel_3.setVerticalGroup(
+				gl_panel_3.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_3.createSequentialGroup()
+						.addGap(11)
+						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+							.addComponent(getLblSudoku())
+							.addComponent(getLabel()))
+						.addGap(23)
+						.addGroup(gl_panel_3.createParallelGroup(Alignment.LEADING)
+							.addComponent(getLabel_1())
+							.addComponent(getLblDescripcin())))
+			);
+			panel_3.setLayout(gl_panel_3);
 		}
 		return panel_3;
 	}
@@ -264,14 +291,12 @@ public class VentanaHistorial extends JFrame {
 	private JLabel getLblSudoku() {
 		if (lblSudoku == null) {
 			lblSudoku = new JLabel("Sudoku:");
-			lblSudoku.setBounds(10, 11, 46, 14);
 		}
 		return lblSudoku;
 	}
 	private JLabel getLblDescripcin() {
 		if (lblDescripcin == null) {
 			lblDescripcin = new JLabel("Descripci\u00F3n:");
-			lblDescripcin.setBounds(10, 48, 74, 14);
 		}
 		return lblDescripcin;
 	}
@@ -297,7 +322,7 @@ public class VentanaHistorial extends JFrame {
 				res.next();
 				String des=res.getString("DESCRPCION");
 				ConexionBD.getConexionBD().closeResult(res);
-				label.setText(des);}
+				label_1.setText(des);}
 		}
 		return label_1;
 	}

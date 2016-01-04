@@ -158,6 +158,7 @@ public static DefaultListModel verLogros(String nick){
 		ResultSet lista=ConexionBD.getConexionBD().consultaBD("SELECT ID_LOGRO FROM TIENE WHERE NOMBRE_JUG='"+nick+"';");
 		while(lista.next()){
 			ResultSet logs=ConexionBD.getConexionBD().consultaBD("SELECT ID_L,ID_SUDOKU,DESCRIPCION FROM LOGRO WHERE ID_L='"+lista.getString(1)+"';");
+			logs.next();
 			logros.addElement(logs.getString(1));
 			ConexionBD.getConexionBD().closeResult(logs);
 		}

@@ -34,6 +34,9 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class VentanaFinal extends JFrame {
 
@@ -247,12 +250,43 @@ public class VentanaFinal extends JFrame {
 	private JPanel getPanel_2() throws SQLException, ExcepcionConectarBD {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
-			panel_2.setLayout(null);
-			panel_2.add(getLblSudoku());
-			panel_2.add(getLblDescripcin());
-			panel_2.add(getLabel_12());
-			panel_2.add(getLabel_14());
-			panel_2.add(getBtnCompartirLogro());
+			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
+			gl_panel_2.setHorizontalGroup(
+				gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createSequentialGroup()
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(10)
+								.addComponent(getLblSudoku(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(10)
+								.addComponent(getLblDescripcin(), GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(38)
+								.addComponent(getBtnCompartirLogro(), GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(66)
+								.addComponent(getLabel_12()))
+							.addGroup(gl_panel_2.createSequentialGroup()
+								.addGap(91)
+								.addComponent(getLabel_14())))
+						.addContainerGap(34, Short.MAX_VALUE))
+			);
+			gl_panel_2.setVerticalGroup(
+				gl_panel_2.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel_2.createSequentialGroup()
+						.addGap(11)
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addComponent(getLblSudoku())
+							.addComponent(getLabel_12()))
+						.addGap(11)
+						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
+							.addComponent(getLblDescripcin())
+							.addComponent(getLabel_14()))
+						.addGap(90)
+						.addComponent(getBtnCompartirLogro()))
+			);
+			panel_2.setLayout(gl_panel_2);
 		}
 		return panel_2;
 	}
@@ -268,14 +302,12 @@ public class VentanaFinal extends JFrame {
 	private JLabel getLblSudoku() {
 		if (lblSudoku == null) {
 			lblSudoku = new JLabel("Sudoku:");
-			lblSudoku.setBounds(10, 11, 46, 14);
 		}
 		return lblSudoku;
 	}
 	private JLabel getLblDescripcin() {
 		if (lblDescripcin == null) {
 			lblDescripcin = new JLabel("Descripci\u00F3n:");
-			lblDescripcin.setBounds(10, 36, 75, 14);
 		}
 		return lblDescripcin;
 	}
@@ -342,7 +374,6 @@ public class VentanaFinal extends JFrame {
 					}}else{JOptionPane.showMessageDialog(null, "Seleccione un logro de la lista para compartirlo.");}
 				}
 			});
-			btnCompartirLogro.setBounds(38, 151, 152, 23);
 		}
 		return btnCompartirLogro;
 	}
