@@ -14,20 +14,32 @@ import packModelo.Logros;
 
 public class GestorLogros {
 	//Llama al metodo que clasifica los logros y los mete en la bd.
+	/*Precondicion: Esnecesario que el metodo datos(abajo) compruebe que los datos cumplen ciertas condiciones.
+	 *Postcondicion:Los datos se han metido en la bd correctamente.
+	 * */
 public static void anadirLogro(String iDLogro,String iDSudoku,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD
 {		
 	Logros.tipoLogro(iDLogro, iDSudoku, descripcion, puntos, numJug);
 	}	
 //Llama al metodo que elimina los logros en la bd.
+/*Precondicion: El String que se le pasa tenga menos de 5 caracteres.
+ *Postcondicion: Se ha eliminado el logro con el id que se le pasa de la bd.
+ * */
 public static void eliminar(String iDLogro) throws ExcepcionConectarBD{
 	ConexionBD.getConexionBD().actualizarBD("DELETE FROM LOGRO WHERE ID_L='"+iDLogro+"';");
 	
 }
 //Llama al metodo que hace modificadiones de los logros en la bd.
+/*Precondicion: Los datos que se le pasan tienen que cumplir las condiciones que se especifican en el metodo datos(abajo).
+ *Postcondicion: Los datos se modifican correctamente en la bd.
+ * */
 public static void modificarLogros(String iDLogro,String iDSudoku,String descripcion,String puntos,String numJug)throws ExcepcionConectarBD{
 	Logros.modificarLogros(iDLogro, iDSudoku, descripcion, puntos, numJug);
 }
 //Devuleve una lista con los IDs de todos los logros existentes. Se utiliza para llenar las JLists que tienen los Ids de los Logros.
+/*Precondicion:
+ *Postcondicion:
+ * */
 public static DefaultListModel llenarLista(){
 	DefaultListModel l=new DefaultListModel();
 	try{
@@ -46,6 +58,9 @@ public static DefaultListModel llenarLista(){
 }
 //https://www.youtube.com/watch?v=v8zKLCec-Tk
 //Devuleve una lista con los IDs de todos los sudokus existentes, esten activos o no. Se utiliza para llenar los combobox de VentanaAdminLogros
+/*Precondicion:
+ *Postcondicion:
+ * */
 public static Vector<String> metodoSudoku(){
 	Vector<String> vec=new Vector<String>();
 	try{
@@ -58,6 +73,9 @@ public static Vector<String> metodoSudoku(){
 	return vec;
 }
 //Comprueba que los datos que se introducen cumpen unas caracteristicas para luego asi meterlos en la bd.
+/*Precondicion: Se le pasan los datos a comprobar.
+ *Postcondicion:
+ * */
 public static boolean datos(String iDLogro,String descripcion,String puntos,String jug){
 	boolean flag=false;
 	if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 && puntos.length()>0 && jug.length()>0 ){
@@ -69,6 +87,9 @@ public static boolean datos(String iDLogro,String descripcion,String puntos,Stri
 	return flag;
 }
 //Este metodo devuelve una lista con los IDs de los logros que ha conseguido el usuario al terminar un sudoku.
+/*Precondicion: Se le pasa un usuario y un sudoku que estan en la bd.
+ *Postcondicion: Se ha asociado el usuario con el logro conseguido.
+ * */
 public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pPuntos){
 	//Primero se crea la lista a devolver.
 	DefaultListModel logros=new DefaultListModel();
@@ -128,6 +149,9 @@ public static DefaultListModel logrosConseguidos(String nick,int idSudoku,int pP
 	return logros;
 }
 //Devuelve los IDs de los logros que ha conseguido un usuario mediante una DefaultListModel que aparece en el historial.
+/*Precondicion: Se le pasa un usuario que exista en la bd.
+ *Postcondicion:
+ * */
 public static DefaultListModel verLogros(String nick){
 	DefaultListModel logros=new DefaultListModel();
 	try{

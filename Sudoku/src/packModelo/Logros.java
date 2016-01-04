@@ -9,6 +9,9 @@ import packExcepciones.ExcepcionConectarBD;
 public class Logros {
 	
 	//Este metodo mete en la bd los datos basicos del logro(id,descripcion y sudoku al que pertenece) y clasifica el logro segun sus caracteristicas.
+	/*Precondicion: Se le pasan unos datos que cumplen las especificaciones necesarias para meterlos en la bd.
+	 *Postcondicion: Los datos se han metido en la bd correctamente.
+	 * */
 	public static void tipoLogro(String codL,String codS,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD{
 		//Primero se crea una variable a la que le damos el valor del id del logro que se nos pasa.
 		String log=codL;
@@ -42,6 +45,9 @@ public class Logros {
 	}
 	//Este metodo se encarga de modificar los datos de un logro. AVISO: No se puede cambiar el tipo de logro. Si es un logro de resolucion no se modifica para que sea de puntuacionx
 	//En tal caso se debe eliminar y crear uno nuevo.
+	/*Precondicion: Se le pasan unos datos que cumplen las especificaciones necesarias para que sean modificados en la bd.
+	 *Postcondicion: Los datos se han modificado en la bd correctamente.
+	 * */
 	public static void modificarLogros(String codL,String codS,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD{
 		//Primero modifica el logro en si(la descripcion y el sudoku asociado)
 		ConexionBD.getConexionBD().actualizarBD("UPDATE LOGRO SET ID_SUDOKU='"+codS+"',DESCRIPCION='"+descripcion+"' WHERE ID_L='"+codL+"';");
