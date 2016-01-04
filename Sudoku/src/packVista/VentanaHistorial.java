@@ -60,9 +60,6 @@ public class VentanaHistorial extends JFrame {
 	private JLabel lblDescripcin;
 	private JLabel label;
 	private JLabel label_1;
-	private JButton btnVolver;
-	private JButton btnVolver1;
-	private JButton btnVolver2;
 	
 
 	/**
@@ -104,6 +101,7 @@ public class VentanaHistorial extends JFrame {
 	
 	private void initialize() throws ExcepcionConectarBD, SQLException {
 		addWindowListener(new WindowAdapter() {
+			//Al cerrarse la ventana nos envia a la ventanaJugador
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 					dispose();
@@ -133,20 +131,14 @@ public class VentanaHistorial extends JFrame {
 			panel = new JPanel();
 			GroupLayout gl_panel = new GroupLayout(panel);
 			gl_panel.setHorizontalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addComponent(getTextArea(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-						.addContainerGap(333, Short.MAX_VALUE)
-						.addComponent(getBtnVolver2(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap())
+				gl_panel.createParallelGroup(Alignment.TRAILING)
+					.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 			);
 			gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-						.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-						.addGap(18)
-						.addComponent(getBtnVolver2())
-						.addContainerGap())
+				gl_panel.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panel.createSequentialGroup()
+						.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+						.addGap(52))
 			);
 			panel.setLayout(gl_panel);
 		}
@@ -157,20 +149,14 @@ public class VentanaHistorial extends JFrame {
 			panel_1 = new JPanel();
 			GroupLayout gl_panel_1 = new GroupLayout(panel_1);
 			gl_panel_1.setHorizontalGroup(
-				gl_panel_1.createParallelGroup(Alignment.LEADING)
-					.addComponent(getTextArea_1(), Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
-					.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(getBtnVolver1(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
-						.addGap(10))
+				gl_panel_1.createParallelGroup(Alignment.TRAILING)
+					.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
 			);
 			gl_panel_1.setVerticalGroup(
-				gl_panel_1.createParallelGroup(Alignment.LEADING)
-					.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
-						.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
-						.addGap(18)
-						.addComponent(getBtnVolver1())
-						.addContainerGap())
+				gl_panel_1.createParallelGroup(Alignment.TRAILING)
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
+						.addGap(52))
 			);
 			panel_1.setLayout(gl_panel_1);
 		}
@@ -205,6 +191,8 @@ public class VentanaHistorial extends JFrame {
 			scrollPane.setPreferredSize(new Dimension(200, 300));
 			scrollPane.setViewportView(getList_1());
 			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
+			//Esta lista tiene un Listener que al seleccionar el id de un logro actualiza dos de los textFields para que aparezca el ID del sudoku
+			//al que pertenece y la descripcion del logro.
 			list_1.addMouseListener(new MouseListener() {
 				
 				@Override
@@ -213,7 +201,7 @@ public class VentanaHistorial extends JFrame {
 				
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
-					try {
+					try {if(list_1.getSelectedIndex()>-1){
 						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
 						tes.next();
 						String ses=tes.getString("ID_SUDOKU");
@@ -224,7 +212,7 @@ public class VentanaHistorial extends JFrame {
 						String des=res.getString("DESCRIPCION");
 						ConexionBD.getConexionBD().closeResult(res);
 						label_1.setText(des);
-						
+					}
 						
 					} catch (ExcepcionConectarBD e1) {
 						e1.printStackTrace();
@@ -260,12 +248,12 @@ public class VentanaHistorial extends JFrame {
 			panel_3.add(getLblDescripcin());
 			panel_3.add(getLabel());
 			panel_3.add(getLabel_1());
-			panel_3.add(getBtnVolver());
 		}
 		return panel_3;
 	}
 	
 	private JList getList_1() throws ExcepcionConectarBD {
+		//La lista se llena con los IDs de los logros existentes
 		if (list_1 == null) {
 			list_1 = new JList();
 			list_1.setVisibleRowCount(100);
@@ -288,9 +276,9 @@ public class VentanaHistorial extends JFrame {
 		return lblDescripcin;
 	}
 	private JLabel getLabel() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con el ID del sudoku al cual pertenece el logro que se ha seleccionado en la lista
 		if (label == null) {
 			label = new JLabel("");
-			label.setBounds(66, 11, 46, 14);
 			if(list_1.getSelectedValue()!=null){
 				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
 				res.next();
@@ -301,9 +289,9 @@ public class VentanaHistorial extends JFrame {
 		return label;
 	}
 	private JLabel getLabel_1() throws ExcepcionConectarBD, SQLException {
+		//Este label se llena con la descripcion del logro que se ha seleccionado en la lista
 		if (label_1 == null) {
 			label_1 = new JLabel("");
-			label_1.setBounds(10, 73, 46, 14);
 			if(list_1.getSelectedValue()!=null){
 				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
 				res.next();
@@ -313,64 +301,6 @@ public class VentanaHistorial extends JFrame {
 		}
 		return label_1;
 	}
-	private JButton getBtnVolver() {
-		if (btnVolver == null) {
-			btnVolver = new JButton("Volver");
-			btnVolver.setBounds(120, 190, 89, 23);
-			btnVolver.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-						VentanaJugador.getVentana().setVisible(true);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		return btnVolver;
-	}
-	private JButton getBtnVolver1() {
-		if (btnVolver1 == null) {
-			btnVolver1 = new JButton("Volver");
-			btnVolver1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-						VentanaJugador.getVentana().setVisible(true);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		return btnVolver1;
-	}
-	private JButton getBtnVolver2() {
-		if (btnVolver2 == null) {
-			btnVolver2 = new JButton("Volver");
-			btnVolver2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-						VentanaJugador.getVentana().setVisible(true);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-		}
-		return btnVolver2;
-	}
 	private void obtenerHistorialSudokus(){
         String historial;
         try {
@@ -379,7 +309,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea.setText(historial);
             }else{
-                textArea.setText("¡No has jugado ningún sudoku!");
+                textArea.setText("Â¡No has jugado ningÃºn sudoku!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
@@ -392,7 +322,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea_1.setText(historial);
             }else{
-                textArea_1.setText("¡No has participado en ningún reto!");
+                textArea_1.setText("Â¡No has participado en ningÃºn reto!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
