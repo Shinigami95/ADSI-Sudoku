@@ -335,7 +335,7 @@ public class VentanaHistorial extends JFrame {
 			if(list_1.getSelectedValue()!=null){
 				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
 				res.next();
-				String des=res.getString("DESCRPCION");
+				String des=res.getString("DESCRIPCION");
 				ConexionBD.getConexionBD().closeResult(res);
 				label_1.setText(des);}
 		}
@@ -349,7 +349,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea.setText(historial);
             }else{
-                textArea.setText("Â¡No has jugado ningÃºn sudoku!");
+                textArea.setText("No has jugado ning�n sudoku!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
@@ -362,7 +362,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea_1.setText(historial);
             }else{
-                textArea_1.setText("Â¡No has participado en ningÃºn reto!");
+                textArea_1.setText("�No has participado en ning�n reto!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();

@@ -31,9 +31,12 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import packControladores.ConexionBD;
 import packControladores.GestorRanking;
+import packControladores.GestorSesion;
 import packExcepciones.ExcepcionConectarBD;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.Font;
 
 
 public class VentanaRanking extends JFrame {
@@ -52,21 +55,19 @@ public class VentanaRanking extends JFrame {
 	private JScrollPane scrollPane;
 	private JPanel panel_3;
 	private JList<Integer> list;
-	private JLabel lblidSudoku;
-	private JLabel lblidSudoku2;
 	private JLabel lblDificultad;
 	private JLabel lblDificultad2;
 	private JLabel lblActivo;
 	private JLabel lblActivo2;
-	private JLabel lblEstasEnLaPos;
-	private JLabel lblEstasEnLaPos2;
 	private JLabel lblRanking;
 	private JTextArea textArea;
-	private JTextArea textArea_1;
 	private JButton btnVolver;
-	private JButton button;
-	private JButton button_1;
+	private JButton btnVolver1;
 	private JTextArea textArea_2;
+	private JTextArea textArea_1;
+	private JButton btnVolver2;
+	private JLabel lblRnkPtos;
+	private JLabel lblRankingPorRetos;
 	
 	/**
 	 * Launch the application.
@@ -127,27 +128,11 @@ public class VentanaRanking extends JFrame {
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			GroupLayout gl_panel = new GroupLayout(panel);
-			gl_panel.setHorizontalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel.createSequentialGroup()
-						.addContainerGap()
-						.addComponent(getTextArea_1(), GroupLayout.PREFERRED_SIZE, 549, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-					.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-						.addContainerGap(468, Short.MAX_VALUE)
-						.addComponent(getBtnVolver(), GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE)
-						.addContainerGap())
-			);
-			gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(getTextArea_1(), GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
-						.addComponent(getBtnVolver())
-						.addContainerGap())
-			);
-			panel.setLayout(gl_panel);
+			panel.setLayout(null);
+			panel.add(getTextArea_1());
+			panel.add(getBtnVolver2());
+			panel.add(getLblRnkPtos());
+			
 		}
 		return panel;
 	}
@@ -158,19 +143,30 @@ public class VentanaRanking extends JFrame {
 			gl_panel_1.setHorizontalGroup(
 				gl_panel_1.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_1.createSequentialGroup()
-						.addContainerGap()
 						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
-							.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-							.addComponent(getBtnVolver_1(), Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
-						.addContainerGap())
+							.addGroup(gl_panel_1.createSequentialGroup()
+								.addContainerGap()
+								.addComponent(getTextArea(), GroupLayout.PREFERRED_SIZE, 350, GroupLayout.PREFERRED_SIZE)
+								.addGap(54)
+								.addComponent(getBtnVolver(), GroupLayout.PREFERRED_SIZE, 91, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_1.createSequentialGroup()
+								.addGap(102)
+								.addComponent(getLblRankingPorRetos(), GroupLayout.PREFERRED_SIZE, 148, GroupLayout.PREFERRED_SIZE)))
+						.addContainerGap(64, Short.MAX_VALUE))
 			);
 			gl_panel_1.setVerticalGroup(
-				gl_panel_1.createParallelGroup(Alignment.LEADING)
+				gl_panel_1.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel_1.createSequentialGroup()
-						.addComponent(getTextArea(), GroupLayout.PREFERRED_SIZE, 248, GroupLayout.PREFERRED_SIZE)
-						.addPreferredGap(ComponentPlacement.RELATED, 242, Short.MAX_VALUE)
-						.addComponent(getBtnVolver_1())
-						.addContainerGap())
+						.addContainerGap()
+						.addComponent(getLblRankingPorRetos(), GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+						.addGroup(gl_panel_1.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel_1.createSequentialGroup()
+								.addComponent(getTextArea(), GroupLayout.PREFERRED_SIZE, 456, GroupLayout.PREFERRED_SIZE)
+								.addContainerGap())
+							.addGroup(Alignment.TRAILING, gl_panel_1.createSequentialGroup()
+								.addComponent(getBtnVolver())
+								.addGap(244))))
 			);
 			panel_1.setLayout(gl_panel_1);
 		}
@@ -196,7 +192,6 @@ public class VentanaRanking extends JFrame {
 
 		@Override
 		public void windowClosing(WindowEvent e) {
-			VentanaJugador.getVentana().setVisible(true);
 			try {
 				VentanaRanking.getVentana().setVisible(false);
 			} catch (ExcepcionConectarBD e1) {
@@ -204,6 +199,7 @@ public class VentanaRanking extends JFrame {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+			VentanaJugador.getVentana().setVisible(true);
 		}
 	}
 	private JScrollPane getScrollPane() throws ExcepcionConectarBD, SQLException {
@@ -232,7 +228,7 @@ public class VentanaRanking extends JFrame {
 				//seleccionamos un id del sudoku para ver su ranking
 				@Override
 				public void mousePressed(MouseEvent arg0) {
-					int idSudoku = list.getSelectedValue().intValue();
+					int idSudoku = list.getSelectedValue().intValue(); //Cogemos el valor
 					try {
 						String ranking = GestorRanking.getGestorRanking().obtenerRankingUnSudoku(idSudoku);
 						if(ranking.length() > 0){
@@ -240,10 +236,22 @@ public class VentanaRanking extends JFrame {
 						}else{
 							textArea_2.setText("¡No hay nadie en el ranking de este sudoku!");
 						}
+						//Cogemos los respectivos valores para ponerlos en las etiquetas de las ventanas
+						ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT DIFICULTAD FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
+						res.next();
+						String id = res.getString("DIFICULTAD");
+						ConexionBD.getConexionBD().closeResult(res);
+						lblDificultad2.setText(id);
+						ResultSet res1 = ConexionBD.getConexionBD().consultaBD("SELECT ACTIVO FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
+						res1.next();
+						String activo = res1.getString("ACTIVO");
+						ConexionBD.getConexionBD().closeResult(res1);
+						lblActivo2.setText(activo);
 					} catch (ExcepcionConectarBD e) {
 						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
 					}
-					
 				}
 
 				@Override
@@ -259,26 +267,25 @@ public class VentanaRanking extends JFrame {
 		if (panel_3 == null) {
 			panel_3 = new JPanel();
 			panel_3.setLayout(null);
-			panel_3.add(getLblidSudoku());
-			panel_3.add(getLblidSudoku2());
 			panel_3.add(getLblDificultad());
 			panel_3.add(getLblDificultad2());
 			panel_3.add(getLblActivo());
 			panel_3.add(getLblActivo2());
-			panel_3.add(getLblEstasEnLaPos());
-			panel_3.add(getLblEstasEnLaPos2());
 			panel_3.add(getLblRanking());
-			panel_3.add(getBtnVolver_2());
+			panel_3.add(getBtnVolver1());
 			panel_3.add(getTextArea_2());
 		}
 		return panel_3;
 	}
 	private JList<Integer> getList() throws ExcepcionConectarBD, SQLException {
 		if (list == null) {
+			list = new JList<Integer>();
 			DefaultListModel<Integer> listModel = new DefaultListModel<Integer>();
 			ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT ID_S FROM SUDOKU;");
 			while(res.next()){
+				//Cogemos el entero de todos los sudokus que haya
 				int id = Integer.parseInt(res.getString("ID_S"));
+				//los añadimos al DefaultListModel para poder escogerlos e imprimirlos en la ventana
 				listModel.addElement(id);
 			}
 			list.setModel(listModel);
@@ -286,66 +293,39 @@ public class VentanaRanking extends JFrame {
 		}
 		return list;
 	}
-	private JLabel getLblidSudoku() {
-		if (lblidSudoku == null) {
-			lblidSudoku = new JLabel("Sudoku:");
-			lblidSudoku.setBounds(10, 11, 49, 14);
-		}
-		return lblidSudoku;
-	}
-	private JLabel getLblidSudoku2() {
-		if (lblidSudoku2 == null) {
-			lblidSudoku2 = new JLabel("");
-			lblidSudoku2.setBounds(69, 11, 46, 14);
-		}
-		return lblidSudoku2;
-	}
 	private JLabel getLblDificultad() {
 		if (lblDificultad == null) {
 			lblDificultad = new JLabel("Dificultad:");
-			lblDificultad.setBounds(10, 40, 62, 14);
+			lblDificultad.setBounds(10, 11, 62, 14);
 		}
 		return lblDificultad;
 	}
 	private JLabel getLblDificultad2() {
 		if (lblDificultad2 == null) {
 			lblDificultad2 = new JLabel("");
-			lblDificultad2.setBounds(79, 40, 46, 14);
+			lblDificultad2.setBounds(82, 11, 46, 14);
 		}
 		return lblDificultad2;
 	}
 	private JLabel getLblActivo() {
 		if (lblActivo == null) {
 			lblActivo = new JLabel("Activo:");
-			lblActivo.setBounds(10, 69, 39, 14);
+			lblActivo.setBounds(10, 40, 39, 14);
 		}
 		return lblActivo;
 	}
 	private JLabel getLblActivo2() {
 		if (lblActivo2 == null) {
 			lblActivo2 = new JLabel("");
-			lblActivo2.setBounds(48, 69, 46, 14);
+			lblActivo2.setBounds(59, 40, 46, 14);
 		}
 		return lblActivo2;
 	}
-	private JLabel getLblEstasEnLaPos() {
-		if (lblEstasEnLaPos == null) {
-			lblEstasEnLaPos = new JLabel("Est\u00E1s en la posici\u00F3n:");
-			lblEstasEnLaPos.setBounds(10, 98, 115, 14);
-		}
-		return lblEstasEnLaPos;
-	}
-	private JLabel getLblEstasEnLaPos2() {
-		if (lblEstasEnLaPos2 == null) {
-			lblEstasEnLaPos2 = new JLabel("");
-			lblEstasEnLaPos2.setBounds(135, 98, 46, 14);
-		}
-		return lblEstasEnLaPos2;
-	}
 	private JLabel getLblRanking() {
 		if (lblRanking == null) {
-			lblRanking = new JLabel("Ranking");
-			lblRanking.setBounds(10, 127, 46, 14);
+			lblRanking = new JLabel("Ranking del sudoku");
+			lblRanking.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+			lblRanking.setBounds(44, 69, 163, 25);
 		}
 		return lblRanking;
 	}
@@ -353,49 +333,48 @@ public class VentanaRanking extends JFrame {
 		//Retos
 		if (textArea == null) {
 			textArea = new JTextArea();
+			textArea.setBounds(10, 57, 351, 456);
 		}
 		return textArea;
-	}
-	private JTextArea getTextArea_1() {
-		//Puntuacion
-		if (textArea_1 == null) {
-			textArea_1 = new JTextArea();
-		}
-		return textArea_1;
 	}
 	private JButton getBtnVolver() {
 		if (btnVolver == null) {
 			btnVolver = new JButton("Volver");
-			button.addActionListener(new ActionListener() {
+			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					//TODO todos llevaran a la ventana principal del jugador o el sudoku
+					dispose();
+					try {
+						VentanaRanking.getVentana().setVisible(false);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					VentanaJugador.getVentana().setVisible(true);
 				}
 			});
 		}
 		return btnVolver;
 	}
-	private JButton getBtnVolver_1() {
-		if (button == null) {
-			button = new JButton("Volver");
-			button.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					
-				}
-			});
-		}
-		return button;
-	}
-	private JButton getBtnVolver_2() {
-		if (button_1 == null) {
-			button_1 = new JButton("Volver");
-			button_1.addActionListener(new ActionListener() {
+	private JButton getBtnVolver1() {
+		if (btnVolver1 == null) {
+			btnVolver1 = new JButton("Volver");
+			btnVolver1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					
+					dispose();
+					try {
+						VentanaRanking.getVentana().setVisible(false);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					VentanaJugador.getVentana().setVisible(true);
 				}
 			});
-			button_1.setBounds(268, 490, 91, 23);
+			btnVolver1.setBounds(268, 490, 91, 23);
 		}
-		return button_1;
+		return btnVolver1;
 	}
 	private void obtenerRankingPuntos(){
         String ranking;
@@ -426,8 +405,42 @@ public class VentanaRanking extends JFrame {
 	private JTextArea getTextArea_2() {
 		if (textArea_2 == null) {
 			textArea_2 = new JTextArea();
-			textArea_2.setBounds(10, 152, 232, 325);
+			textArea_2.setBounds(10, 105, 221, 370);
 		}
 		return textArea_2;
+	}
+	private JTextArea getTextArea_1() {
+		if (textArea_1 == null) {
+			textArea_1 = new JTextArea();
+			textArea_1.setBounds(10, 57, 351, 456);
+		}
+		return textArea_1;
+	}
+	private JButton getBtnVolver2() {
+		if (btnVolver2 == null) {
+			btnVolver2 = new JButton("Volver");
+			btnVolver2.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+				}
+			});
+			btnVolver2.setBounds(415, 258, 89, 23);
+		}
+		return btnVolver2;
+	}
+	private JLabel getLblRnkPtos() {
+		if (lblRnkPtos == null) {
+			lblRnkPtos = new JLabel("Ranking por puntos");
+			lblRnkPtos.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+			lblRnkPtos.setBounds(103, 11, 148, 23);
+		}
+		return lblRnkPtos;
+	}
+	private JLabel getLblRankingPorRetos() {
+		if (lblRankingPorRetos == null) {
+			lblRankingPorRetos = new JLabel("Ranking por retos");
+			lblRankingPorRetos.setFont(new Font("Comic Sans MS", Font.PLAIN, 15));
+		}
+		return lblRankingPorRetos;
 	}
 }

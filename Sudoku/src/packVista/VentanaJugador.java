@@ -29,6 +29,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.sql.SQLException;
 
 import javax.swing.JComboBox;
@@ -292,7 +293,16 @@ public class VentanaJugador extends JFrame {
 				}
 				VentanaJugador.getVentana().setVisible(false);
 			} else if(e.getActionCommand().equals("PRESS_btnVerRetos")){
-				
+				try {
+					VentanaRetos.getVentanaRetos().setVisible(true);
+				} catch (ExcepcionConectarBD e1) {
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+				VentanaJugador.getVentana().setVisible(false);
 			} else if(e.getActionCommand().equals("PRESS_btnJugar")){
 				VentanaJugador.getVentana().jugar();
 			} else if(e.getActionCommand().equals("PRESS_btnContinuar")){

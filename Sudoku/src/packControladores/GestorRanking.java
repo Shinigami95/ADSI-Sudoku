@@ -39,11 +39,11 @@ public class GestorRanking {
 	public String obtenerRankingRetos() throws ExcepcionConectarBD{
 		String rankingR = "";
 		int puesto = 1;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADO,ID_SUDOKU,TIEMPO FROM RETO INNER JOIN PARTIDA ON RETO.ID_SUDOKU=PARTIDA.ID_SUDOKU WHERE ESTADO=’A’ ORDER BY TIEMPO DESC;");
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADO,RETO.ID_SUDOKU,SEGUNDOS FROM RETO INNER JOIN JUGADO ON RETO.ID_SUDOKU=JUGADO.ID_SUDOKU WHERE ESTADO='A' ORDER BY SEGUNDOS DESC;");
 		try{
 			//Los 10 primeros
 			while(result.next()&&puesto<11){
-				rankingR+=puesto + "- "+ result.getString("NOMBRE_RETADO")+ " ha tardado " + result.getShort("TIEMPO") + " en resolver " + result.getString("ID_SUDOKU") + "\n";
+				rankingR+=puesto + "- "+ result.getString("NOMBRE_RETADO")+ " ha tardado " + result.getShort("SEGUNDOS") + " en resolver " + result.getString("ID_SUDOKU") + "\n";
 				puesto++;
 			}
 		}catch(SQLException e){
@@ -55,11 +55,11 @@ public class GestorRanking {
 	public String obtenerRankingUnSudoku(int pIdSudoku) throws ExcepcionConectarBD{
 		String rankingUS = "";
 		int puesto = 1;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,NOMBRE_JUG,PTO FROM JUGADO WHERE ID_SUDOKU='"+pIdSudoku+"' ORDER BY PTO;");
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU,NOMBRE_JUG,PTO FROM JUGADO WHERE ID_SUDOKU='"+pIdSudoku+"' ORDER BY PTO DESC;");
 		try{
 			//Los 10 primeros
 			while(result.next()&&puesto<11){
-				rankingUS+=puesto + "- "+ result.getString("NOMBRE_JUG")+ " ha conseguido " + result.getShort("TIEMPO") + " en " + result.getShort("ID_SUDOKU");
+				rankingUS+=puesto + "- "+ result.getString("NOMBRE_JUG")+ " ha conseguido " + result.getShort("PTO") + " en " + result.getShort("ID_SUDOKU") + "\n";
 				puesto++;
 			}
 		}catch(SQLException e){
