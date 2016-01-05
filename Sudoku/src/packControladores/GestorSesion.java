@@ -5,8 +5,11 @@ public class GestorSesion {
 	private String user;
 	private String tipoSesion;//admin o usuario
 	
-	//habrá que modificarlo
-	private GestorSesion() {user = "Jorge";}
+	//TODO: habrá que poner el user a null (de momento "Jorge" para pruebas)
+	private GestorSesion() {
+		user="Jorge";
+		tipoSesion=null;
+	}
 
 	public static GestorSesion getGestor(){
 		if(miGestor==null){

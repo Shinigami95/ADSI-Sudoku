@@ -21,9 +21,10 @@ public class GestorJugadores {
 	}
 	
 	public static void main(String args[]) throws ExcepcionConectarBD{
-		GestorJugadores.getGestor().registrarJugador("PRUEB", "FACIL", "1", "2");
+		//GestorJugadores.getGestor().registrarJugador("PRUEB", "FACIL", "1", "2");
 		//ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('PRUEB5','Q')");
 		//System.out.println(getGestorJugadores().identificarUsuario("PRUEBA3", "FACIL"));
+		GestorJugadores.getGestor().actualizarPuntuacion(1, "prueba1");
 	}
 	
 	//POST: vacio si ya existe usuario, si no existe devuelve su nombre.
@@ -124,6 +125,25 @@ public class GestorJugadores {
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
 			return null;
+		}
+	}
+	
+	//POST: actualiza la puntuacion de un jugador (sumandola si ya tenia puntos)
+	public void actualizarPuntuacion(int pPuntuacion, String pJugador) throws ExcepcionConectarBD {
+		try{
+			int puntuacion=pPuntuacion;
+			String sql = "SELECT PTO_TOTAL FROM JUGADOR WHERE NOMBRE='"+pJugador+"';";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			result.next();
+			//si ya tiene puntuacion se suma
+			if(result.getString("PTO_TOTAL")!=null){
+				puntuacion+=Integer.parseInt(result.getString("PTO_TOTAL"));
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+			String sql2= "UPDATE JUGADOR SET PTO_TOTAL='"+puntuacion+"' WHERE NOMBRE='"+pJugador+"';";
+			ConexionBD.getConexionBD().actualizarBD(sql2);
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
 		}
 	}
 }

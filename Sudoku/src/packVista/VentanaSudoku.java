@@ -23,7 +23,9 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 
+import packControladores.GestorJugadores;
 import packControladores.GestorPartida;
+import packControladores.GestorSesion;
 import packControladores.GestorTiempo;
 import packExcepciones.ExcepcionConectarBD;
 import packModelo.Partida;
@@ -568,6 +570,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 
 	public void mostrarVentanaFinal(){
 		GestorTiempo.getGestor().pausar();
+		actualizarInfoJugador();
 		JOptionPane.showMessageDialog(this, "Enhorabuena has completado el sudoku.");
 		try {
 			VentanaFinal.getVentana().setVisible(true);
@@ -589,5 +592,15 @@ public class VentanaSudoku extends JFrame implements Observer{
 		JOptionPane.showMessageDialog(this, "PAUSA");
 		this.setVisible(true);
 		GestorTiempo.getGestor().reanudar();
+	}
+	
+	public void actualizarInfoJugador(){
+		try{
+			int puntuacion= GestorPartida.getGestor().calcularPuntuacion();
+			String jugador= GestorSesion.getGestor().getUserSesion();
+			GestorJugadores.getGestor().actualizarPuntuacion(puntuacion, jugador);
+		}catch(ExcepcionConectarBD e){
+			System.out.println(e.getMessage());
+		}
 	}
 }

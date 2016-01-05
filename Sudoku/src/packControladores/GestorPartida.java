@@ -254,12 +254,13 @@ public class GestorPartida {
 		}
 	}
 
-	//TODO definir mejor la formula
+	//POST: Puntuacion = 1000 + [8999*exp(-%Dificultad * Tiempo)] - Penalizacion*Ayudas
 	public int calcularPuntuacion(){
 		int tiempo = GestorTiempo.getGestor().tiempoASegundos();
 		int dificultad = this.game.getDificultad();
-		int pistasAyudas= (5-this.game.getNumAyudas())+(5-this.game.getNumComprobaciones());
-		double puntuacion = 9999*Math.exp(-(getPorcentajeDificultad(dificultad)*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
+		//int pistasAyudas= (5-this.game.getNumAyudas())+(5-this.game.getNumComprobaciones());
+		int pistasAyudas= 0;
+		double puntuacion = 1000+8999*Math.exp(-(getPorcentajeDificultad(dificultad)*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
 		return (int)puntuacion;
 	}
 	
