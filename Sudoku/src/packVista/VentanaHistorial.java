@@ -61,6 +61,8 @@ public class VentanaHistorial extends JFrame {
 	private JLabel lblDescripcin;
 	private JLabel label;
 	private JLabel label_1;
+	private JButton btnVolver;
+	private JButton btnVolver1;
 	
 
 	/**
@@ -106,16 +108,17 @@ public class VentanaHistorial extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent arg0) {
 					dispose();
-					VentanaJugador.getVentana().setVisible(true);;
+					VentanaJugador.getVentana().setVisible(true);
 			}
 		});
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 550, 400);
 		setTitle("Historial");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new GridLayout(1, 0, 0, 0));
 		contentPane.add(getTabbedPane());
+		setLocationRelativeTo(null);
 	}
 
 	private JTabbedPane getTabbedPane() throws ExcepcionConectarBD, SQLException {
@@ -134,12 +137,18 @@ public class VentanaHistorial extends JFrame {
 			gl_panel.setHorizontalGroup(
 				gl_panel.createParallelGroup(Alignment.TRAILING)
 					.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+					.addGroup(gl_panel.createSequentialGroup()
+						.addContainerGap(321, Short.MAX_VALUE)
+						.addComponent(getBtnVolver(), GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap())
 			);
 			gl_panel.setVerticalGroup(
 				gl_panel.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel.createSequentialGroup()
-						.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-						.addGap(52))
+						.addComponent(getTextArea(), GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(getBtnVolver())
+						.addGap(18))
 			);
 			panel.setLayout(gl_panel);
 		}
@@ -152,12 +161,18 @@ public class VentanaHistorial extends JFrame {
 			gl_panel_1.setHorizontalGroup(
 				gl_panel_1.createParallelGroup(Alignment.TRAILING)
 					.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+					.addGroup(gl_panel_1.createSequentialGroup()
+						.addContainerGap(321, Short.MAX_VALUE)
+						.addComponent(getBtnVolver1(), GroupLayout.PREFERRED_SIZE, 88, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap())
 			);
 			gl_panel_1.setVerticalGroup(
 				gl_panel_1.createParallelGroup(Alignment.TRAILING)
 					.addGroup(gl_panel_1.createSequentialGroup()
-						.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 171, Short.MAX_VALUE)
-						.addGap(52))
+						.addComponent(getTextArea_1(), GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+						.addGap(18)
+						.addComponent(getBtnVolver1())
+						.addContainerGap())
 			);
 			panel_1.setLayout(gl_panel_1);
 		}
@@ -353,4 +368,42 @@ public class VentanaHistorial extends JFrame {
             e.printStackTrace();
         }
     }
+	private JButton getBtnVolver() {
+		if (btnVolver == null) {
+			btnVolver = new JButton("Volver");
+			btnVolver.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					dispose();
+					try {
+						VentanaHistorial.getVentanaHistorial().setVisible(false);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					VentanaJugador.getVentana().setVisible(true);
+				}
+			});
+		}
+		return btnVolver;
+	}
+	private JButton getBtnVolver1() {
+		if (btnVolver1 == null) {
+			btnVolver1 = new JButton("Volver");
+			btnVolver1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+					try {
+						VentanaHistorial.getVentanaHistorial().setVisible(false);
+					} catch (ExcepcionConectarBD e1) {
+						e1.printStackTrace();
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					}
+					VentanaJugador.getVentana().setVisible(true);
+				}
+			});
+		}
+		return btnVolver1;
+	}
 }

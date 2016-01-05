@@ -25,7 +25,7 @@ public class GestorHistorial {
 		String historialS = "";
 		try{
 			while(result.next()){
-				historialS += "Sudoku: " + result.getString("ID_SUDOKU") + ", Completado: " + result.getString("COMPLETADO") + ", Puntos: " + result.getString("PTO") + ", Fecha: " + result.getString("FECHA");
+				historialS += "Sudoku: " + result.getString("ID_SUDOKU") + ", Completado: " + result.getString("COMPLETADO") + ", Puntos: " + result.getString("PTO") + ", Fecha: " + result.getString("FECHA") + "\n";
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
@@ -38,7 +38,7 @@ public class GestorHistorial {
 		String historialR = "";
 		try{
 			while(result.next()){
-				historialR += "Reto: " + result.getString("ID_R") + ", Retador: " + result.getString("NOMBRE_RETADOR") + ", Retado: " + result.getString("NOMBRE_RETADO") + ", SudokuJugado: " + result.getString("ID_SUDOKU") + ", Estado: " + result.getString("ESTADO") + ", Fecha: " + result.getString("FECHA");
+				historialR += "Reto: " + result.getString("ID_R") + ", Retador: " + result.getString("NOMBRE_RETADOR") + ", Retado: " + result.getString("NOMBRE_RETADO") + ", SudokuJugado: " + result.getString("ID_SUDOKU") + ", Estado: " + result.getString("ESTADO") + ", Fecha: " + result.getString("FECHA") + "\n";
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
