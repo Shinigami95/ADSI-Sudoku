@@ -1,27 +1,19 @@
 package packModelo;
 
 import java.awt.Point;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import packControladores.ConexionBD;
-import packControladores.GestorSesion;
-import packExcepciones.ExcepcionConectarBD;
 
 public class Partida extends Observable{
 	private int numAyudas, numComprobaciones;
 	private Sudoku sudoku;
 	private MatrizPartida matrizPartida;
-	private int reto;
+	private Integer reto;
 	
-	public Partida(Sudoku pSud, int pReto, int pA, int pC) {
-		reto = 0;
+	public Partida(Sudoku pSud, Integer pReto, int pA, int pC) {
+		reto = pReto;
 		numAyudas = pA;
 		numComprobaciones = pC;
 		sudoku = pSud;
@@ -36,7 +28,7 @@ public class Partida extends Observable{
 		return this.sudoku.esCorrecto();
 	}
 	
-	public int getReto() {
+	public Integer getReto() {
 		return this.reto;
 	}
 	

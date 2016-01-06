@@ -115,7 +115,7 @@ public class GestorPartida {
 		Sudoku sud;
 		try {
 			sud = new Sudoku(id, 1, solSud, sinRes, true);
-			this.game = new Partida(sud, 0, 90, 5);
+			this.game = new Partida(sud, null, 90, 5);
 			GestorTiempo.getGestor().setTiempo(0);
 			GestorTiempo.getGestor().reanudar();
 		} catch (NoValidoException e) {
@@ -142,7 +142,7 @@ public class GestorPartida {
 				mS = result.getString("M_SOL");
 				try {
 					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
-					this.setPartida(new Partida(sud, 0, 5, 5));
+					this.setPartida(new Partida(sud, null, 5, 5));
 					GestorTiempo.getGestor().reanudar();		
 				} catch (NoValidoException e) {
 					e.printStackTrace();
@@ -187,7 +187,8 @@ public class GestorPartida {
 				int na = result.getInt("NA");
 				int nc = result.getInt("NC");
 				int ts = result.getInt("TS");
-				int rt = result.getInt("RT");
+				Integer rt = result.getInt("RT");
+				if(rt==0)rt=null;
 				int dif = result.getInt("DIF");
 				String mi = result.getString("MI");
 				String ms = result.getString("MS");
@@ -298,7 +299,7 @@ public class GestorPartida {
 			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
 			if(result.next()){
 				String ids = result.getInt("ID_SUDOKU")+"";
-				int reto = result.getInt("RETO");
+				Integer reto = result.getInt("RETO");
 				ConexionBD.getConexionBD().closeResult(result);
 				if(reto != 0){
 					sql = "UPDATE RETO SET ESTADO='T' WHERE ID_R="+reto+";";
@@ -330,7 +331,7 @@ public class GestorPartida {
 			ConexionBD.getConexionBD().actualizarBD(sql);
 			sql = "INSERT INTO JUGADO (NOMBRE_JUG, ID_SUDOKU, COMPLETADO, PTO, SEGUNDOS)"
 				+ " VALUES ('"+jugador+"', "+ids+", 'S', "+pto+", "+tiempo+");";
-			int reto = this.getReto();
+			Integer reto = this.getReto();
 			if(reto!=0){
 				sql = "UPDATE RETO SET ESTADO = 'T' WHERE ID_R="+reto+";";
 				ConexionBD.getConexionBD().actualizarBD(sql);
