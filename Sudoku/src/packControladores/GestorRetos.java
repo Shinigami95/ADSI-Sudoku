@@ -30,11 +30,11 @@ public class GestorRetos {
 	}
 	
 	public String obtenerListadoRetos(String pRetado) throws ExcepcionConectarBD{
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR FROM RETO INNER JOIN JUGADO WHERE NOMBRE_JUG='"+pRetado+"' AND ESTADO = 'P' ORDER BY FECHA DESC;");
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT RETO.ID_SUDOKU FROM RETO INNER JOIN JUGADO WHERE NOMBRE_JUG='"+pRetado+"' AND ESTADO = 'P' ORDER BY JUGADO.FECHA DESC;");
 		String listaRetos = "";
 		try{
 			while(result.next()){
-				listaRetos += result.getString("NOMBRE_RETADOR") + "\n";
+				listaRetos += result.getString("RETO.ID_SUDOKU") + "\n";
 			}
 		}catch(SQLException e){
 			System.out.println(e.getMessage());
@@ -117,7 +117,7 @@ public class GestorRetos {
 		return ganador;
 	}
 	
-	private boolean buscarRetoPorSudoku(int pIdSudoku) throws ExcepcionConectarBD{
+	public boolean buscarRetoPorSudoku(int pIdSudoku) throws ExcepcionConectarBD{
 		//Queremos que solo se reciba un unico reto de un sudoku
 		boolean esta = false;
 		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT * FROM RETO WHERE ID_SUDOKU='"+pIdSudoku+"'");
