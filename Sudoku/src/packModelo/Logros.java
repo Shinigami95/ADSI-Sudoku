@@ -7,12 +7,20 @@ import packExcepciones.ExcepcionConectarBD;
 
 
 public class Logros {
-	
+	 private static Logros mLogro;
+	public Logros(){}
+	//Singelton
+	public static Logros getLogros(){
+		if(mLogro==null){
+			mLogro=new Logros();
+		}
+		return mLogro;
+	}
 	//Este metodo mete en la bd los datos basicos del logro(id,descripcion y sudoku al que pertenece) y clasifica el logro segun sus caracteristicas.
 	/*Precondicion: Se le pasan unos datos que cumplen las especificaciones necesarias para meterlos en la bd.
 	 *Postcondicion: Los datos se han metido en la bd correctamente.
 	 * */
-	public static void tipoLogro(String codL,String codS,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD{
+	public void tipoLogro(String codL,String codS,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD{
 		//Primero se crea una variable a la que le damos el valor del id del logro que se nos pasa.
 		String log=codL;
 		//Esta parte es la clasificacion del logro. Si la puntuacion que se nos pasa es mayor que 0 puede ser dos tipos de logro.
@@ -23,7 +31,7 @@ public class Logros {
 				log="X"+log;
 				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionX
 				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
-				LogrosPuntuacionX.logrosPuntuacionX(log, puntos);
+				LogrosPuntuacionX.getLogroX().logrosPuntuacionX(log, puntos);
 			}
 			//Si el numero de jugadores que la pueden conseguir es mayor que 0 este logro se consigue al ser uno de los y primeros en llegar a una puntuacion x.
 			else{
@@ -31,7 +39,7 @@ public class Logros {
 				log="Y"+log;
 				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionXY
 				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
-				LogrosPuntuacionXY.logrosPuntuacionXY(log, puntos, numJug); 
+				LogrosPuntuacionXY.getLogroY().logrosPuntuacionXY(log, puntos, numJug); 
 			}
 		}
 		//Si la puntuacion que se nos de es 0 entoces es un logro que se consigue al ser uno de los x primeros en completar el sudoku.
@@ -40,7 +48,7 @@ public class Logros {
 			log="R"+log;
 			//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroResolucion
 			ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
-			LogrosResolucion.logrosResolucion(log, numJug);
+			LogrosResolucion.getLogrosR().logrosResolucion(log, numJug);
 		}
 	}
 	//Este metodo se encarga de modificar los datos de un logro. AVISO: No se puede cambiar el tipo de logro. Si es un logro de resolucion no se modifica para que sea de puntuacionx
@@ -48,19 +56,19 @@ public class Logros {
 	/*Precondicion: Se le pasan unos datos que cumplen las especificaciones necesarias para que sean modificados en la bd.
 	 *Postcondicion: Los datos se han modificado en la bd correctamente.
 	 * */
-	public static void modificarLogros(String codL,String codS,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD{
+	public void modificarLogros(String codL,String codS,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD{
 		//Primero modifica el logro en si(la descripcion y el sudoku asociado)
 		ConexionBD.getConexionBD().actualizarBD("UPDATE LOGRO SET ID_SUDOKU='"+codS+"',DESCRIPCION='"+descripcion+"' WHERE ID_L='"+codL+"';");
 		//Luego se encarga de mirar el primer caracter del id para saber que tipo de logro es y como hay que modificarlo.
 		if(codL.charAt(0)=='X'){
 			//Por ultimo se hacen llamadas a los metodos que modifican el tipo de logro.
-			LogrosPuntuacionX.modificarLogro(codL, puntos);
+			LogrosPuntuacionX.getLogroX().modificarLogro(codL, puntos);
 		}
 		else if (codL.charAt(0)=='Y') {
-			LogrosPuntuacionXY.modificarLogro(codL, puntos, numJug);
+			LogrosPuntuacionXY.getLogroY().modificarLogro(codL, puntos, numJug);
 		}
 		else if (codL.charAt(0)=='R') {
-			LogrosResolucion.modificarLogro(codL, numJug);
+			LogrosResolucion.getLogrosR().modificarLogro(codL, numJug);
 		}
 		else{JOptionPane.showMessageDialog(null, "Datos incorrectos.");}
 	}

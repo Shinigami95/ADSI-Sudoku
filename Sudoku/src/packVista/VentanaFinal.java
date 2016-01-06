@@ -114,6 +114,7 @@ public class VentanaFinal extends JFrame {
 		}
 		return mVent;
 	}
+	//Este metodo se encarga de cargar el tiempo,la puntuacion, el usuario, el id del sudoku y los logros que ha conseguido el usuario al terminar la partida.
 	private void cargarDatos(){
 		int pto = GestorPartida.getGestor().calcularPuntuacion();
 		String user = GestorSesion.getGestor().getUserSesion();
@@ -329,20 +330,20 @@ public class VentanaFinal extends JFrame {
 	
 	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
 		String selItemLogro = "";
-		
+		//Al cerrarse la ventana llama a la ventanaJugador
 		@Override
 		public void windowClosing(WindowEvent e) {
 			dispose();
 			VentanaJugador.getVentana().setVisible(true);
 		}
-		
+		//Comparte el logro que se ha seleccionado de la lista de los logros conseguidos.
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getActionCommand().equals("PRESS_btnCompartirLogro")){
 				try {
 					String user = GestorSesion.getGestor().getUserSesion();
 					String descr = VentanaFinal.getVentana().getTextAreaDescrLogro().getText();
-					String str = user+" ha conseguido el logro "+selItemLogro+" por: "+descr;
+					String str = user+"+ha+conseguido+el+logro+"+selItemLogro+"+por:+"+descr;
 					GestorTwitter.getGestorTwitter().compartirEnTwitter(str);
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -354,7 +355,7 @@ public class VentanaFinal extends JFrame {
 					String user = GestorSesion.getGestor().getUserSesion();
 					int idSud = GestorPartida.getGestor().getIdSud();
 					int pto = GestorPartida.getGestor().calcularPuntuacion();
-					String str = user+" ha conseguido "+pto+" puntos en el sudoku "+idSud;
+					String str = user+"+ha+conseguido+"+pto+"+puntos+en+el+sudoku+"+idSud;
 					GestorTwitter.getGestorTwitter().compartirEnTwitter(str);
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -367,7 +368,8 @@ public class VentanaFinal extends JFrame {
 				mVent=null;
 			}
 		}
-
+		
+		//Rellena el textarea con la descripción del logro seleccionado
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){

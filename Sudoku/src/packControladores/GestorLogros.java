@@ -16,7 +16,7 @@ public class GestorLogros {
 	private static GestorLogros mGest;
 	
 	private GestorLogros(){}
-	
+	//Singelton
 	public static GestorLogros getGestor(){
 		if(mGest==null){
 			mGest = new GestorLogros();
@@ -29,7 +29,7 @@ public class GestorLogros {
 	 * */
 	public void anadirLogro(String iDLogro,String iDSudoku,String descripcion,String puntos,String numJug) throws ExcepcionConectarBD
 	{		
-		Logros.tipoLogro(iDLogro, iDSudoku, descripcion, puntos, numJug);
+		Logros.getLogros().tipoLogro(iDLogro, iDSudoku, descripcion, puntos, numJug);
 		}	
 	//Llama al metodo que elimina los logros en la bd.
 	/*Precondicion: El String que se le pasa tenga menos de 5 caracteres.
@@ -44,7 +44,7 @@ public class GestorLogros {
 	 *Postcondicion: Los datos se modifican correctamente en la bd.
 	 * */
 	public void modificarLogros(String iDLogro,String iDSudoku,String descripcion,String puntos,String numJug)throws ExcepcionConectarBD{
-		Logros.modificarLogros(iDLogro, iDSudoku, descripcion, puntos, numJug);
+		Logros.getLogros().modificarLogros(iDLogro, iDSudoku, descripcion, puntos, numJug);
 	}
 	//Devuleve una lista con los IDs de todos los logros existentes. Se utiliza para llenar las JLists que tienen los Ids de los Logros.
 	/*Precondicion:
@@ -167,17 +167,17 @@ public class GestorLogros {
 		try{
 			ResultSet lista=ConexionBD.getConexionBD().consultaBD("SELECT ID_LOGRO FROM TIENE WHERE NOMBRE_JUG='"+nick+"';");
 			while(lista.next()){
-				ResultSet logs=ConexionBD.getConexionBD().consultaBD("SELECT ID_L,ID_SUDOKU,DESCRIPCION FROM LOGRO WHERE ID_L='"+lista.getString(1)+"';");
-				logs.next();
-				logros.addElement(logs.getString(1));
-				ConexionBD.getConexionBD().closeResult(logs);
+				logros.addElement(lista.getString(1));
 			}
 			ConexionBD.getConexionBD().closeResult(lista);
 		}catch(Exception e){e.printStackTrace();}
 		
 		return logros;
 	}
-
+//Este metodo devuelve la descripcion del logro que se le pasa
+	/*Precondicion: Se le pasa un id de un logro que exista en la bd.
+	 *Postcondicion:
+	 * */
 	public String getDescripcionDe(String pIdL) throws ExcepcionConectarBD {
 		try{
 			String sql = "SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+pIdL+"';";
