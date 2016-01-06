@@ -218,16 +218,8 @@ public class VentanaHistorial extends JFrame {
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					try {if(list_1.getSelectedIndex()>-1){
-						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-						tes.next();
-						String ses=tes.getString("ID_SUDOKU");
-						ConexionBD.getConexionBD().closeResult(tes);
-						label.setText(ses);
-						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-						res.next();
-						String des=res.getString("DESCRIPCION");
-						ConexionBD.getConexionBD().closeResult(res);
-						label_1.setText(des);
+						label.setText(GestorLogros.getGestor().getSudoku(list_1.getSelectedValue().toString()));
+						label_1.setText(GestorLogros.getGestor().getDescripcionDe(list_1.getSelectedValue().toString()));
 					}
 						
 					} catch (ExcepcionConectarBD e1) {
@@ -320,11 +312,7 @@ public class VentanaHistorial extends JFrame {
 		if (label == null) {
 			label = new JLabel("");
 			if(list_1.getSelectedValue()!=null){
-				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-				res.next();
-				String des=res.getString("ID_SUDOKU");
-				ConexionBD.getConexionBD().closeResult(res);
-				label.setText(des);}
+				label.setText(GestorLogros.getGestor().getSudoku(list_1.getSelectedValue().toString()));}
 		}
 		return label;
 	}
@@ -333,11 +321,7 @@ public class VentanaHistorial extends JFrame {
 		if (label_1 == null) {
 			label_1 = new JLabel("");
 			if(list_1.getSelectedValue()!=null){
-				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-				res.next();
-				String des=res.getString("DESCRIPCION");
-				ConexionBD.getConexionBD().closeResult(res);
-				label_1.setText(des);}
+				label_1.setText(GestorLogros.getGestor().getDescripcionDe(list_1.getSelectedValue().toString()));}
 		}
 		return label_1;
 	}
@@ -349,7 +333,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea.setText(historial);
             }else{
-                textArea.setText("No has jugado ningún sudoku!");
+                textArea.setText("No has jugado ningÃºn sudoku!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
@@ -362,7 +346,7 @@ public class VentanaHistorial extends JFrame {
             if(historial.length() > 0){
                 textArea_1.setText(historial);
             }else{
-                textArea_1.setText("¡No has participado en ningún reto!");
+                textArea_1.setText("Â¡No has participado en ningÃºn reto!");
             }
         } catch (ExcepcionConectarBD e) {
             e.printStackTrace();
@@ -374,13 +358,6 @@ public class VentanaHistorial extends JFrame {
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
 					VentanaJugador.getVentana().setVisible(true);
 				}
 			});
@@ -393,13 +370,6 @@ public class VentanaHistorial extends JFrame {
 			btnVolver1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
 					VentanaJugador.getVentana().setVisible(true);
 				}
 			});
