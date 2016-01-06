@@ -61,7 +61,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JLabel lblDescripcin_1;
 	private JTextField textField_3;
 	private JLabel lblCodsudoku;
-	private JComboBox comboBox;
+	private JComboBox<String> comboBox;
 	private JPanel panel_8;
 	private JScrollPane scrollPane_1;
 	private JPanel panel_9;
@@ -72,7 +72,7 @@ public class VentanaAdminLogros extends JFrame {
 	private JLabel lblVarDescripcin;
 	private JButton btnModificar;
 	private JLabel label_5;
-	private JComboBox comboBox_5;
+	private JComboBox<String> comboBox_5;
 	private JLabel label_6;
 	private JTextField textField_6;
 	private JLabel label_7;
@@ -81,15 +81,14 @@ public class VentanaAdminLogros extends JFrame {
 	private JTextField textField_8;
 	private JLabel label_9;
 	private JTextField textField;
-	private JList list;
 	private JScrollPane scrollPane;
 	private JPanel panel_4;
 	private JLabel lblCdigoSudoku;
 	private JLabel label_12;
 	private JLabel label_13;
 	private JLabel label_14;
-	private JList list_1;
-	private JList list_2;
+	private JList<String> list_1;
+	private JList<String> list_2;
 	private static VentanaAdminLogros ventana;
 
 	/**
@@ -186,7 +185,7 @@ public class VentanaAdminLogros extends JFrame {
 				//Al seleccionar un logro de la lista y dar a eliminar este se elimina de la base de datos y se actualizan las listas de la ventana.
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						GestorLogros.eliminar(list_1.getSelectedValue().toString());
+						GestorLogros.getGestor().eliminar(list_1.getSelectedValue().toString());
 						getList_1();
 						getList_2();
 						JOptionPane.showMessageDialog(null, "Se ha eliminado correctamente.");
@@ -219,9 +218,9 @@ public class VentanaAdminLogros extends JFrame {
 				/*Al hacer clic en el boton aÃ±adir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
 				 * Si es asi se meten en la base de datos y junto con la actualizacion de las listas sale un mensaje que indica que todo ha ido bien.*/
 				public void actionPerformed(ActionEvent arg0) {
-					if(GestorLogros.datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
+					if(GestorLogros.getGestor().datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
 						try {
-							GestorLogros.anadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
+							GestorLogros.getGestor().anadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
 							getList_1();
 							getList_2();
 							JOptionPane.showMessageDialog(null, "Se ha a\u00F1adido corectamente.");
@@ -365,11 +364,11 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return lblCodsudoku;
 	}
-	private JComboBox getComboBox() {
+	private JComboBox<String> getComboBox() {
 		//Este comboBox se rellena con los IDs de los sudokus existentes.No se mira que esten activos o no.
 		if (comboBox == null) {
-			DefaultComboBoxModel mdl=new DefaultComboBoxModel(GestorLogros.metodoSudoku());
-			comboBox = new JComboBox(mdl);
+			DefaultComboBoxModel<String> mdl=new DefaultComboBoxModel<String>(GestorLogros.getGestor().metodoSudoku());
+			comboBox = new JComboBox<String>(mdl);
 		}
 		return comboBox;
 	}
@@ -568,9 +567,9 @@ public class VentanaAdminLogros extends JFrame {
 			btnModificar = new JButton("Modificar");
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(GestorLogros.datos(list_2.getSelectedValue().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText())){
+					if(GestorLogros.getGestor().datos(list_2.getSelectedValue().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText())){
 						try {
-							GestorLogros.modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
+							GestorLogros.getGestor().modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
 							JOptionPane.showMessageDialog(null, "Se ha modificado corectamente.");
 						} catch (ExcepcionConectarBD e) {
 							e.printStackTrace();
@@ -586,11 +585,11 @@ public class VentanaAdminLogros extends JFrame {
 		}
 		return label_5;
 	}
-	private JComboBox getComboBox_5() {
+	private JComboBox<String> getComboBox_5() {
 		//Este comboBox se rellena con los IDs de los sudokus existentes.No se mira que esten activos o no.
 		if (comboBox_5 == null) {
-			DefaultComboBoxModel mdl=new DefaultComboBoxModel(GestorLogros.metodoSudoku());
-			comboBox_5 = new JComboBox(mdl);
+			DefaultComboBoxModel<String> mdl=new DefaultComboBoxModel<String>(GestorLogros.getGestor().metodoSudoku());
+			comboBox_5 = new JComboBox<String>(mdl);
 		}
 		return comboBox_5;
 	}
@@ -793,22 +792,22 @@ public class VentanaAdminLogros extends JFrame {
 		return label_14;
 	}
 
-	private JList getList_1() throws ExcepcionConectarBD {
+	private JList<String> getList_1() throws ExcepcionConectarBD {
 		//La lista se llena con los IDs de los logros existentes
 		if (list_1 == null) {
-			list_1 = new JList();
+			list_1 = new JList<String>();
 			list_1.setVisibleRowCount(100);
 		}
-		list_1.setModel(GestorLogros.llenarLista());
+		list_1.setModel(GestorLogros.getGestor().llenarLista());
 		return list_1;
 	}
-	private JList getList_2() {
+	private JList<String> getList_2() {
 		//La lista se llena con los IDs de los logros existentes
 		if (list_2 == null) {
-			list_2 = new JList();
+			list_2 = new JList<String>();
 			list_2.setVisibleRowCount(100);
 		}
-		list_2.setModel(GestorLogros.llenarLista());
+		list_2.setModel(GestorLogros.getGestor().llenarLista());
 		return list_2;
 	}
 	

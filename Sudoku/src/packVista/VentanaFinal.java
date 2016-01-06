@@ -7,21 +7,20 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.DefaultListModel;
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.SwingConstants;
+import javax.swing.ListSelectionModel;
 
 import java.awt.FlowLayout;
-import java.awt.event.MouseListener;
 import java.net.URISyntaxException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JButton;
 
-import packControladores.ConexionBD;
 import packControladores.GestorLogros;
 import packControladores.GestorPartida;
 import packControladores.GestorSesion;
@@ -34,31 +33,39 @@ import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JTextArea;
 
 public class VentanaFinal extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private static VentanaFinal mVentana;
+	private static VentanaFinal mVent;
 	private JScrollPane scrollPane;
 	private JPanel panel;
-	private JLabel label;
-	private JLabel label_1;
-	private JLabel label_2;
-	private JLabel label_3;
+	private JLabel labelTiempoValor;
+	private JLabel labelTiempo;
+	private JLabel labelPuntuacionValor;
+	private JLabel labelPuntuacion;
 	private JPanel panel_1;
 	private JButton btnRetar;
 	private JButton btnFinalizar;
 	private JPanel panel_2;
-	private JList list_1;
+	private JList<String> listLogrosNuevos;
+	private DefaultListModel<String> defListModelLogrosNuevos;
 	private JLabel lblSudoku;
-	private JLabel lblDescripcin;
-	private JLabel label_12;
-	private JLabel label_14;
-	private JButton btnCompartir;
+	private JLabel lblDescripcion;
+	private JLabel lblSudokuValor;
+	private JButton btnCompartirPuntuacion;
 	private JButton btnCompartirLogro;
+	private Controlador controlador;
+	private JTextArea textAreaDescrLogro;
 
 	/**
 	 * Launch the application.
@@ -81,19 +88,15 @@ public class VentanaFinal extends JFrame {
 	 * @throws ExcepcionConectarBD 
 	 * @throws SQLException 
 	 */
-	private VentanaFinal() throws ExcepcionConectarBD, SQLException {
+	private VentanaFinal(){
 		initialize();
 	}
 	
-	private void initialize() throws ExcepcionConectarBD, SQLException {
-		addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				dispose();
-				VentanaJugador.getVentana().setVisible(true);
-			}
-		});
+	private void initialize() {
+		addWindowListener(getControlador());
 		setBounds(100, 100, 450, 300);
+		setMinimumSize(new Dimension(450, 300));
+		setTitle("Ventana final");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -104,62 +107,31 @@ public class VentanaFinal extends JFrame {
 		contentPane.add(getPanel_2(), BorderLayout.CENTER);
 	}
 
-	public static VentanaFinal getVentana() throws ExcepcionConectarBD, SQLException{
-		if(mVentana==null){
-			mVentana = new VentanaFinal();
+	public static VentanaFinal getVentana(){
+		if(mVent==null){
+			mVent = new VentanaFinal();
+			mVent.cargarDatos();
 		}
-		return mVentana;
+		return mVent;
 	}
-	private JScrollPane getScrollPane() throws ExcepcionConectarBD {
+	private void cargarDatos(){
+		int pto = GestorPartida.getGestor().calcularPuntuacion();
+		String user = GestorSesion.getGestor().getUserSesion();
+		int idSud = GestorPartida.getGestor().getIdSud();
+		getLblSudokuValor().setText(idSud+"");
+		getLabelPuntuacionValor().setText(pto+"");
+		DefaultListModel<String> logros = GestorLogros.getGestor().logrosConseguidos(user, idSud+"", pto+"");
+		getListLogrosNuevos().setModel(logros);
+		getListLogrosNuevos().setSelectedIndex(0);
+		if(logros.getSize()>0){
+			getBtnCompartirLogro().setEnabled(true);
+		}
+	}
+	private JScrollPane getScrollPane(){
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setPreferredSize(new Dimension(200, 300));
-			scrollPane.setViewportView(getList_1());
-			//https://www.youtube.com/watch?v=twkRNQ2Vs6g
-			//Esta lista tiene un Listener que al seleccionar el id de un logro actualiza dos de los textFields para que aparezca el ID del sudoku
-			//al que pertenece y la descripcion del logro.
-			list_1.addMouseListener(new MouseListener() {
-				
-				@Override
-				public void mouseReleased(java.awt.event.MouseEvent e) {
-				}
-				
-				@Override
-				public void mousePressed(java.awt.event.MouseEvent e) {
-					try {
-						if(list_1.getSelectedIndex()>-1){btnCompartirLogro.setEnabled(true);
-						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-						tes.next();
-						String ses=tes.getString("ID_SUDOKU");
-						ConexionBD.getConexionBD().closeResult(tes);
-						label_12.setText(ses);
-						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-						res.next();
-						String des=res.getString("DESCRIPCION");
-						ConexionBD.getConexionBD().closeResult(res);
-						label_14.setText(des);
-						}
-						
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					};
-					
-				}
-				
-				@Override
-				public void mouseExited(java.awt.event.MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseEntered(java.awt.event.MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseClicked(java.awt.event.MouseEvent e) {
-				}
-			});
+			scrollPane.setViewportView(getListLogrosNuevos());
 		}
 		return scrollPane;
 	}
@@ -169,43 +141,42 @@ public class VentanaFinal extends JFrame {
 			FlowLayout flowLayout = (FlowLayout) panel.getLayout();
 			flowLayout.setHgap(10);
 			flowLayout.setAlignment(FlowLayout.LEFT);
-			panel.add(getLabel_1());
-			panel.add(getLabel());
-			panel.add(getLabel_3());
-			panel.add(getLabel_2());
-			panel.add(getBtnCompartir());
+			panel.add(getLabelTiempo());
+			panel.add(getLabelTiempoValor());
+			panel.add(getLabelPuntuacion());
+			panel.add(getLabelPuntuacionValor());
+			panel.add(getBtnCompartirPuntuacion());
 		}
 		return panel;
 	}
-	private JLabel getLabel() {
+	private JLabel getLabelTiempoValor() {
 		//En este label se aÃ±ade el tiempo que ha tardado en hacer el ultimo sudoku
-		if (label == null) {
-			label = new JLabel(GestorTiempo.getGestor().tiempoAString());
-			label.setBounds(0, 0, 51, 14);
+		if (labelTiempoValor == null) {
+			labelTiempoValor = new JLabel(GestorTiempo.getGestor().tiempoAString());
+			labelTiempoValor.setBounds(0, 0, 51, 14);
 		}
-		return label;
+		return labelTiempoValor;
 	}
-	private JLabel getLabel_1() {
-		if (label_1 == null) {
-			label_1 = new JLabel("Tiempo:");
-			label_1.setBounds(0, 0, 38, 14);
+	private JLabel getLabelTiempo() {
+		if (labelTiempo == null) {
+			labelTiempo = new JLabel("Tiempo:");
+			labelTiempo.setBounds(0, 0, 38, 14);
 		}
-		return label_1;
+		return labelTiempo;
 	}
-	private JLabel getLabel_2() {
-		//En estÃ© label se mete los puntos que se han conseguido en el ultimo sudoku
-		if (label_2 == null) {
-			label_2 = new JLabel(Integer.toString(GestorPartida.getGestor().calcularPuntuacion()));
-			label_2.setBounds(0, 0, 49, 14);
+	private JLabel getLabelPuntuacionValor() {
+		if (labelPuntuacionValor == null) {
+			labelPuntuacionValor = new JLabel("<pto>");
+			labelPuntuacionValor.setBounds(0, 0, 49, 14);
 		}
-		return label_2;
+		return labelPuntuacionValor;
 	}
-	private JLabel getLabel_3() {
-		if (label_3 == null) {
-			label_3 = new JLabel("Puntuaci\u00F3n:");
-			label_3.setBounds(0, 0, 57, 14);
+	private JLabel getLabelPuntuacion() {
+		if (labelPuntuacion == null) {
+			labelPuntuacion = new JLabel("Puntuaci\u00F3n:");
+			labelPuntuacion.setBounds(0, 0, 57, 14);
 		}
-		return label_3;
+		return labelPuntuacion;
 	}
 	private JPanel getPanel_1() {
 		if (panel_1 == null) {
@@ -224,10 +195,9 @@ public class VentanaFinal extends JFrame {
 			btnRetar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					try {
-						VentanaIntroducirNombre.getVentana().setVisible(true);
+						VentanaRetarUsuarios.getVentana().setVisible(true);
+						VentanaFinal.getVentana().setVisible(false);
 					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
 				}
@@ -239,15 +209,12 @@ public class VentanaFinal extends JFrame {
 		//Este boton nos lleva a la ventanaJugador
 		if (btnFinalizar == null) {
 			btnFinalizar = new JButton("Finalizar");
-			btnFinalizar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-							dispose();
-							VentanaJugador.getVentana().setVisible(true);	
-				}});
+			btnFinalizar.setActionCommand("PRESS_btnFinalizar");
+			btnFinalizar.addActionListener(getControlador());
 		}
 		return btnFinalizar;
 	}
-	private JPanel getPanel_2() throws SQLException, ExcepcionConectarBD {
+	private JPanel getPanel_2(){
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
 			GroupLayout gl_panel_2 = new GroupLayout(panel_2);
@@ -257,47 +224,64 @@ public class VentanaFinal extends JFrame {
 						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
 							.addGroup(gl_panel_2.createSequentialGroup()
 								.addGap(10)
-								.addComponent(getLblSudoku(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE))
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addGap(10)
-								.addComponent(getLblDescripcin(), GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+								.addComponent(getLblDescripcion(), GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
 							.addGroup(gl_panel_2.createSequentialGroup()
 								.addGap(38)
 								.addComponent(getBtnCompartirLogro(), GroupLayout.PREFERRED_SIZE, 152, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING, false)
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addGap(10)
+									.addComponent(getLblSudoku(), GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+								.addGroup(gl_panel_2.createSequentialGroup()
+									.addGap(66)
+									.addComponent(getLblSudokuValor())))
 							.addGroup(gl_panel_2.createSequentialGroup()
-								.addGap(66)
-								.addComponent(getLabel_12()))
-							.addGroup(gl_panel_2.createSequentialGroup()
-								.addGap(91)
-								.addComponent(getLabel_14())))
-						.addContainerGap(34, Short.MAX_VALUE))
+								.addContainerGap()
+								.addComponent(getTextAreaDescrLogro(), GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)))
+						.addContainerGap())
 			);
 			gl_panel_2.setVerticalGroup(
 				gl_panel_2.createParallelGroup(Alignment.LEADING)
 					.addGroup(gl_panel_2.createSequentialGroup()
 						.addGap(11)
 						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-							.addComponent(getLblSudoku())
-							.addComponent(getLabel_12()))
+							.addComponent(getLblSudokuValor())
+							.addComponent(getLblSudoku()))
 						.addGap(11)
-						.addGroup(gl_panel_2.createParallelGroup(Alignment.LEADING)
-							.addComponent(getLblDescripcin())
-							.addComponent(getLabel_14()))
-						.addGap(90)
+						.addComponent(getLblDescripcion())
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addComponent(getTextAreaDescrLogro(), GroupLayout.PREFERRED_SIZE, 70, GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(ComponentPlacement.UNRELATED)
 						.addComponent(getBtnCompartirLogro()))
 			);
 			panel_2.setLayout(gl_panel_2);
 		}
 		return panel_2;
 	}
-	private JList getList_1() throws ExcepcionConectarBD {
+	private JList<String> getListLogrosNuevos(){
 		//La lista se llena con los IDs de los logros existentes
-		if (list_1 == null) {
-			list_1 = new JList();
-			list_1.setVisibleRowCount(100);
+		if (listLogrosNuevos == null) {
+			listLogrosNuevos = new JList<String>();
+			listLogrosNuevos.setVisibleRowCount(100);
+			listLogrosNuevos.setModel(getDefListModelLogrosNuevos());
+			listLogrosNuevos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listLogrosNuevos.addListSelectionListener(getControlador());
+			
 		}
-		list_1.setModel(GestorLogros.logrosConseguidos(GestorSesion.getGestor().getUserSesion(), Integer.toString(GestorPartida.getGestor().getIdSud()), Integer.toString(GestorPartida.getGestor().calcularPuntuacion())));
-		return list_1;
+		return listLogrosNuevos;
+	}
+	private DefaultListModel<String> getDefListModelLogrosNuevos(){
+		if (defListModelLogrosNuevos == null) {
+			defListModelLogrosNuevos = new DefaultListModel<String>();
+		}
+		return defListModelLogrosNuevos;
+	}
+	private JTextArea getTextAreaDescrLogro() {
+		if (textAreaDescrLogro == null) {
+			textAreaDescrLogro = new JTextArea();
+			textAreaDescrLogro.setEditable(false);
+		}
+		return textAreaDescrLogro;
 	}
 	private JLabel getLblSudoku() {
 		if (lblSudoku == null) {
@@ -305,77 +289,99 @@ public class VentanaFinal extends JFrame {
 		}
 		return lblSudoku;
 	}
-	private JLabel getLblDescripcin() {
-		if (lblDescripcin == null) {
-			lblDescripcin = new JLabel("Descripci\u00F3n:");
+	private JLabel getLblDescripcion() {
+		if (lblDescripcion == null) {
+			lblDescripcion = new JLabel("Descripci\u00F3n:");
 		}
-		return lblDescripcin;
+		return lblDescripcion;
 	}
-	private JLabel getLabel_12() throws SQLException, ExcepcionConectarBD {
-		//Este label se llena con el ID del sudoku al cual pertenece el logro que se ha seleccionado en la lista
-		if (label_12 == null) {
-			label_12 = new JLabel("");
-			if(list_1.getSelectedValue()!=null){
-				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-				res.next();
-				String des=res.getString("ID_SUDOKU");
-				ConexionBD.getConexionBD().closeResult(res);
-			label_12.setText(des);}
+	private JLabel getLblSudokuValor(){
+		if (lblSudokuValor == null) {
+			lblSudokuValor = new JLabel("<id sud>");
 		}
 		
-		return label_12;
+		return lblSudokuValor;
 	}
-	private JLabel getLabel_14() throws ExcepcionConectarBD, SQLException {
-		//Este label se llena con la descripcion del logro que se ha seleccionado en la lista
-		if (label_14 == null) {
-			label_14 = new JLabel("");
-			if(list_1.getSelectedValue()!=null){
-				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-				res.next();
-				String des=res.getString("DESCRIPCION");
-				ConexionBD.getConexionBD().closeResult(res);
-				label_14.setText(des);}
+	private JButton getBtnCompartirPuntuacion() {
+		if (btnCompartirPuntuacion == null) {
+			btnCompartirPuntuacion = new JButton("Compartir Puntuacion");
+			btnCompartirPuntuacion.setActionCommand("PRESS_btnCompartirPuntuacion");
+			btnCompartirPuntuacion.addActionListener(getControlador());
 		}
-		return label_14;
-	}
-	private JButton getBtnCompartir() {
-		//Lama al metodo que comparte la puntuacion en Twitter
-		if (btnCompartir == null) {
-			btnCompartir = new JButton("Compartir");
-			btnCompartir.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					try {
-						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido "+label_2.getText()+
-								" puntos en el sudoku "+Integer.toString(GestorPartida.getGestor().getIdSud()));
-					} catch (IOException e) {
-						e.printStackTrace();
-					} catch (URISyntaxException e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		}
-		return btnCompartir;
+		return btnCompartirPuntuacion;
 	}
 	private JButton getBtnCompartirLogro() {
-		//Lama al metodo que comparte el logro que se ha seleccionado en Twitter
 		if (btnCompartirLogro == null) {
 			btnCompartirLogro = new JButton("Compartir Logro");
 			btnCompartirLogro.setEnabled(false);
-			btnCompartirLogro.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(list_1.getSelectedIndex()>-1){
-					try {
-						GestorTwitter.getGestorTwitter().compartirEnTwitter(GestorSesion.getGestor().getUserSesion()+" ha conseguido el logro "+list_1.getSelectedValue().toString()+" por: "+label_14.getText());
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (URISyntaxException e1) {
-						e1.printStackTrace();
-					}}else{JOptionPane.showMessageDialog(null, "Seleccione un logro de la lista para compartirlo.");}
-				}
-			});
+			btnCompartirLogro.setActionCommand("PRESS_btnCompartirLogro");
+			btnCompartirLogro.addActionListener(getControlador());
 		}
 		return btnCompartirLogro;
+	}
+	
+	private Controlador getControlador(){
+		if(controlador == null){
+			controlador = new Controlador();
+		}
+		return controlador;
+	}
+	
+	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
+		String selItemLogro = "";
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			dispose();
+			VentanaJugador.getVentana().setVisible(true);
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(arg0.getActionCommand().equals("PRESS_btnCompartirLogro")){
+				try {
+					String user = GestorSesion.getGestor().getUserSesion();
+					String descr = VentanaFinal.getVentana().getTextAreaDescrLogro().getText();
+					String str = user+" ha conseguido el logro "+selItemLogro+" por: "+descr;
+					GestorTwitter.getGestorTwitter().compartirEnTwitter(str);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				} catch (URISyntaxException e1) {
+					e1.printStackTrace();
+				}
+			} else if(arg0.getActionCommand().equals("PRESS_btnCompartirPuntuacion")){
+				try {
+					String user = GestorSesion.getGestor().getUserSesion();
+					int idSud = GestorPartida.getGestor().getIdSud();
+					int pto = GestorPartida.getGestor().calcularPuntuacion();
+					String str = user+" ha conseguido "+pto+" puntos en el sudoku "+idSud;
+					GestorTwitter.getGestorTwitter().compartirEnTwitter(str);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+			} else if(arg0.getActionCommand().equals("PRESS_btnFinalizar")){
+				VentanaJugador.getVentana().setVisible(true);
+				dispose();
+				mVent=null;
+			}
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getSource() instanceof JList){
+				try {
+					JList<String> list = (JList<String>)e.getSource();
+					selItemLogro = list.getSelectedValue();
+					String descr = GestorLogros.getGestor().getDescripcionDe(selItemLogro);
+					getTextAreaDescrLogro().setText(descr);
+				} catch (ExcepcionConectarBD e1) {
+					e1.printStackTrace();
+				}
+			}
+		}
+		
 	}
 }
 

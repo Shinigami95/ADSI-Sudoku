@@ -3,8 +3,6 @@ package packControladores;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.mysql.fabric.xmlrpc.base.Array;
-
 import packExcepciones.ExcepcionConectarBD;
 
 public class GestorRetos {
@@ -22,13 +20,14 @@ public class GestorRetos {
 		return miGestorRetos;
 	}
 	
+	@Deprecated
 	public void addReto(String pRetador, String pRetado, int pIdSudoku) throws ExcepcionConectarBD{
 		//No se puede retar a un mismo usuario a un sudoku mas de una vez aunque el reto sea de diferentes users
 		if(!buscarRetoPorSudoku(pIdSudoku)){
 			ConexionBD.getConexionBD().actualizarBD("INSERT INTO RETO(NOMBRE_RETADOR,NOMBRE_RETADO,ID_SUDOKU,ESTADO) VALUES('"+pRetador+"','"+pRetado+"','"+pIdSudoku+"','P');");
 		}
 	}
-	
+	@Deprecated
 	public String obtenerListadoRetos(String pRetado) throws ExcepcionConectarBD{
 		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR FROM RETO INNER JOIN JUGADO WHERE NOMBRE_JUG='"+pRetado+"' AND ESTADO = 'P' ORDER BY FECHA DESC;");
 		String listaRetos = "";
@@ -41,15 +40,15 @@ public class GestorRetos {
 		}
 		return listaRetos;
 	}
-	
+	@Deprecated
 	public void aceptarReto(int pIdReto) throws ExcepcionConectarBD{
 		ConexionBD.getConexionBD().actualizarBD("UPDATE RETO SET ESTADO='A' WHERE ID_R='"+pIdReto+"';");
 	}
-	
+	@Deprecated
 	public void rechazarReto(int pIdReto) throws ExcepcionConectarBD{
 		ConexionBD.getConexionBD().actualizarBD("UPDATE RETO SET ESTADO='R' WHERE ID_R='"+pIdReto+"';");
 	}
-	
+	@Deprecated
 	public String obtenerGanadorReto(int pIdReto) throws ExcepcionConectarBD{
 		//Cogemos el sudoku que el retador y el retado han jugado
 		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR,NOMBRE_RETADO,ID_SUDOKU FROM RETO WHERE ID_R='"+pIdReto+"';");
@@ -116,7 +115,7 @@ public class GestorRetos {
 		}
 		return ganador;
 	}
-	
+	@Deprecated
 	private boolean buscarRetoPorSudoku(int pIdSudoku) throws ExcepcionConectarBD{
 		//Queremos que solo se reciba un unico reto de un sudoku
 		boolean esta = false;
@@ -128,5 +127,40 @@ public class GestorRetos {
 			System.out.println(e.getMessage());
 		}
 		return esta;
+	}
+	
+	public String[] getUsuariosRetablesAlSudoku(int idSud) throws ExcepcionConectarBD{
+		try{
+			String userSesion = GestorSesion.getGestor().getUserSesion();
+			String sql = "SELECT NOMBRE FROM JUGADOR "
+					+ "WHERE NOMBRE NOT IN ( "
+					+ "SELECT NOMBRE_JUG FROM JUGADO WHERE ID_SUDOKU="+idSud+" "
+					+ "UNION "
+					+ "SELECT NOMBRE_JUG FROM PARTIDA WHERE ID_SUDOKU="+idSud+" "
+					+ "UNION "
+					+ "SELECT NOMBRE_RETADO FROM RETO WHERE NOMBRE_RETADOR='"+userSesion+"' AND ID_SUDOKU="+idSud+" "
+					+ ")";
+			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
+			result.last();
+			int nRow = result.getRow();
+			result.beforeFirst();
+			String[] list = new String[nRow];
+			for(int i=0; result.next(); i++){
+				list[i] = result.getString("NOMBRE");
+			}
+			ConexionBD.getConexionBD().closeResult(result);
+			return list;
+		}catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+	public static void retarJugadorAlSudokuHechoPorUsuarioSesion(String pJugador) throws ExcepcionConectarBD {
+		String userSesion = GestorSesion.getGestor().getUserSesion();
+		int idSud = GestorPartida.getGestor().getIdSud();
+		String sql = "INSERT INTO RETO(NOMBRE_RETADOR, NOMBRE_RETADO, ID_SUDOKU, ESTADO) "
+				+ "VALUES('"+userSesion+"','"+pJugador+"',"+idSud+",'P');";
+		ConexionBD.getConexionBD().actualizarBD(sql);
 	}
 }

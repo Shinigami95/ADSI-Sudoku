@@ -44,7 +44,7 @@ public class GestorPartida {
 		return this.game.getIdSud();
 	}
 	
-	public int getReto(){
+	public Integer getReto(){
 		return this.game.getReto();
 	}
 	
@@ -142,7 +142,7 @@ public class GestorPartida {
 				mS = result.getString("M_SOL");
 				try {
 					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
-					this.setPartida(new Partida(sud, null, 5, 5));
+					this.setPartida(new Partida(sud, null, 81, 5)); //TODO poner ayudas a 5
 					GestorTiempo.getGestor().reanudar();		
 				} catch (NoValidoException e) {
 					e.printStackTrace();
@@ -332,7 +332,7 @@ public class GestorPartida {
 			sql = "INSERT INTO JUGADO (NOMBRE_JUG, ID_SUDOKU, COMPLETADO, PTO, SEGUNDOS)"
 				+ " VALUES ('"+jugador+"', "+ids+", 'S', "+pto+", "+tiempo+");";
 			Integer reto = this.getReto();
-			if(reto!=0){
+			if(reto!=null){
 				sql = "UPDATE RETO SET ESTADO = 'T' WHERE ID_R="+reto+";";
 				ConexionBD.getConexionBD().actualizarBD(sql);
 			}

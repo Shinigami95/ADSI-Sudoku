@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import javax.print.attribute.URISyntax;
+
 public class GestorTwitter {
 	private static GestorTwitter miGestorTwitter;
 	
@@ -17,8 +19,18 @@ public class GestorTwitter {
 		return miGestorTwitter;
 	}
 	
-	public void compartirEnTwitter(String texto) throws IOException, URISyntaxException{
-		 Desktop d = Desktop.getDesktop();
-		 d.browse(new URI("https://twitter.com/intent/tweet?text="+texto));
+	public void compartirEnTwitter(String pTexto) throws IOException, URISyntaxException{
+		String texto = this.sanearURI(pTexto);
+		Desktop d = Desktop.getDesktop();
+		d.browse(new URI("https://twitter.com/intent/tweet?text="+texto));
+	}
+	
+	private String sanearURI(String pT){
+		String texto = "";
+		for(int i = 0; i<pT.length(); i++){
+			if(pT.charAt(i)==' ') texto += "+";
+			else texto += pT.charAt(i);
+		}
+		return texto;
 	}
 }

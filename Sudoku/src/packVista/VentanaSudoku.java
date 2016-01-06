@@ -23,9 +23,7 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 
-import packControladores.GestorJugadores;
 import packControladores.GestorPartida;
-import packControladores.GestorSesion;
 import packControladores.GestorTiempo;
 import packExcepciones.ExcepcionConectarBD;
 import packModelo.Partida;
@@ -35,7 +33,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
-import java.sql.SQLException;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -518,7 +515,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 	public void rendirse() {
 		int respuesta = JOptionPane.showConfirmDialog(this, "\u00BFDesea rendirse?", "Rendirse", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if(respuesta == JOptionPane.YES_OPTION){
-			//TODO ir a ventana jugador
 			GestorTiempo.getGestor().pausar();
 			JOptionPane.showMessageDialog(this, ">.< Rendido >.<");
 			try {
@@ -572,14 +568,9 @@ public class VentanaSudoku extends JFrame implements Observer{
 		GestorTiempo.getGestor().pausar();
 		actualizarInfoJugador();
 		JOptionPane.showMessageDialog(this, "Enhorabuena has completado el sudoku.");
-		try {
-			VentanaFinal.getVentana().setVisible(true);
-		} catch (ExcepcionConectarBD e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		VentanaFinal.getVentana().setVisible(true);
 		this.dispose();
+		mVent = null;
 	}
 	
 	public void switchBorrador() {

@@ -94,11 +94,13 @@ public class Partida extends Observable{
 					}
 				}
 			}
-			Random rn = new Random();
-			Point cas = listaPuntos.get(rn.nextInt(listaPuntos.size()));
-			char valor = this.sudoku.getValorSolucion(cas.x, cas.y);
-			this.matrizPartida.anadirNumero(valor, cas.x, cas.y);
-			this.dcrAyudas();
+			if(listaPuntos.size()!=0){
+				Random rn = new Random();
+				Point cas = listaPuntos.get(rn.nextInt(listaPuntos.size()));
+				char valor = this.sudoku.getValorSolucion(cas.x, cas.y);
+				this.matrizPartida.anadirNumero(valor, cas.x, cas.y);
+				this.dcrAyudas();
+			}
 		}
 	}
 

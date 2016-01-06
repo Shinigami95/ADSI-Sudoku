@@ -56,7 +56,7 @@ public class VentanaHistorial extends JFrame {
 	private JTextArea textArea;
 	private JScrollPane scrollPane;
 	private JPanel panel_3;
-	private JList list_1;
+	private JList<String> list_1;
 	private JLabel lblSudoku;
 	private JLabel lblDescripcin;
 	private JLabel label;
@@ -294,13 +294,13 @@ public class VentanaHistorial extends JFrame {
 		return panel_3;
 	}
 	
-	private JList getList_1() throws ExcepcionConectarBD {
+	private JList<String> getList_1() throws ExcepcionConectarBD {
 		//La lista se llena con los IDs de los logros existentes
 		if (list_1 == null) {
-			list_1 = new JList();
+			list_1 = new JList<String>();
 			list_1.setVisibleRowCount(100);
 		}
-		list_1.setModel(GestorLogros.verLogros(GestorSesion.getGestor().getUserSesion()));
+		list_1.setModel(GestorLogros.getGestor().verLogros(GestorSesion.getGestor().getUserSesion()));
 		return list_1;
 	}
 	private JLabel getLblSudoku() {

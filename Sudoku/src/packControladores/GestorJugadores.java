@@ -32,7 +32,7 @@ public class GestorJugadores {
 		String respuesta="";
 		if(!buscarJugador(pNombre)){
 			ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO VALUES('"+pNombre+"','"+pPass+"','"+pPregunta+"','"+pRespuesta+"');");
-			ConexionBD.getConexionBD().actualizarBD("INSERT INTO JUGADOR(NOMBRE) VALUES('"+pNombre+"');");
+			ConexionBD.getConexionBD().actualizarBD("INSERT INTO JUGADOR(NOMBRE, PTO_TOTAL) VALUES('"+pNombre+"',0);");
 			respuesta=pNombre;
 		}
 		return respuesta;
