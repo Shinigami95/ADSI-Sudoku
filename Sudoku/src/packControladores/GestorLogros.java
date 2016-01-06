@@ -11,7 +11,6 @@ import javax.swing.JOptionPane;
 import packExcepciones.ExcepcionConectarBD;
 import packModelo.Logros;
 
-
 public class GestorLogros {
 	private static GestorLogros mGest;
 	
@@ -117,7 +116,7 @@ public class GestorLogros {
 					if(x.getInt(1)<=Integer.parseInt(pPuntos)){
 						//Si es asi se mete la relacion del logro con el usuario en la base de datos para saber que lo ha conseguido.
 						ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");
-						//Por ultimo se aÃ±ade el logro a la lista que se devolvera luego.
+						//Por ultimo se aÃƒÂ±ade el logro a la lista que se devolvera luego.
 						logros.addElement(lista.getString(1));
 					}
 					ConexionBD.getConexionBD().closeResult(x);
@@ -129,7 +128,7 @@ public class GestorLogros {
 					//Despues de coger el logro y comprobar que ha superado la puntuacion necesaria se comprueba que el numero de jugadores a los que se le puede dar sea mayor que 0.
 					if(y.getInt(1)<=Integer.parseInt(pPuntos)){
 						if(y.getInt(2)>0){
-							//Si es asi a parte de aÃ±adir la relacion a la bd se modifica el logro restando 1 a la cantidad de jugadores que pueden conseguirlo. 
+							//Si es asi a parte de aÃƒÂ±adir la relacion a la bd se modifica el logro restando 1 a la cantidad de jugadores que pueden conseguirlo. 
 							//De esta manera controlo que se le de al numero adecuado de usuarios.
 							int numjug=y.getInt(2)-1;
 							ConexionBD.getConexionBD().actualizarBD("INSERT INTO TIENE(ID_LOGRO,NOMBRE_JUG) VALUES('"+lista.getString(1)+"','"+nick+"');");
@@ -174,10 +173,20 @@ public class GestorLogros {
 		
 		return logros;
 	}
-//Este metodo devuelve la descripcion del logro que se le pasa
-	/*Precondicion: Se le pasa un id de un logro que exista en la bd.
-	 *Postcondicion:
-	 * */
+	//Este metodo devuelve el id del sudoku al cual pertenece logro que se le pasa
+		/*Precondicion: Se le pasa un id de un logro que exista en la bd.
+		 *Postcondicion:
+		 * */
+	public String getSudoku(String pIdL) throws ExcepcionConectarBD, SQLException {
+	ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+pIdL+"';");
+	tes.next();
+	String ses=tes.getString("ID_SUDOKU");
+	ConexionBD.getConexionBD().closeResult(tes);
+	return ses;}
+	//Este metodo devuelve la descripcion del logro que se le pasa
+		/*Precondicion: Se le pasa un id de un logro que exista en la bd.
+		 *Postcondicion:
+		 * */
 	public String getDescripcionDe(String pIdL) throws ExcepcionConectarBD {
 		try{
 			String sql = "SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+pIdL+"';";
