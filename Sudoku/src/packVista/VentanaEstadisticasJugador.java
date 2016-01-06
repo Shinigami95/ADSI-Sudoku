@@ -234,7 +234,8 @@ public class VentanaEstadisticasJugador extends JFrame {
 		@Override
 		public void windowClosing(WindowEvent e) {
 			VentanaJugador.getVentana().setVisible(true);
-			VentanaEstadisticasJugador.getVentana().setVisible(false);
+			VentanaEstadisticasJugador.getVentana().dispose();
+			mVent=null;
 		}
 		
 		@Override

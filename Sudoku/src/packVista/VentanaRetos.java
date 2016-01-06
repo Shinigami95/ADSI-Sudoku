@@ -3,24 +3,19 @@ package packVista;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.event.MouseListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.StringReader;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
-import packControladores.ConexionBD;
 import packControladores.GestorPartida;
 import packControladores.GestorRetos;
-import packControladores.GestorSesion;
 import packControladores.GestorSudokus;
 import packExcepciones.ExcepcionConectarBD;
 import packExcepciones.ExcepcionNoHaySudokuCargado;
@@ -32,6 +27,12 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class VentanaRetos extends JFrame {
 
@@ -39,21 +40,25 @@ public class VentanaRetos extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static VentanaRetos mVRetos;
+	private static VentanaRetos mVent;
 	private JPanel contentPane;
 	private JScrollPane scrollPane;
 	private JPanel panel;
-	private JList<String> list;
-	private JLabel lblRetador;
+	private JList<String> listRetos;
+	private JLabel lblIdReto;
 	private JLabel lblFecha;
 	private JButton btnAceptar;
 	private JButton btnRechazar;
 	private JLabel lblEstado;
-	private JLabel lblRetador2;
-	private JLabel lblEstado2;
-	private JLabel lblFecha2;
-	private JLabel lblReto2;
-	private JLabel lblReto;
+	private JLabel lblIdRetoValor;
+	private JLabel lblEstadoValor;
+	private JLabel lblFechaValor;
+	private JLabel lblRetadorValor;
+	private JLabel lblRetador;
+	private Controlador controlador;
+	private JLabel lblIdSudoku;
+	private JLabel lblIdSudokuValor;
+	private DefaultListModel<String> defListModelRetos;
 
 	/**
 	 * Launch the application.
@@ -71,18 +76,15 @@ public class VentanaRetos extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 * @throws ExcepcionConectarBD 
-	 * @throws IOException 
-	 */
-	public VentanaRetos() throws ExcepcionConectarBD, IOException {
+	private VentanaRetos(){
 		initialize();
 	}
 	
-	private void initialize() throws ExcepcionConectarBD, IOException {
-		setBounds(100, 100, 450, 300);
-		setTitle("Lista de retos");
+	private void initialize(){
+		setBounds(100, 100, 480, 300);
+		setMinimumSize(new Dimension(480, 300));
+		addWindowListener(getControlador());
+		setTitle("Lista de retos pendientes");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -91,205 +93,283 @@ public class VentanaRetos extends JFrame {
 		contentPane.add(getPanel(), BorderLayout.CENTER);
 	}
 
-	public static VentanaRetos getVentanaRetos() throws ExcepcionConectarBD, SQLException, IOException{
-		if(mVRetos==null){
-			mVRetos = new VentanaRetos();
+	public static VentanaRetos getVentana(){
+		if(mVent==null){
+			mVent = new VentanaRetos();
+			mVent.cargarDatos();
 		}
-		return mVRetos;
+		return mVent;
 	}
-	private JScrollPane getScrollPane() throws ExcepcionConectarBD, IOException {
+	
+	private void cargarDatos(){
+		this.actualizarListaRetosPendientes();
+	}
+	
+	private void actualizarValoresReto(String pIdReto){
+		try {
+			String[] reto = GestorRetos.getGestor().getInfoReto(pIdReto);
+			String idReto = reto[0];
+			String nombreRetador = reto[1];
+			String idSud = reto[2];
+			String estado = reto[3];
+			String fecha = reto[4];
+			getLblIdRetoValor().setText(idReto);
+			getLblRetadorValor().setText(nombreRetador);
+			getLblIdSudokuValor().setText(idSud);
+			getLblEstadoValor().setText(estado);
+			getLblFechaValor().setText(fecha);
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void actualizarListaRetosPendientes(){
+		try {
+			String[] listaRetPend = GestorRetos.getGestor().obtenerListadoRetosPendientesUsuarioSesion();
+			getDefListModelRetos().clear();
+			for(int i=0; i<listaRetPend.length; i++){
+				getDefListModelRetos().addElement(listaRetPend[i]);;
+			}
+			if(getDefListModelRetos().size()==0){
+				getBtnAceptar().setEnabled(false);
+				getBtnRechazar().setEnabled(false);
+			} else {
+				this.getListRetos().setSelectedIndex(0);
+			}
+		} catch (ExcepcionConectarBD e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private JScrollPane getScrollPane(){
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
 			scrollPane.setPreferredSize(new Dimension(200, 300));
-			scrollPane.setViewportView(getList());
-			list.addMouseListener(new MouseListener() {
-				
-				@Override
-				public void mouseReleased(java.awt.event.MouseEvent e) {
-				}
-				
-				@Override
-				public void mousePressed(java.awt.event.MouseEvent e) {
-					try {
-						ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
-						res.next();
-						String retador = res.getString("NOMBRE_RETADOR");
-						ConexionBD.getConexionBD().closeResult(res);
-						lblRetador2.setText(retador);
-						ResultSet res1 = ConexionBD.getConexionBD().consultaBD("SELECT ESTADO FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
-						res1.next();
-						String estado = res1.getString("ESTADO");
-						ConexionBD.getConexionBD().closeResult(res1);
-						lblEstado2.setText(estado);
-						ResultSet res2 = ConexionBD.getConexionBD().consultaBD("SELECT FECHA FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
-						res2.next();
-						String fecha = res2.getString("FECHA");
-						ConexionBD.getConexionBD().closeResult(res2);
-						lblFecha2.setText(fecha);
-						ResultSet res3 = ConexionBD.getConexionBD().consultaBD("SELECT ID_R FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
-						res3.next();
-						String idR = res3.getString("ID_R");
-						ConexionBD.getConexionBD().closeResult(res3);
-						lblReto2.setText(idR);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					};
-					
-				}
-				
-				@Override
-				public void mouseExited(java.awt.event.MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseEntered(java.awt.event.MouseEvent e) {
-				}
-				
-				@Override
-				public void mouseClicked(java.awt.event.MouseEvent e) {
-				}
-			});
+			scrollPane.setViewportView(getListRetos());
 		}
 		return scrollPane;
 	}
 	private JPanel getPanel() {
 		if (panel == null) {
 			panel = new JPanel();
-			panel.setLayout(null);
-			panel.add(getLblRetador());
-			panel.add(getLblFecha());
-			panel.add(getBtnAceptar());
-			panel.add(getBtnRechazar());
-			panel.add(getLblEstado());
-			panel.add(getLblRetador2());
-			panel.add(getLblEstado2());
-			panel.add(getLblFecha2());
-			panel.add(getLblReto2());
-			panel.add(getLblReto());
+			GroupLayout gl_panel = new GroupLayout(panel);
+			gl_panel.setHorizontalGroup(
+				gl_panel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+							.addGroup(gl_panel.createSequentialGroup()
+								.addComponent(getBtnAceptar(), GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+								.addComponent(getBtnRechazar(), GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE))
+							.addGroup(gl_panel.createSequentialGroup()
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+									.addComponent(getLblIdReto(), GroupLayout.PREFERRED_SIZE, 56, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblEstado(), GroupLayout.PREFERRED_SIZE, 46, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblFecha())
+									.addComponent(getLblRetador(), GroupLayout.PREFERRED_SIZE, 58, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblIdSudoku()))
+								.addGap(24)
+								.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+									.addComponent(getLblIdSudokuValor())
+									.addComponent(getLblRetadorValor())
+									.addComponent(getLblEstadoValor(), GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblFechaValor(), GroupLayout.PREFERRED_SIZE, 139, GroupLayout.PREFERRED_SIZE)
+									.addComponent(getLblIdRetoValor(), GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))))
+						.addContainerGap())
+			);
+			gl_panel.setVerticalGroup(
+				gl_panel.createParallelGroup(Alignment.LEADING)
+					.addGroup(gl_panel.createSequentialGroup()
+						.addGap(11)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblIdReto(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblIdRetoValor(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblEstado(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblEstadoValor(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblFecha(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblFechaValor(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblRetador(), GroupLayout.PREFERRED_SIZE, 14, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblRetadorValor()))
+						.addPreferredGap(ComponentPlacement.RELATED)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblIdSudoku())
+							.addComponent(getLblIdSudokuValor()))
+						.addPreferredGap(ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
+						.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getBtnAceptar(), GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getBtnRechazar(), GroupLayout.PREFERRED_SIZE, 23, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap())
+			);
+			panel.setLayout(gl_panel);
 		}
 		return panel;
 	}
-	private JList<String> getList() throws ExcepcionConectarBD, IOException {
-		if (list == null) {
-			list = new JList<String>();
-			String retos = GestorRetos.getGestorRetos().obtenerListadoRetos(GestorSesion.getGestor().getUserSesion());
-			DefaultListModel<String> listModel = new DefaultListModel<String>();
-			BufferedReader bufReader = new BufferedReader(new StringReader(retos));
-			String linea = null;
-			while((linea=bufReader.readLine()) != null){
-				if(!listModel.contains(linea)){
-					listModel.addElement(linea);
-				}
-			}
-			list.setModel(listModel);
-			list.setVisibleRowCount(listModel.getSize());
+	private JList<String> getListRetos(){
+		if (listRetos == null) {
+			listRetos = new JList<String>();
+			listRetos.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			listRetos.addListSelectionListener(getControlador());
+			listRetos.setModel(getDefListModelRetos());
 		}
-		return list;
+		return listRetos;
 	}
-	private JLabel getLblRetador() {
-		if (lblRetador == null) {
-			lblRetador = new JLabel("Retador:");
-			lblRetador.setBounds(10, 11, 56, 14);
+	private DefaultListModel<String> getDefListModelRetos(){
+		if (defListModelRetos == null) {
+			defListModelRetos = new DefaultListModel<String>();
 		}
-		return lblRetador;
+		return defListModelRetos;
+	}
+	private JLabel getLblIdReto() {
+		if (lblIdReto == null) {
+			lblIdReto = new JLabel("Id Reto:");
+		}
+		return lblIdReto;
 	}
 	private JLabel getLblFecha() {
 		if (lblFecha == null) {
 			lblFecha = new JLabel("Fecha:");
-			lblFecha.setBounds(10, 62, 39, 14);
 		}
 		return lblFecha;
 	}
 	private JButton getBtnAceptar() {
 		if (btnAceptar == null) {
 			btnAceptar = new JButton("Aceptar");
-			btnAceptar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					if(!lblRetador2.getText().isEmpty()){
-						int idS = Integer.parseInt(lblRetador2.getText());
-						int idR = Integer.parseInt(lblReto2.getText());
-						try {
-							GestorRetos.getGestorRetos().aceptarReto(idR);
-							Sudoku sudoku = GestorSudokus.getGestor().buscarSudokuPorCodigo(idS);
-							int dif = sudoku.getDificultad();
-							GestorPartida.getGestor().cargarRetoParaUsSesion(dif, idR);
-							VentanaSudoku.getVentana().setVisible(true);
-							dispose();
-						} catch (ExcepcionConectarBD e1) {
-							e1.printStackTrace();
-						} catch (ExcepcionNoHaySudokuCargado e1) {
-							e1.printStackTrace();
-						}
-					}else{
-						JOptionPane.showMessageDialog(null, "¡Selecciona primero un reto!");
-					}
-					//TODO ACTUALIZAR LISTA PARA QUE SOLO MUESTRE LOS PENDIENTES
-				}
-			});
-			btnAceptar.setBounds(10, 141, 89, 23);
+			btnAceptar.setActionCommand("PRESS_btnAceptar");
+			btnAceptar.addActionListener(getControlador());
 		}
 		return btnAceptar;
 	}
 	private JButton getBtnRechazar() {
 		if (btnRechazar == null) {
 			btnRechazar = new JButton("Rechazar");
-			btnRechazar.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					int idR = Integer.parseInt(lblReto2.getText());
-					try {
-						GestorRetos.getGestorRetos().rechazarReto(idR);
-						JOptionPane.showMessageDialog(null, "Has rechazado el reto. Gallina.");
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-			btnRechazar.setBounds(109, 141, 89, 23);
+			btnRechazar.setActionCommand("PRESS_btnRechazar");
+			btnRechazar.addActionListener(getControlador());
 		}
 		return btnRechazar;
 	}
 	private JLabel getLblEstado() {
 		if (lblEstado == null) {
 			lblEstado = new JLabel("Estado:");
-			lblEstado.setBounds(10, 36, 46, 14);
 		}
 		return lblEstado;
 	}
-	private JLabel getLblRetador2() {
-		if (lblRetador2 == null) {
-			lblRetador2 = new JLabel("");
-			lblRetador2.setBounds(76, 11, 106, 14);
+	private JLabel getLblIdRetoValor() {
+		if (lblIdRetoValor == null) {
+			lblIdRetoValor = new JLabel("<idReto>");
 		}
-		return lblRetador2;
+		return lblIdRetoValor;
 	}
-	private JLabel getLblEstado2() {
-		if (lblEstado2 == null) {
-			lblEstado2 = new JLabel("");
-			lblEstado2.setBounds(66, 36, 46, 14);
+	private JLabel getLblEstadoValor() {
+		if (lblEstadoValor == null) {
+			lblEstadoValor = new JLabel("<estado>");
 		}
-		return lblEstado2;
+		return lblEstadoValor;
 	}
-	private JLabel getLblFecha2() {
-		if (lblFecha2 == null) {
-			lblFecha2 = new JLabel("");
-			lblFecha2.setBounds(59, 62, 139, 14);
+	private JLabel getLblFechaValor() {
+		if (lblFechaValor == null) {
+			lblFechaValor = new JLabel("<fecha>");
 		}
-		return lblFecha2;
+		return lblFechaValor;
 	}
-	private JLabel getLblReto2() {
-		if (lblReto2 == null) {
-			lblReto2 = new JLabel("");
-			lblReto2.setBounds(66, 87, 46, 14);
+	private JLabel getLblRetadorValor() {
+		if (lblRetadorValor == null) {
+			lblRetadorValor = new JLabel("<retador>");
 		}
-		return lblReto2;
+		return lblRetadorValor;
 	}
-	private JLabel getLblReto() {
-		if (lblReto == null) {
-			lblReto = new JLabel("Reto:");
-			lblReto.setBounds(10, 87, 39, 14);
+	private JLabel getLblRetador() {
+		if (lblRetador == null) {
+			lblRetador = new JLabel("Retador:");
 		}
-		return lblReto;
+		return lblRetador;
+	}
+	
+	private JLabel getLblIdSudoku() {
+		if (lblIdSudoku == null) {
+			lblIdSudoku = new JLabel("Id Sudoku:");
+		}
+		return lblIdSudoku;
+	}
+	
+	private JLabel getLblIdSudokuValor() {
+		if (lblIdSudokuValor == null) {
+			lblIdSudokuValor = new JLabel("<idSud>");
+		}
+		return lblIdSudokuValor;
+	}
+	private Controlador getControlador(){
+		if(controlador==null){
+			controlador = new Controlador();
+		}
+		return controlador;
+	}
+	
+	private class Controlador extends WindowAdapter implements ActionListener, ListSelectionListener {
+		private String selItem = "";
+		
+		@Override
+		public void windowClosing(WindowEvent e) {
+			VentanaJugador.getVentana().setVisible(true);
+			VentanaRetos.getVentana().dispose();
+			mVent = null;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			if(arg0.getActionCommand().equals("PRESS_btnRechazar")){
+				rechazar(selItem);
+			} else if(arg0.getActionCommand().equals("PRESS_btnAceptar")){
+				aceptar(selItem);
+			}
+		}
+
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			if(e.getSource() instanceof JList){
+				JList<String> list = (JList<String>)e.getSource();
+				selItem = list.getSelectedValue();
+				actualizarValoresReto(selItem);
+			}
+		}
+	}
+	
+	private void aceptar(String pIdReto){
+		try {
+			boolean hayPartidaPendiente = GestorPartida.getGestor().tienePartidaPendienteUserSesion();
+			if(hayPartidaPendiente){
+				String msg1 = "Ya hay una partida empezada, si empieza un sudoku nuevo se borrar\u00E1n los datos de la misma.";
+				int respuesta = JOptionPane.showConfirmDialog(this, msg1);
+				if(respuesta!=JOptionPane.OK_OPTION){
+					return;
+				} else {
+					GestorPartida.getGestor().borrarPartidaUsuarioSesion();
+				}	
+			}
+			GestorRetos.getGestor().aceptarReto(pIdReto);
+			GestorPartida.getGestor().cargarRetoParaUsSesion(Integer.parseInt(pIdReto));
+			VentanaSudoku.getVentana().setVisible(true);
+			dispose();
+			mVent=null;
+		} catch (ExcepcionConectarBD e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private void rechazar(String pIdR){
+		int idR = Integer.parseInt(pIdR);
+		try {
+			GestorRetos.getGestor().rechazarReto(idR);
+			actualizarListaRetosPendientes();
+			JOptionPane.showMessageDialog(null, "Has rechazado el reto.");
+		} catch (ExcepcionConectarBD e1) {
+			e1.printStackTrace();
+		}
 	}
 }

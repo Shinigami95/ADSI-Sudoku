@@ -85,7 +85,7 @@ public class VentanaRetarUsuarios extends JFrame {
 	private void actualizarListaUsuarios() throws ExcepcionConectarBD{
 		getDefaultListModelUsuarios().clear();
 		int idSud = GestorPartida.getGestor().getIdSud();
-		String[] listaUsRetables = GestorRetos.getGestorRetos().getUsuariosRetablesAlSudoku(idSud);
+		String[] listaUsRetables = GestorRetos.getGestor().getUsuariosRetablesAlSudoku(idSud);
 		for(int i=0; i<listaUsRetables.length; i++){
 			getDefaultListModelUsuarios().addElement(listaUsRetables[i]);
 		}

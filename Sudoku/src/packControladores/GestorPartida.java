@@ -143,6 +143,7 @@ public class GestorPartida {
 				try {
 					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
 					this.setPartida(new Partida(sud, null, 81, 5)); //TODO poner ayudas a 5
+					GestorTiempo.getGestor().setTiempo(0);
 					GestorTiempo.getGestor().reanudar();		
 				} catch (NoValidoException e) {
 					e.printStackTrace();
@@ -209,12 +210,6 @@ public class GestorPartida {
 		}
 	}
 	
-	public void anadirSudokuJugadoAUsuarioSesion(){
-		//TODO
-	}
-	
-	//falta revisarlo
-	//hay que modificar la BD para lo de RETO
 	public void guardarPartida() throws ExcepcionConectarBD{
 		String jugador = GestorSesion.getGestor().getUserSesion();
 		try{
@@ -331,26 +326,22 @@ public class GestorPartida {
 			ConexionBD.getConexionBD().actualizarBD(sql);
 			sql = "INSERT INTO JUGADO (NOMBRE_JUG, ID_SUDOKU, COMPLETADO, PTO, SEGUNDOS)"
 				+ " VALUES ('"+jugador+"', "+ids+", 'S', "+pto+", "+tiempo+");";
+			ConexionBD.getConexionBD().actualizarBD(sql);
 			Integer reto = this.getReto();
 			if(reto!=null){
 				sql = "UPDATE RETO SET ESTADO = 'T' WHERE ID_R="+reto+";";
 				ConexionBD.getConexionBD().actualizarBD(sql);
 			}
-			ConexionBD.getConexionBD().actualizarBD(sql);
 		} catch (ExcepcionConectarBD e) {
 			e.printStackTrace();
 		}
 	}
 	
-	public void cargarRetoParaUsSesion(int pD, int pIdReto) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
+	public void cargarRetoParaUsSesion(int pIdReto) throws ExcepcionConectarBD{
 		try{
-			String user = GestorSesion.getGestor().getUserSesion();
-			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL FROM SUDOKU "
-						+ "WHERE ACTIVO='S' AND DIFICULTAD="+pD+" "
-						+ "AND ID_S NOT IN ("
-						+ "SELECT ID_SUDOKU FROM JUGADO WHERE NOMBRE_JUG='"+user+"' "
-						+ "UNION "
-						+ "SELECT ID_SUDOKU FROM RETO WHERE NOMBRE_RETADO='"+user+"' AND ESTADO<>'R')";
+			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL "
+					+ "FROM RETO INNER JOIN SUDOKU ON SUDOKU.ID_S=RETO.ID_SUDOKU "
+					+ "WHERE ID_R ="+pIdReto+";";
 			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
 			int idS, dif;
 			String mI, mS;
@@ -362,13 +353,11 @@ public class GestorPartida {
 				try {
 					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
 					this.setPartida(new Partida(sud, pIdReto, 5, 5));
+					GestorTiempo.getGestor().setTiempo(0);
 					GestorTiempo.getGestor().reanudar();		
 				} catch (NoValidoException e) {
 					e.printStackTrace();
 				}
-				
-			} else {
-				throw new ExcepcionNoHaySudokuCargado();
 			}
 			ConexionBD.getConexionBD().closeResult(result);
 		}catch(SQLException e){
