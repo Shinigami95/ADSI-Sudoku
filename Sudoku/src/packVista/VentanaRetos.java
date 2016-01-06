@@ -44,12 +44,12 @@ public class VentanaRetos extends JFrame {
 	private JScrollPane scrollPane;
 	private JPanel panel;
 	private JList<String> list;
-	private JLabel lblSudoku;
+	private JLabel lblRetador;
 	private JLabel lblFecha;
 	private JButton btnAceptar;
 	private JButton btnRechazar;
 	private JLabel lblEstado;
-	private JLabel lblSudoku2;
+	private JLabel lblRetador2;
 	private JLabel lblEstado2;
 	private JLabel lblFecha2;
 	private JLabel lblReto2;
@@ -111,22 +111,22 @@ public class VentanaRetos extends JFrame {
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					try {
-						ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM RETO WHERE NOMBRE_RETADOR='"+list.getSelectedValue().toString()+"';");
+						ResultSet res = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADOR FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
 						res.next();
-						String idS = res.getString("ID_SUDOKU");
+						String retador = res.getString("NOMBRE_RETADOR");
 						ConexionBD.getConexionBD().closeResult(res);
-						lblSudoku2.setText(idS);
-						ResultSet res1 = ConexionBD.getConexionBD().consultaBD("SELECT ESTADO FROM RETO WHERE NOMBRE_RETADOR='"+list.getSelectedValue().toString()+"';");
+						lblRetador2.setText(retador);
+						ResultSet res1 = ConexionBD.getConexionBD().consultaBD("SELECT ESTADO FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
 						res1.next();
 						String estado = res1.getString("ESTADO");
 						ConexionBD.getConexionBD().closeResult(res1);
 						lblEstado2.setText(estado);
-						ResultSet res2 = ConexionBD.getConexionBD().consultaBD("SELECT FECHA FROM RETO WHERE NOMBRE_RETADOR='"+list.getSelectedValue().toString()+"';");
+						ResultSet res2 = ConexionBD.getConexionBD().consultaBD("SELECT FECHA FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
 						res2.next();
 						String fecha = res2.getString("FECHA");
 						ConexionBD.getConexionBD().closeResult(res2);
 						lblFecha2.setText(fecha);
-						ResultSet res3 = ConexionBD.getConexionBD().consultaBD("SELECT ID_R FROM RETO WHERE NOMBRE_RETADOR='"+list.getSelectedValue().toString()+"';");
+						ResultSet res3 = ConexionBD.getConexionBD().consultaBD("SELECT ID_R FROM RETO WHERE ID_SUDOKU='"+list.getSelectedValue().toString()+"';");
 						res3.next();
 						String idR = res3.getString("ID_R");
 						ConexionBD.getConexionBD().closeResult(res3);
@@ -158,12 +158,12 @@ public class VentanaRetos extends JFrame {
 		if (panel == null) {
 			panel = new JPanel();
 			panel.setLayout(null);
-			panel.add(getLblSudoku());
+			panel.add(getLblRetador());
 			panel.add(getLblFecha());
 			panel.add(getBtnAceptar());
 			panel.add(getBtnRechazar());
 			panel.add(getLblEstado());
-			panel.add(getLblSudoku2());
+			panel.add(getLblRetador2());
 			panel.add(getLblEstado2());
 			panel.add(getLblFecha2());
 			panel.add(getLblReto2());
@@ -173,24 +173,27 @@ public class VentanaRetos extends JFrame {
 	}
 	private JList<String> getList() throws ExcepcionConectarBD, IOException {
 		if (list == null) {
+			list = new JList<String>();
 			String retos = GestorRetos.getGestorRetos().obtenerListadoRetos(GestorSesion.getGestor().getUserSesion());
 			DefaultListModel<String> listModel = new DefaultListModel<String>();
 			BufferedReader bufReader = new BufferedReader(new StringReader(retos));
 			String linea = null;
 			while((linea=bufReader.readLine()) != null){
-				listModel.addElement(linea);
+				if(!listModel.contains(linea)){
+					listModel.addElement(linea);
+				}
 			}
 			list.setModel(listModel);
 			list.setVisibleRowCount(listModel.getSize());
 		}
 		return list;
 	}
-	private JLabel getLblSudoku() {
-		if (lblSudoku == null) {
-			lblSudoku = new JLabel("Sudoku:");
-			lblSudoku.setBounds(10, 11, 46, 14);
+	private JLabel getLblRetador() {
+		if (lblRetador == null) {
+			lblRetador = new JLabel("Retador:");
+			lblRetador.setBounds(10, 11, 56, 14);
 		}
-		return lblSudoku;
+		return lblRetador;
 	}
 	private JLabel getLblFecha() {
 		if (lblFecha == null) {
@@ -204,8 +207,8 @@ public class VentanaRetos extends JFrame {
 			btnAceptar = new JButton("Aceptar");
 			btnAceptar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					if(!lblSudoku2.getText().isEmpty()){
-						int idS = Integer.parseInt(lblSudoku2.getText());
+					if(!lblRetador2.getText().isEmpty()){
+						int idS = Integer.parseInt(lblRetador2.getText());
 						int idR = Integer.parseInt(lblReto2.getText());
 						try {
 							GestorRetos.getGestorRetos().aceptarReto(idR);
@@ -222,9 +225,10 @@ public class VentanaRetos extends JFrame {
 					}else{
 						JOptionPane.showMessageDialog(null, "¡Selecciona primero un reto!");
 					}
+					//TODO ACTUALIZAR LISTA PARA QUE SOLO MUESTRE LOS PENDIENTES
 				}
 			});
-			btnAceptar.setBounds(10, 142, 89, 23);
+			btnAceptar.setBounds(10, 141, 89, 23);
 		}
 		return btnAceptar;
 	}
@@ -242,7 +246,7 @@ public class VentanaRetos extends JFrame {
 					}
 				}
 			});
-			btnRechazar.setBounds(109, 142, 89, 23);
+			btnRechazar.setBounds(109, 141, 89, 23);
 		}
 		return btnRechazar;
 	}
@@ -253,12 +257,12 @@ public class VentanaRetos extends JFrame {
 		}
 		return lblEstado;
 	}
-	private JLabel getLblSudoku2() {
-		if (lblSudoku2 == null) {
-			lblSudoku2 = new JLabel("");
-			lblSudoku2.setBounds(66, 11, 46, 14);
+	private JLabel getLblRetador2() {
+		if (lblRetador2 == null) {
+			lblRetador2 = new JLabel("");
+			lblRetador2.setBounds(76, 11, 106, 14);
 		}
-		return lblSudoku2;
+		return lblRetador2;
 	}
 	private JLabel getLblEstado2() {
 		if (lblEstado2 == null) {
@@ -270,7 +274,7 @@ public class VentanaRetos extends JFrame {
 	private JLabel getLblFecha2() {
 		if (lblFecha2 == null) {
 			lblFecha2 = new JLabel("");
-			lblFecha2.setBounds(59, 62, 46, 14);
+			lblFecha2.setBounds(59, 62, 139, 14);
 		}
 		return lblFecha2;
 	}
