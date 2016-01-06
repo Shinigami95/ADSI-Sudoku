@@ -215,7 +215,7 @@ public class VentanaAdminLogros extends JFrame {
 		if (btnAadir == null) {
 			btnAadir = new JButton("A\u00F1adir");
 			btnAadir.addActionListener(new ActionListener() {
-				/*Al hacer clic en el boton aÃ±adir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
+				/*Al hacer clic en el boton aÃƒÂ±adir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
 				 * Si es asi se meten en la base de datos y junto con la actualizacion de las listas sale un mensaje que indica que todo ha ido bien.*/
 				public void actionPerformed(ActionEvent arg0) {
 					if(GestorLogros.getGestor().datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
@@ -400,16 +400,8 @@ public class VentanaAdminLogros extends JFrame {
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					try {if(list_2.getSelectedIndex()>-1){
-						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
-						tes.next();
-						String ses=tes.getString("ID_SUDOKU");
-						ConexionBD.getConexionBD().closeResult(tes);
-						lblVarSudoku.setText(ses);
-						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
-						res.next();
-						String des=res.getString("DESCRIPCION");
-						ConexionBD.getConexionBD().closeResult(res);
-						lblVarDescripcin.setText(des);}
+						lblVarSudoku.setText(GestorLogros.getGestor().getSudoku(list_2.getSelectedValue().toString()));
+						lblVarDescripcin.setText(GestorLogros.getGestor().getDescripcionDe(list_2.getSelectedValue().toString()));}
 					} catch (ExcepcionConectarBD e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
@@ -532,11 +524,7 @@ public class VentanaAdminLogros extends JFrame {
 		if (lblVarSudoku == null) {
 			lblVarSudoku = new JLabel();
 			if(list_2.getSelectedValue()!=null){
-				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
-				res.next();
-				String des=res.getString("ID_SUDOKU");
-				ConexionBD.getConexionBD().closeResult(res);
-			lblVarSudoku.setText(des);}
+			lblVarSudoku.setText(GestorLogros.getGestor().getSudoku(list_2.getSelectedValue().toString()));}
 		}
 		return lblVarSudoku;
 	}
@@ -551,11 +539,7 @@ public class VentanaAdminLogros extends JFrame {
 		if (lblVarDescripcin == null) {
 			lblVarDescripcin = new JLabel();
 			if(list_2.getSelectedValue()!=null){
-			ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_2.getSelectedValue().toString()+"';");
-			res.next();
-			String des=res.getString("DESCRIPCION");
-			ConexionBD.getConexionBD().closeResult(res);
-			lblVarDescripcin.setText(des);}
+			lblVarDescripcin.setText(GestorLogros.getGestor().getDescripcionDe(list_2.getSelectedValue().toString()));}
 
 		}
 		return lblVarDescripcin;
@@ -680,16 +664,8 @@ public class VentanaAdminLogros extends JFrame {
 				@Override
 				public void mousePressed(java.awt.event.MouseEvent e) {
 					try {if(list_1.getSelectedIndex()>-1){
-						ResultSet tes=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-						tes.next();
-						String ses=tes.getString("ID_SUDOKU");
-						ConexionBD.getConexionBD().closeResult(tes);
-						label_12.setText(ses);
-						ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-						res.next();
-						String des=res.getString("DESCRIPCION");
-						ConexionBD.getConexionBD().closeResult(res);
-						label_14.setText(des);
+						label_12.setText(GestorLogros.getGestor().getSudoku(list_1.getSelectedValue().toString()));
+						label_14.setText(GestorLogros.getGestor().getDescripcionDe(list_1.getSelectedValue().toString()));
 					}
 						
 					} catch (ExcepcionConectarBD e1) {
@@ -764,11 +740,7 @@ public class VentanaAdminLogros extends JFrame {
 		if (label_12 == null) {
 			label_12 = new JLabel();
 			if(list_1.getSelectedValue()!=null){
-				ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_SUDOKU FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-				res.next();
-				String des=res.getString("ID_SUDOKU");
-				ConexionBD.getConexionBD().closeResult(res);
-			label_12.setText(des);}
+				label_12.setText(GestorLogros.getGestor().getSudoku(list_1.getSelectedValue().toString()));}
 		}
 		return label_12;
 	}
@@ -783,11 +755,7 @@ public class VentanaAdminLogros extends JFrame {
 		if (label_14 == null) {
 			label_14 = new JLabel();
 			if(list_1.getSelectedValue()!=null){
-			ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT DESCRIPCION FROM LOGRO WHERE ID_L='"+list_1.getSelectedValue().toString()+"';");
-			res.next();
-			String des=res.getString("DESCRIPCION");
-			ConexionBD.getConexionBD().closeResult(res);
-			label_14.setText(des);}
+				label_14.setText(GestorLogros.getGestor().getDescripcionDe(list_1.getSelectedValue().toString()));}
 		}
 		return label_14;
 	}
