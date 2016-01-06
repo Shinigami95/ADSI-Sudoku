@@ -342,7 +342,7 @@ public class VentanaFinal extends JFrame {
 				try {
 					String user = GestorSesion.getGestor().getUserSesion();
 					String descr = VentanaFinal.getVentana().getTextAreaDescrLogro().getText();
-					String str = user+" ha conseguido el logro "+selItemLogro+" por: "+descr;
+					String str = user+"+ha+conseguido+el+logro+"+selItemLogro+"+por:+"+descr;
 					GestorTwitter.getGestorTwitter().compartirEnTwitter(str);
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -354,7 +354,7 @@ public class VentanaFinal extends JFrame {
 					String user = GestorSesion.getGestor().getUserSesion();
 					int idSud = GestorPartida.getGestor().getIdSud();
 					int pto = GestorPartida.getGestor().calcularPuntuacion();
-					String str = user+" ha conseguido "+pto+" puntos en el sudoku "+idSud;
+					String str = user+"+ha+conseguido+"+pto+"+puntos+en+el+sudoku+"+idSud;
 					GestorTwitter.getGestorTwitter().compartirEnTwitter(str);
 				} catch (IOException e) {
 					e.printStackTrace();
