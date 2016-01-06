@@ -44,6 +44,10 @@ public class GestorPartida {
 		return this.game.getIdSud();
 	}
 	
+	public int getReto(){
+		return this.game.getReto();
+	}
+	
 	public boolean getBorradorActivo(){
 		return this.borradorActivo;
 	}
@@ -111,7 +115,7 @@ public class GestorPartida {
 		Sudoku sud;
 		try {
 			sud = new Sudoku(id, 1, solSud, sinRes, true);
-			this.game = new Partida(sud, null, 90, 5);
+			this.game = new Partida(sud, 0, 90, 5);
 			GestorTiempo.getGestor().setTiempo(0);
 			GestorTiempo.getGestor().reanudar();
 		} catch (NoValidoException e) {
@@ -138,7 +142,7 @@ public class GestorPartida {
 				mS = result.getString("M_SOL");
 				try {
 					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
-					this.setPartida(new Partida(sud, null, 5, 5));
+					this.setPartida(new Partida(sud, 0, 5, 5));
 					GestorTiempo.getGestor().reanudar();		
 				} catch (NoValidoException e) {
 					e.printStackTrace();
@@ -183,12 +187,11 @@ public class GestorPartida {
 				int na = result.getInt("NA");
 				int nc = result.getInt("NC");
 				int ts = result.getInt("TS");
-				Integer rt = result.getInt("RT");
+				int rt = result.getInt("RT");
 				int dif = result.getInt("DIF");
 				String mi = result.getString("MI");
 				String ms = result.getString("MS");
 				ConexionBD.getConexionBD().closeResult(result);
-				if(rt==0) rt=null;
 				Sudoku sud = new Sudoku(ids, dif, ms, mi, true);
 				Partida part = new Partida(sud, rt, na, nc);
 				part.setMatrizPartida(mtab);
@@ -306,10 +309,34 @@ public class GestorPartida {
 				sql = "INSERT INTO JUGADO (NOMBRE_JUG, ID_SUDOKU, COMPLETADO, PTO, SEGUNDOS)"
 					+ " VALUES ('"+jugador+"', "+ids+", 'N', 0, 0);";
 				ConexionBD.getConexionBD().actualizarBD(sql);
+			} else {
+				ConexionBD.getConexionBD().closeResult(result);
 			}
 		} catch (ExcepcionConectarBD e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void actualizarPartidaCompletadaUsuarioSesion() {
+		try {
+			String jugador= GestorSesion.getGestor().getUserSesion();
+			int ids = this.getIdSud();
+			int pto = this.calcularPuntuacion();
+			GestorJugadores.getGestor().actualizarPuntuacion(pto, jugador);
+			int tiempo = GestorTiempo.getGestor().tiempoASegundos();
+			String sql = "DELETE FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';";
+			ConexionBD.getConexionBD().actualizarBD(sql);
+			sql = "INSERT INTO JUGADO (NOMBRE_JUG, ID_SUDOKU, COMPLETADO, PTO, SEGUNDOS)"
+				+ " VALUES ('"+jugador+"', "+ids+", 'S', "+pto+", "+tiempo+");";
+			int reto = this.getReto();
+			if(reto!=0){
+				sql = "UPDATE RETO SET ESTADO = 'T' WHERE ID_R="+reto+";";
+				ConexionBD.getConexionBD().actualizarBD(sql);
+			}
+			ConexionBD.getConexionBD().actualizarBD(sql);
+		} catch (ExcepcionConectarBD e) {
 			e.printStackTrace();
 		}
 	}

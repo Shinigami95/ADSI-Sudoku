@@ -595,12 +595,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 	
 	public void actualizarInfoJugador(){
-		try{
-			int puntuacion= GestorPartida.getGestor().calcularPuntuacion();
-			String jugador= GestorSesion.getGestor().getUserSesion();
-			GestorJugadores.getGestor().actualizarPuntuacion(puntuacion, jugador);
-		}catch(ExcepcionConectarBD e){
-			System.out.println(e.getMessage());
-		}
+		GestorPartida.getGestor().actualizarPartidaCompletadaUsuarioSesion();
 	}
 }

@@ -8,9 +8,7 @@ import java.net.URISyntaxException;
 public class GestorTwitter {
 	private static GestorTwitter miGestorTwitter;
 	
-	private GestorTwitter() {
-		// TODO Auto-generated constructor stub
-	}
+	private GestorTwitter() {}
 
 	public static GestorTwitter getGestorTwitter(){
 		if(miGestorTwitter==null){
