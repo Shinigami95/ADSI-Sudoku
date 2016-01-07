@@ -31,13 +31,11 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 import packControladores.ConexionBD;
 import packControladores.GestorRanking;
-import packControladores.GestorSesion;
 import packExcepciones.ExcepcionConectarBD;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
-
 
 public class VentanaRanking extends JFrame {
 
@@ -51,7 +49,6 @@ public class VentanaRanking extends JFrame {
 	private JPanel panel;
 	private JPanel panel_1;
 	private JPanel panel_2;
-	private Controlador controlador;
 	private JScrollPane scrollPane;
 	private JPanel panel_3;
 	private JList<Integer> list;
@@ -106,7 +103,14 @@ public class VentanaRanking extends JFrame {
 	}
 	
 	private void initialize() throws ExcepcionConectarBD, SQLException {
-		addWindowListener(getControlador());
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent arg0) {
+				VentanaJugador.getVentana().setVisible(true);
+				dispose();
+				mVRanking = null;
+			}
+		});
 		setBounds(100, 100, 600, 600);
 		setTitle("Ranking");
 		contentPane = new JPanel();
@@ -181,27 +185,7 @@ public class VentanaRanking extends JFrame {
 		}
 		return panel_2;
 	}
-	private Controlador getControlador(){
-		if(controlador==null){
-			controlador = new Controlador();
-		}
-		return controlador;
-	}
 	
-	private class Controlador extends WindowAdapter{
-
-		@Override
-		public void windowClosing(WindowEvent e) {
-			try {
-				VentanaRanking.getVentana().setVisible(false);
-			} catch (ExcepcionConectarBD e1) {
-				e1.printStackTrace();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
-			VentanaJugador.getVentana().setVisible(true);
-		}
-	}
 	private JScrollPane getScrollPane() throws ExcepcionConectarBD, SQLException {
 		if (scrollPane == null) {
 			scrollPane = new JScrollPane();
@@ -209,22 +193,13 @@ public class VentanaRanking extends JFrame {
 			scrollPane.setViewportView(getList());
 			list.addMouseListener(new MouseListener(){
 				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void mouseClicked(MouseEvent arg0) {}
 
 				@Override
-				public void mouseEntered(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void mouseEntered(MouseEvent arg0) {}
 
 				@Override
-				public void mouseExited(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void mouseExited(MouseEvent arg0) {}
 				//seleccionamos un id del sudoku para ver su ranking
 				@Override
 				public void mousePressed(MouseEvent arg0) {
@@ -255,10 +230,7 @@ public class VentanaRanking extends JFrame {
 				}
 
 				@Override
-				public void mouseReleased(MouseEvent arg0) {
-					// TODO Auto-generated method stub
-					
-				}
+				public void mouseReleased(MouseEvent arg0) {}
 			});
 		}
 		return scrollPane;
@@ -342,15 +314,9 @@ public class VentanaRanking extends JFrame {
 			btnVolver = new JButton("Volver");
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					dispose();
-					try {
-						VentanaRanking.getVentana().setVisible(false);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
 					VentanaJugador.getVentana().setVisible(true);
+					dispose();
+					mVRanking = null;
 				}
 			});
 		}
@@ -361,15 +327,9 @@ public class VentanaRanking extends JFrame {
 			btnVolver1 = new JButton("Volver");
 			btnVolver1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					try {
-						VentanaRanking.getVentana().setVisible(false);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
 					VentanaJugador.getVentana().setVisible(true);
+					dispose();
+					mVRanking = null;
 				}
 			});
 			btnVolver1.setBounds(268, 490, 91, 23);
@@ -421,7 +381,9 @@ public class VentanaRanking extends JFrame {
 			btnVolver2 = new JButton("Volver");
 			btnVolver2.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					
+					VentanaJugador.getVentana().setVisible(true);
+					dispose();
+					mVRanking = null;
 				}
 			});
 			btnVolver2.setBounds(415, 258, 89, 23);

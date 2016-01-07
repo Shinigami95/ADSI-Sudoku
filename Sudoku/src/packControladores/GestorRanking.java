@@ -39,11 +39,18 @@ public class GestorRanking {
 	public String obtenerRankingRetos() throws ExcepcionConectarBD{
 		String rankingR = "";
 		int puesto = 1;
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE_RETADO,RETO.ID_SUDOKU,SEGUNDOS FROM RETO INNER JOIN JUGADO ON RETO.ID_SUDOKU=JUGADO.ID_SUDOKU WHERE ESTADO='A' ORDER BY SEGUNDOS DESC;");
+		String sql = "SELECT NOMBRE_RETADOR,NOMBRE_RETADO,RETO.ID_SUDOKU,SEGUNDOS "
+				+ "FROM RETO INNER JOIN JUGADO ON RETO.ID_SUDOKU=JUGADO.ID_SUDOKU AND RETO.NOMBRE_RETADO=JUGADO.NOMBRE_JUG "
+				+ "WHERE ESTADO='T' ORDER BY SEGUNDOS DESC;";
+		ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
 		try{
 			//Los 10 primeros
 			while(result.next()&&puesto<11){
-				rankingR+=puesto + "- "+ result.getString("NOMBRE_RETADO")+ " ha tardado " + result.getShort("SEGUNDOS") + " en resolver " + result.getString("ID_SUDOKU") + "\n";
+				String retado = result.getString("NOMBRE_RETADO");
+				int seg = result.getInt("SEGUNDOS");
+				int idSud = result.getInt("ID_SUDOKU");
+				String retador = result.getString("NOMBRE_RETADOR");
+				rankingR+=puesto + "- "+retado+ " ha tardado " + seg + " en resolver " + idSud+ ", le reto "+retador+"\n";
 				puesto++;
 			}
 		}catch(SQLException e){

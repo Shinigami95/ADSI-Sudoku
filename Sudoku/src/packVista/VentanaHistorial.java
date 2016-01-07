@@ -25,7 +25,6 @@ import javax.swing.JScrollPane;
 import packControladores.ConexionBD;
 import packControladores.GestorHistorial;
 import packControladores.GestorLogros;
-import packControladores.GestorRanking;
 import packControladores.GestorSesion;
 import packExcepciones.ExcepcionConectarBD;
 
@@ -107,11 +106,13 @@ public class VentanaHistorial extends JFrame {
 			//Al cerrarse la ventana nos envia a la ventanaJugador
 			@Override
 			public void windowClosing(WindowEvent arg0) {
-					dispose();
 					VentanaJugador.getVentana().setVisible(true);
+					dispose();
+					mVHistorial=null;
 			}
 		});
-		setBounds(100, 100, 550, 400);
+		setBounds(100, 100, 640, 400);
+		setMinimumSize(new Dimension(640, 400));
 		setTitle("Historial");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -358,7 +359,8 @@ public class VentanaHistorial extends JFrame {
 	private void obtenerHistorialRetos(){
         String historial;
         try {
-        	historial = GestorRanking.getGestorRanking().obtenerRankingPuntuacion();
+        	String jugador = GestorSesion.getGestor().getUserSesion();
+        	historial = GestorHistorial.getGestorHistorial().obtenerHistorialRetos(jugador);
             if(historial.length() > 0){
                 textArea_1.setText(historial);
             }else{
@@ -373,15 +375,9 @@ public class VentanaHistorial extends JFrame {
 			btnVolver = new JButton("Volver");
 			btnVolver.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
 					VentanaJugador.getVentana().setVisible(true);
+					dispose();
+					mVHistorial=null;
 				}
 			});
 		}
@@ -392,15 +388,9 @@ public class VentanaHistorial extends JFrame {
 			btnVolver1 = new JButton("Volver");
 			btnVolver1.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					dispose();
-					try {
-						VentanaHistorial.getVentanaHistorial().setVisible(false);
-					} catch (ExcepcionConectarBD e1) {
-						e1.printStackTrace();
-					} catch (SQLException e1) {
-						e1.printStackTrace();
-					}
 					VentanaJugador.getVentana().setVisible(true);
+					dispose();
+					mVHistorial=null;
 				}
 			});
 		}

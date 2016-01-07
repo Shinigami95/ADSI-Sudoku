@@ -9,9 +9,7 @@ public class GestorHistorial {
 	
 	private static GestorHistorial miGestorHistorial;
 
-	private GestorHistorial() {
-		// TODO Auto-generated constructor stub
-	}
+	private GestorHistorial() {}
 
 	public static GestorHistorial getGestorHistorial(){
 		if(miGestorHistorial == null){
@@ -34,7 +32,7 @@ public class GestorHistorial {
 	}
 	
 	public String obtenerHistorialRetos(String pJugador) throws ExcepcionConectarBD{
-		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_R,NOMBRE_RETADOR,NOMBRE_RETADO,ID_SUDOKU,ESTADO,FECHA FROM RETO WHERE NOMBRE_RETADOR ='"+pJugador+"' AND NOMBRE_RETADO = '"+pJugador+"' ORDER BY FECHA;");
+		ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT ID_R,NOMBRE_RETADOR,NOMBRE_RETADO,ID_SUDOKU,ESTADO,FECHA FROM RETO WHERE NOMBRE_RETADO = '"+pJugador+"' ORDER BY FECHA;");
 		String historialR = "";
 		try{
 			while(result.next()){

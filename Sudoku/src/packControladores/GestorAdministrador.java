@@ -11,7 +11,9 @@ public class GestorAdministrador {
 	
 	private static GestorAdministrador mGestor = new GestorAdministrador();
 	
-	private GestorAdministrador() {}
+	private GestorAdministrador() {
+		 
+	}
 	
 	public static GestorAdministrador getGestor(){
 		return mGestor;
