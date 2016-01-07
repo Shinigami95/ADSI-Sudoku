@@ -1,7 +1,5 @@
 package packVista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -39,22 +37,6 @@ public class VentanaRegistro extends JDialog {
 	private JPanel panel;
 	private JButton btnCancel;
 	private ControladorRegistro controlador;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaRegistro frame = new VentanaRegistro();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

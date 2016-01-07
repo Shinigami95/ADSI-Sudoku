@@ -26,19 +26,6 @@ public class VentanaRecuperarPass1 extends JDialog {
 	private ControladorRecuperar controlador;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			VentanaRecuperarPass1 dialog = new VentanaRecuperarPass1();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Create the dialog.
 	 */
 	public VentanaRecuperarPass1() {
@@ -119,13 +106,17 @@ public class VentanaRecuperarPass1 extends JDialog {
 					if(textUsuario.getText().length()==0){
 						new VentanaError("Introduzca un usuario.");
 					}
+					//todo correcto, comprobamos si existe usuario y cogemos la pregunta de seguridad
 					else{
 						String pregunta = GestorJugadores.getGestor().buscarPreguntaJugador(textUsuario.getText());
 						if(pregunta.length()>0){
 							dispose();
+							//pasamos la pregunta a mostrar y el usuario
 							new VentanaRecuperarPass2(pregunta,textUsuario.getText());
 						}
 						else{
+							/*en el registro obligamos a que introduzca una pregunta de seguridad
+							si no hay pregunta no existe ese usuario*/
 							new VentanaError("No existe ese usuario.");
 						}
 					}

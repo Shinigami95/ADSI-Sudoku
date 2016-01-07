@@ -190,6 +190,7 @@ public class VentanaInicio extends JFrame {
 		return controlador;
 	}
 	
+	//POST: borra los valores de los JTextField
 	private void reiniciarVentana(){
 		textNombre.setText("");
 		textPass.setText("");
@@ -205,21 +206,25 @@ public class VentanaInicio extends JFrame {
 		public void actionPerformed(ActionEvent arg0){
 			
 			if(arg0.getActionCommand().equals("Iniciar")){
-				//comprobar si el user y pass correctos
-				//si admin otra ventana
 				try{
 					String pass= new String(textPass.getPassword());
 					String tipoSesion=GestorJugadores.getGestor().identificarUsuario(textNombre.getText(), pass);
+					//identificado administrador
 					if(tipoSesion.compareTo("admin")==0){
-						GestorSesion.getGestor().iniciarSesion(textNombre.getText(), "admin");
+						GestorSesion.getGestor().iniciarSesion(textNombre.getText());
 						VentanaAdmin.getVentana().setVisible(true);
+						/*reiniciamos JTextField, cuando se acaba el juego volvemos a la pantalla inicial
+						de esta manera no tenemos los campos rellenos*/
 						VentanaInicio.getVentanaInicio().reiniciarVentana();
 						VentanaInicio.getVentanaInicio().setVisible(false);
 					}
+					//identificado usuario
 					else if(tipoSesion.compareTo("jugador")==0){
-						GestorSesion.getGestor().iniciarSesion(textNombre.getText(), "jugador");
+						GestorSesion.getGestor().iniciarSesion(textNombre.getText());
 						VentanaJugador frame = VentanaJugador.getVentana();
 						frame.setVisible(true);
+						/*reiniciamos JTextField, cuando se acaba el juego volvemos a la pantalla inicial
+						de esta manera no tenemos los campos rellenos*/
 						VentanaInicio.getVentanaInicio().reiniciarVentana();
 						VentanaInicio.getVentanaInicio().setVisible(false);
 					}

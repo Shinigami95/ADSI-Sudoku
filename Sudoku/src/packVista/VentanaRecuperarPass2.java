@@ -33,19 +33,6 @@ public class VentanaRecuperarPass2 extends JDialog {
 	private JTextArea textPregunta;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			VentanaRecuperarPass2 dialog = new VentanaRecuperarPass2("Pregunta de prueba","PRUEB");
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Create the dialog.
 	 */
 	public VentanaRecuperarPass2(String pPregunta, String pUsuario) {
@@ -163,9 +150,11 @@ public class VentanaRecuperarPass2 extends JDialog {
 					if(textRespuesta.getText().length()==0){
 						new VentanaError("Introduzca una respuesta.");
 					}
+					//todo correcto, comprobamos respuesta
 					else{
 						if(GestorJugadores.getGestor().comprobarRespuesta(usuario, textRespuesta.getText())){
 							dispose();
+							//pasamos el usuario
 							new VentanaRecuperarPass3(usuario);
 						}
 						else{

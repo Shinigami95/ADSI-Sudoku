@@ -1,7 +1,5 @@
 package packVista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -36,22 +34,6 @@ public class VentanaRecuperarPass3 extends JDialog {
 	private String usuario;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaRecuperarPass3 frame = new VentanaRecuperarPass3("PRUEB");
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public VentanaRecuperarPass3(String pUsuario) {
@@ -59,7 +41,7 @@ public class VentanaRecuperarPass3 extends JDialog {
 		initialize();
 	}
 	private void initialize() {
-		setTitle("Registro");
+		setTitle("Recuperar password");
 		setModal(true);
 		setResizable(false);
 		setDefaultCloseOperation(JDialog.HIDE_ON_CLOSE);
@@ -152,17 +134,17 @@ public class VentanaRecuperarPass3 extends JDialog {
 		public void actionPerformed(ActionEvent arg0){
 			
 			if(arg0.getActionCommand().equals("OK")){
-				//comprobar si el user ya esta en el sistema
-				//comprobar si las password coinciden, getPassword devuelve char[]
 				if(textPass.getPassword().length<1){
 					new VentanaError("Introduzca una password.");
 				}
 				else if(textRepPass.getPassword().length<1){
 					new VentanaError("Repite la password.");
 				}
+				//comprobar si las password coinciden (case sensitive), getPassword devuelve char[]
 				else if(String.valueOf(textPass.getPassword()).compareTo(String.valueOf(textRepPass.getPassword()))!=0){
 					new VentanaError("Las passwords no coinciden");
 				}
+				//todo correcto, actualizamos password
 				else{
 					String pass= new String(textPass.getPassword());
 					try{

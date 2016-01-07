@@ -1,7 +1,5 @@
 package packVista;
 
-import java.awt.EventQueue;
-
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -22,23 +20,6 @@ public class VentanaExito extends JDialog {
 	private JTextArea textError;
 	private JButton btnOK;
 	private Controlador controlador;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaExito dialog = new VentanaExito("EXITO DE PRUEBA");
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the dialog.
@@ -119,8 +100,7 @@ public class VentanaExito extends JDialog {
 			dispose();
 		}
 
-		public void actionPerformed(ActionEvent arg0){
-			
+		public void actionPerformed(ActionEvent arg0){		
 			if(arg0.getActionCommand().equals("OK")){
 				dispose();
 			}

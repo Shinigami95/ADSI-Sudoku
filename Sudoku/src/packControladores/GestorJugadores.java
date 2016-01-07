@@ -9,22 +9,13 @@ public class GestorJugadores {
 
 	private static GestorJugadores miGestorJugadores;
 	
-	private GestorJugadores() {
-		// TODO Auto-generated constructor stub
-	}
+	private GestorJugadores() {}
 
 	public static GestorJugadores getGestor(){
 		if(miGestorJugadores==null){
 			miGestorJugadores= new GestorJugadores();
 		}
 		return miGestorJugadores;
-	}
-	
-	public static void main(String args[]) throws ExcepcionConectarBD{
-		//GestorJugadores.getGestor().registrarJugador("PRUEB", "FACIL", "1", "2");
-		//ConexionBD.getConexionBD().actualizarBD("INSERT INTO USUARIO(NOMBRE,CONTR) VALUES('PRUEB5','Q')");
-		//System.out.println(getGestorJugadores().identificarUsuario("PRUEBA3", "FACIL"));
-		GestorJugadores.getGestor().actualizarPuntuacion(1, "prueba1");
 	}
 	
 	//POST: vacio si ya existe usuario, si no existe devuelve su nombre.
@@ -38,7 +29,7 @@ public class GestorJugadores {
 		return respuesta;
 	}
 	
-	//POST: true si existe
+	//POST: true si existe usuario con ese nombre
 	private boolean buscarJugador(String pNombre) throws ExcepcionConectarBD{
 		boolean esta= false;
 		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"';");
@@ -61,12 +52,15 @@ public class GestorJugadores {
 		String tipoSesion = "incorrecta";
 		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM USUARIO WHERE NOMBRE='"+pNombre+"' AND CONTR='"+pPass+"';");
 		try{
+			//comprobamos si es usuario
 			if(result.next()){
 				ConexionBD.getConexionBD().closeResult(result);
 				ResultSet result2=ConexionBD.getConexionBD().consultaBD("SELECT NOMBRE FROM JUGADOR WHERE NOMBRE='"+pNombre+"';");
+				//comprobamos si es jugador
 				if(result2.next()){
 					tipoSesion="jugador";
 				}
+				//si no es jugador, seguro que es admin
 				else{
 					tipoSesion="admin";
 				}
@@ -78,6 +72,8 @@ public class GestorJugadores {
 		return tipoSesion;
 	}
 	
+	//PRE: existe un usuario con pNombre
+	//POST: devuelve su pregunta de seguridad, si no tiene String vacío
 	public String buscarPreguntaJugador(String pNombre) throws ExcepcionConectarBD{
 		String pregunta= "";
 		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT PREG FROM USUARIO WHERE NOMBRE='"+pNombre+"';");
@@ -90,16 +86,15 @@ public class GestorJugadores {
 		}
 		return pregunta;
 	}
-	
-	public void actualizarPass(String pNombre, String pPass) throws ExcepcionConectarBD{
-		ConexionBD.getConexionBD().actualizarBD("UPDATE USUARIO SET CONTR='"+pPass+"' WHERE NOMBRE='"+pNombre+"';");
-	}
-	
+
+	//PRE: existe un usuario con pNombre
+	//POST: true si respuesta correcta, si no false
 	public boolean comprobarRespuesta(String pNombre,String pRespuesta) throws ExcepcionConectarBD{
 		boolean correcta= false;
 		ResultSet result=ConexionBD.getConexionBD().consultaBD("SELECT RESP FROM USUARIO WHERE NOMBRE='"+pNombre+"';");
 		try{
 			if(result.next()){
+				//case sensitive
 				if(result.getString("RESP").compareTo(pRespuesta)==0){
 					correcta=true;}
 			}	
@@ -110,6 +105,12 @@ public class GestorJugadores {
 		return correcta;
 	}
 
+	//PRE: existe usuario pNombre
+	//POST: actualiza su password
+	public void actualizarPass(String pNombre, String pPass) throws ExcepcionConectarBD{
+		ConexionBD.getConexionBD().actualizarBD("UPDATE USUARIO SET CONTR='"+pPass+"' WHERE NOMBRE='"+pNombre+"';");
+	}
+	
 	public String[] getJugadores() throws ExcepcionConectarBD {
 		try{
 			String sql = "SELECT NOMBRE FROM JUGADOR;";
@@ -128,18 +129,19 @@ public class GestorJugadores {
 		}
 	}
 	
+	//PRE: jugador resuelve correctamente el sudoku
 	//POST: actualiza la puntuacion de un jugador (sumandola si ya tenia puntos)
 	public void actualizarPuntuacion(int pPuntuacion, String pJugador) throws ExcepcionConectarBD {
 		try{
 			int puntuacion=pPuntuacion;
+			//calculamos la puntuacion que ya tiene (si nunca ha jugado tiene 0 puntos)
 			String sql = "SELECT PTO_TOTAL FROM JUGADOR WHERE NOMBRE='"+pJugador+"';";
 			ResultSet result = ConexionBD.getConexionBD().consultaBD(sql);
 			result.next();
-			//si ya tiene puntuacion se suma
-			if(result.getString("PTO_TOTAL")!=null){
-				puntuacion+=Integer.parseInt(result.getString("PTO_TOTAL"));
-			}
+			//sumamos las dos puntuaciones
+			puntuacion+=Integer.parseInt(result.getString("PTO_TOTAL"));
 			ConexionBD.getConexionBD().closeResult(result);
+			//actualizamos con el nuevo valor
 			String sql2= "UPDATE JUGADOR SET PTO_TOTAL='"+puntuacion+"' WHERE NOMBRE='"+pJugador+"';";
 			ConexionBD.getConexionBD().actualizarBD(sql2);
 		}catch(SQLException e){

@@ -210,57 +210,65 @@ public class GestorPartida {
 		}
 	}
 	
+	//PRE: jugador abandona sudoku o cierra ventana
+	//POST: guarda partida, si partida no es reto RETO=NULL si lo es almacena su ID
 	public void guardarPartida() throws ExcepcionConectarBD{
 		String jugador = GestorSesion.getGestor().getUserSesion();
+		String mPartida = this.game.toStringMatrizPartida();
+		Integer reto = this.game.getReto();
+		int idSud = this.game.getIdSud();
+		int numAyudas = this.game.getNumAyudas();
+		int numCompr = this.game.getNumComprobaciones();
+		int seg = GestorTiempo.getGestor().tiempoASegundos();
 		try{
+			//comprobamos si tiene ya una partida pendiente
 			String sql = "SELECT NOMBRE_JUG FROM PARTIDA WHERE NOMBRE_JUG='"+jugador+"';";
 			ResultSet result=ConexionBD.getConexionBD().consultaBD(sql);
-			Integer reto = this.game.getReto();
-			int idSud = this.game.getIdSud();
-			String mPartida = this.game.toStringMatrizPartida();
-			int numAyudas = this.game.getNumAyudas();
-			int numCompr = this.game.getNumComprobaciones();
-			int seg = GestorTiempo.getGestor().tiempoASegundos();
+			//si no es reto guardamos null
 			if(reto == null){
+				//si no tiene partida insert into
 				if(!result.next()){
 					sql = "INSERT INTO PARTIDA(NOMBRE_JUG, ID_SUDOKU, MATRIZ_TABLERO, NUM_AYUDAS, NUM_COMPR, TIEMPO, RETO) "
 						+ "VALUES('"+jugador+"',"+idSud+",'"+mPartida+"',"+numAyudas+","+numCompr+","+seg+",NULL);";
-					ConexionBD.getConexionBD().actualizarBD(sql);
 				}
+				//si ya tiene partida update
 				else{
 					sql = "UPDATE PARTIDA SET ID_SUDOKU="+idSud+", MATRIZ_TABLERO='"+mPartida+"',"
 						+ " NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numCompr+", TIEMPO="+seg+", RETO=NULL"
 						+ " WHERE NOMBRE_JUG='"+jugador+"';";
-					ConexionBD.getConexionBD().actualizarBD(sql);
 				}
-			} else {
+			}
+			//si es reto guardamos el id del reto
+			else {
+				//si no tiene partida insert into
 				if(!result.next()){
 					sql = "INSERT INTO PARTIDA(NOMBRE_JUG, ID_SUDOKU, MATRIZ_TABLERO, NUM_AYUDAS, NUM_COMPR, TIEMPO, RETO) "
 						+ "VALUES('"+jugador+"',"+idSud+",'"+mPartida+"',"+numAyudas+","+numCompr+","+seg+","+reto+");";
-					ConexionBD.getConexionBD().actualizarBD(sql);
 				}
+				//si ya tiene partida update
 				else{
 					sql = "UPDATE PARTIDA SET ID_SUDOKU="+idSud+", MATRIZ_TABLERO='"+mPartida+"',"
 						+ " NUM_AYUDAS="+numAyudas+", NUM_COMPR="+numCompr+", TIEMPO="+seg+", RETO="+reto
 						+ " WHERE NOMBRE_JUG='"+jugador+"';";
-					ConexionBD.getConexionBD().actualizarBD(sql);
 				}
 			}
+			ConexionBD.getConexionBD().actualizarBD(sql);
 			ConexionBD.getConexionBD().closeResult(result);
 		}
 		catch(SQLException e){
 			System.out.println(e.getMessage());
 		}
 	}
-
+	
+	//PRE: jugador resuelve correctamente el sudoku
 	//POST: Puntuacion = 1000 + [8999*exp(-%Dificultad * Tiempo)] - Penalizacion*Ayudas
 	public int calcularPuntuacion(){
 		int tiempo = GestorTiempo.getGestor().tiempoASegundos();
 		int dificultad = this.game.getDificultad();
-		//int pistasAyudas= (5-this.game.getNumAyudas())+(5-this.game.getNumComprobaciones());
-		int pistasAyudas= 0;
+		int pistasAyudas= (5-this.game.getNumAyudas())+(5-this.game.getNumComprobaciones());
 		double puntuacion = 1000+8999*Math.exp(-(getPorcentajeDificultad(dificultad)*tiempo))-pistasAyudas*getPorcentajePenalizacion(dificultad);
-		return (int)puntuacion;
+		//redondeo primer decimal, 1.5= 2
+		return 	(int)Math.round(puntuacion);
 	}
 	
 	//0,0018 facil, 0,0009 medio, 0,0005 dificil
