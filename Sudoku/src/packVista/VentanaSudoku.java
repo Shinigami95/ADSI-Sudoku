@@ -441,9 +441,6 @@ public class VentanaSudoku extends JFrame implements Observer{
 		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
 		    	VentanaSudoku.getVentana().comprobarValorCasilla(e, cas);
 		    }
-		    else if (menuItem.getActionCommand().equalsIgnoreCase("comprobarValor")){
-		    	VentanaSudoku.getVentana().comprobarValorCasilla(e, cas);
-		    }
 		}
 
 		@Override
@@ -470,6 +467,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	//POST: Se actualizaran los valores de las comprobaciones y ayudas y el valor del tiempo en los labels
 	@Override
 	public void update(Observable arg0, Object arg1) {
 		if(arg0 instanceof GestorTiempo){
@@ -488,6 +486,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	//POST: se guardara la partida y se volvera al menu del jugador
 	public void rendirse() {
 		int respuesta = JOptionPane.showConfirmDialog(this, "\u00BFDesea rendirse?", "Rendirse", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 		if(respuesta == JOptionPane.YES_OPTION){
@@ -504,6 +503,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	//POST: Se rellenara una casilla aleatoria vacia o incorrecta del sudoku
 	public void ayudar() {
 		GestorPartida.getGestor().ayudar();
 		boolean haTerminado = GestorPartida.getGestor().haTerminado();
@@ -512,6 +512,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	//POST: Se mostrara un mensaje que dira si el valor de la casilla especificada es correcto o no
 	public void comprobarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		boolean result = GestorPartida.getGestor().comprobar(cas.getCorX(), cas.getCorY());
 		if(result){
@@ -522,10 +523,12 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	//POST: se quitara el valor de la casilla especificada
 	public void quitarValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
         GestorPartida.getGestor().quitarValor(cas.getCorX(), cas.getCorY());
 	}
 
+	//POST: se pondra un valor (borrador si esta activo) en la casilla especificada.
 	public void setValorCasilla(MouseEvent e, ComponentCasillaGenerica cas) {
 		JMenuItem menuItem = (JMenuItem) e.getComponent();
 		char valor= menuItem.getText().charAt(0);
@@ -540,9 +543,10 @@ public class VentanaSudoku extends JFrame implements Observer{
 		}
 	}
 
+	//Una vez terminado el sudoku se mostrara la ventana final
 	public void mostrarVentanaFinal(){
 		GestorTiempo.getGestor().pausar();
-		actualizarInfoJugador();
+		this.actualizarInfoJugador();
 		JOptionPane.showMessageDialog(this, "Enhorabuena has completado el sudoku.");
 		VentanaFinal.getVentana().setVisible(true);
 		this.dispose();
@@ -561,6 +565,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 		GestorTiempo.getGestor().reanudar();
 	}
 	
+	//POST: se actualizara la BD con la informacion de la partida completada.
 	public void actualizarInfoJugador(){
 		GestorPartida.getGestor().actualizarPartidaCompletadaUsuarioSesion();
 	}

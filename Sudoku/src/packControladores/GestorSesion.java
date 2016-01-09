@@ -4,9 +4,8 @@ public class GestorSesion {
 	private static GestorSesion miGestor;
 	private String user;
 	
-	//TODO: habrá que poner el user a null (de momento "Jorge" para pruebas)
 	private GestorSesion() {
-		user="Jorge";
+		user=null;
 	}
 
 	public static GestorSesion getGestor(){

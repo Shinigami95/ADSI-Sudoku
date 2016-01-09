@@ -52,6 +52,8 @@ public class GestorPartida {
 		return this.borradorActivo;
 	}
 	
+	//POST: Si el borrador estaba activo se quita o se pone el valor indicado en la posicion indicada.
+	//		Si el borrador no esta activo se pone el valor tal cual en la casilla indicada.
 	public void setValor(char pV, int pX, int pY) {
 		if(this.getBorradorActivo()){
 			this.game.anadirBorrador(pV, pX, pY);
@@ -80,6 +82,7 @@ public class GestorPartida {
 		this.game.addObserver(pO, pX, pY);
 	}
 	
+	//POST: activa/desactiva el borrador
 	public void switchBorrador(){
 		this.borradorActivo = !this.borradorActivo;
 	}
@@ -104,25 +107,13 @@ public class GestorPartida {
 		return this.game.getNumComprobaciones();
 	}
 
+	//POST: devuelve true si el usuario ha completado el sudoku.
 	public boolean haTerminado() {
 		return this.game.haTerminado();
 	}
-	
-	public void cargarSudokuMANUAL() {
-		int id = 111;
-		String solSud = "792615384583742691164398527948263715275481963631957248857129436326874159419536872";
-		String sinRes = "000000084500042600004000020040063700000001003630957200050009006320800109009500800";
-		Sudoku sud;
-		try {
-			sud = new Sudoku(id, 1, solSud, sinRes, true);
-			this.game = new Partida(sud, null, 90, 5);
-			GestorTiempo.getGestor().setTiempo(0);
-			GestorTiempo.getGestor().reanudar();
-		} catch (NoValidoException e) {
-			e.printStackTrace();
-		}
-	}
 
+	//POST: carga en GestorPartida un nuevo sudoku para el usuario de la sesion.
+	//		Este sudoku sera de la dificultad escogida y no sera un reto pendiente ni estara jugado.
 	public void cargarSudParaUsSesion(int pD) throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
 		try{
 			String user = GestorSesion.getGestor().getUserSesion();
@@ -158,6 +149,7 @@ public class GestorPartida {
 		}
 	}
 	
+	//POST: Devuelve true si el usuario de la sesion tiene una partida pendiente, false en caso contrario
 	public boolean tienePartidaPendienteUserSesion() throws ExcepcionConectarBD{
 		try{
 			String user = GestorSesion.getGestor().getUserSesion();
@@ -172,6 +164,7 @@ public class GestorPartida {
 		return false;
 	}
 	
+	//POST: Carga en el gestor la partida pendiente del usuario de la sesion, si no habia partida se lanza excepcion.
 	public void cargarPartidaPendienteParaUsSesion() throws ExcepcionNoHaySudokuCargado, ExcepcionConectarBD{
 		try{
 			String user = GestorSesion.getGestor().getUserSesion();
@@ -294,7 +287,9 @@ public class GestorPartida {
 		}
 		return penalizacion;
 	}
-
+	
+	//POST: Se ha borrado la partida del usuario de la sesion y se guarda en jugado como
+	//		no completado, si era reto se indica que se ha terminado.
 	public void borrarPartidaUsuarioSesion() {
 		try {
 			String jugador = GestorSesion.getGestor().getUserSesion();
@@ -323,6 +318,8 @@ public class GestorPartida {
 		}
 	}
 	
+	//POST: se actualizara la BD con la informacion de la partida completada.
+	//		se introduce la informacion en la tabla jugado y si era reto se indica que esta terminado.
 	public void actualizarPartidaCompletadaUsuarioSesion() {
 		try {
 			String jugador= GestorSesion.getGestor().getUserSesion();
@@ -345,6 +342,7 @@ public class GestorPartida {
 		}
 	}
 	
+	//POST: Se carga al gestor partida el sudoku del reto indicado. 
 	public void cargarRetoParaUsSesion(int pIdReto) throws ExcepcionConectarBD{
 		try{
 			String sql = "SELECT ID_S, DIFICULTAD, M_INIC, M_SOL "
