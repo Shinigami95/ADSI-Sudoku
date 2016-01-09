@@ -81,6 +81,10 @@ public class VentanaJugador extends JFrame {
 		}
 		return mVent;
 	}
+	
+	// Nombre del usuario en el label del nombre.
+	// Deshabilitar el boton de continuar si no hay partida pendiente.
+	// Poner las dificultades disponibles en el combo box de dificultades.
 	private void cargarDatos(){
 		String nombre = GestorSesion.getGestor().getUserSesion();
 		this.getLblNombreJug().setText(nombre);
@@ -95,6 +99,7 @@ public class VentanaJugador extends JFrame {
 			e.printStackTrace();
 		}
 	}
+	
 	private Controlador getControlador() {
 		if(controlador==null){
 			controlador = new Controlador();
@@ -286,6 +291,8 @@ public class VentanaJugador extends JFrame {
 		}
 	}
 
+	//Se busca un sudoku disponible de la dificultad elegida.
+	//Si no hay sudoku disponible muestra un mensaje informando de la situacion.
 	public void jugar() {
 		String dif = (String) getComboBoxDif().getSelectedItem();
 		try {
@@ -313,6 +320,8 @@ public class VentanaJugador extends JFrame {
 		}
 	}
 	
+	//Al pulsar el boton continuar se carga la partida pendiente
+	//y se muestra la ventana sudoku con la partida cargada
 	public void continuar() {
 		try {
 			GestorPartida.getGestor().cargarPartidaPendienteParaUsSesion();

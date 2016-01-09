@@ -29,11 +29,14 @@ public class Casilla extends IFazCasilla{
 		}
 	}
 
+	//POST: Devuelve el unico valor en un String
 	@Override
 	public String toStringValores() {
 		return this.valor+"";
 	}
 	
+	//Al anadir el observer directamente 
+	//se le notifica el valor de la casilla
 	@Override
 	public void addObserver(Observer pO){
 		super.addObserver(pO);

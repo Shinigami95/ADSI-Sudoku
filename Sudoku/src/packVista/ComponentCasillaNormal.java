@@ -32,10 +32,10 @@ public class ComponentCasillaNormal extends ComponentCasillaGenerica{
 		this.add(text);
 	}
 
+	//Introducira el unico valor de la casilla
 	@Override
 	public void escribirTexto(String pTexto) {
 		if(pTexto.charAt(0)=='0') this.text.setText(" ");
 		else this.text.setText(pTexto);
 	}
-
 }

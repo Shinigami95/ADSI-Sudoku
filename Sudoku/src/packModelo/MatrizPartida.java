@@ -23,6 +23,8 @@ public class MatrizPartida{
 		}
 	}
 
+	//POST: Anade el valor en la posicion indicada.
+	//		Si habia borrador lo cambia a normal
 	public void anadirNumero(char pV, int pX, int pY) {
 		IFazCasilla cAux = this.casillas[pX][pY];
 		if(cAux.esInicial()==false){
@@ -31,6 +33,8 @@ public class MatrizPartida{
 		}
 	}
 	
+	//POST: Anade el valor al borrador en la posicion indicada.
+	//		Si habia casilla normal la cambia a borrador
 	public void anadirBorrador(char pV, int pX, int pY) {
 		IFazCasilla cAux = this.casillas[pX][pY];
 		if(cAux.esInicial()==false){
@@ -38,6 +42,9 @@ public class MatrizPartida{
 			this.casillas[pX][pY].setValor(pV);
 		}
 	}
+	
+	//POST: devuelve el valor de la casilla
+	//		0 si es borrador
 	public char getValor(int pX, int pY) {
 		if (pX<0 || pX>=MAX_FIL || pY<0 || pY>=MAX_COL){
 			System.out.println("Posicion incorrecta");
@@ -47,6 +54,8 @@ public class MatrizPartida{
 		return cAux.getValor();
 	}
 	
+	//POST: Si habia borrador en la posicion indicada
+	//		lo cambia a casilla normal
 	private void crearCasillaSiNoHay(int pX, int pY){
 		if (casillas[pX][pY] instanceof Borrador){
 			Observer obs = casillas[pX][pY].getObserver();
@@ -55,6 +64,8 @@ public class MatrizPartida{
 		}
 	}
 	
+	//POST: Si habia casilla normal en la posicion indicada
+	//		la cambia a borrador
 	private void crearBorradorSiNoHay(int pX, int pY){
 		if (casillas[pX][pY] instanceof Casilla){
 			Observer obs = casillas[pX][pY].getObserver();
@@ -63,6 +74,8 @@ public class MatrizPartida{
 		}
 	}
 	
+	//POST: Devuelve valores de las casillas en un String
+	//		Si era borrador devuelve 0
 	public String toStringCasillas(){
 		String s = "";
 		for(int i = 0; i<MAX_FIL;i++){
@@ -73,10 +86,13 @@ public class MatrizPartida{
 		return s;
 	}
 	
+	//POST: Anade el observer a la casilla
 	public void addObserver(Observer pO, int pX, int pY){
 		this.casillas[pX][pY].addObserver(pO);
 	}
-
+	
+	//Introduce valores directamente desde un String
+	//se usa al cargar partida pendiente
 	public void setValues(String mtab) {
 		for (int i=0; i<MAX_FIL; i++){
 			for (int j=0; j<MAX_COL; j++){

@@ -1,9 +1,11 @@
 package packModelo;
 
-import java.util.Observer;
+//import java.util.Observer;
 
 public class Borrador extends IFazCasilla{
 	
+	//Lista de 9 booleanos, si es true indica que 
+	//el valor de esa posicion +1 esta escrita en el borrador
 	boolean[] lista;
 	
 	public Borrador(){
@@ -14,6 +16,8 @@ public class Borrador extends IFazCasilla{
 		}
 	}
 	
+	//POST: Invierte el valor del borrador
+	//		en la posicion indicada
 	@Override
 	public void setValor(char pV) {
 		int i = Integer.parseInt(pV+"");
@@ -24,6 +28,8 @@ public class Borrador extends IFazCasilla{
 		}
 	}
 
+	//POST: Devuelve los valores del borrador en un string,
+	//		los numeros si estan, espacios en blanco si no estan
 	@Override
 	public String toStringValores() {
 		String result = "";
@@ -39,13 +45,10 @@ public class Borrador extends IFazCasilla{
 		return '0';
 	}
 
+	//Ningun borrador puede ser inicial
 	@Override
 	public boolean esInicial() {
 		return false;
 	}
 	
-	@Override
-	public void addObserver(Observer pO){
-		super.addObserver(pO);
-	}
 }

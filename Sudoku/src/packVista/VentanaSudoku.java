@@ -78,9 +78,10 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 	
 	private void cargarSudoku() {
+		//anadir observer a la partida y al gestor tiempo
 		GestorTiempo.getGestor().addObserver(this);
 		GestorPartida.getGestor().addObserver(this);
-		
+		//anadir observer a cada casilla
 		getLblIdSud().setText(GestorPartida.getGestor().getIdSud()+"");
 		for(int i=0; i<this.getMatrizCasillas().length;i++){
 			for(int j=0; j<this.getMatrizCasillas()[i].length;j++){
@@ -553,10 +554,12 @@ public class VentanaSudoku extends JFrame implements Observer{
 		mVent = null;
 	}
 	
+	//Se cambiara el estado de insercion del borrador
 	public void switchBorrador() {
 		GestorPartida.getGestor().switchBorrador();
 	}
 	
+	//Se pausara el tiempo, la ventana sera invisible hasta reanudar
 	public void pausar() {
 		GestorTiempo.getGestor().pausar();
 		this.setVisible(false);

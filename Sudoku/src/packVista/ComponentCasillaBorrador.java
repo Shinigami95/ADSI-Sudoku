@@ -31,6 +31,8 @@ public class ComponentCasillaBorrador extends ComponentCasillaGenerica{
 		}
 	}
 
+	//El string tendra 9 valores, los correspondientes a los del borrador
+	//Cada uno se introduce en los diferentes labels del panel
 	@Override
 	public void escribirTexto(String pTexto) {
 		for(int i = 0; i<listaTextField.length; i++){

@@ -32,6 +32,7 @@ public class ComponentCasillaInicial  extends ComponentCasillaGenerica{
 		this.add(text);
 	}
 
+	//Introducira el unico valor de la casilla
 	@Override
 	public void escribirTexto(String pTexto) {
 		this.text.setText(pTexto);

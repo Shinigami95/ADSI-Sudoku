@@ -19,14 +19,6 @@ public class Partida extends Observable{
 		sudoku = pSud;
 		matrizPartida = new MatrizPartida(pSud.toStringMatrizInicial());
 	}
-
-	public boolean estaPerfecto() {
-		return this.sudoku.estaPerfecto();
-	}
-	
-	public boolean esCorrecto() {
-		return this.sudoku.esCorrecto();
-	}
 	
 	public Integer getReto() {
 		return this.reto;
@@ -54,10 +46,6 @@ public class Partida extends Observable{
 
 	public char getValorSolucion(int pX, int pY) {
 		return this.sudoku.getValorSolucion(pX, pY);
-	}
-
-	public boolean comprobarSiEstaBien(int pX, int pY) {
-		return this.matrizPartida.getValor(pX, pY) == this.sudoku.getValorSolucion(pX, pY);
 	}
 	
 	private void dcrAyudas() {
@@ -116,6 +104,8 @@ public class Partida extends Observable{
 		}
 	}
 
+	//Devuelve true si la matriz partida coincide con la
+	//matriz solucion del sudoku
 	public boolean haTerminado() {
 		String mPartida = this.matrizPartida.toStringCasillas();
 		String mSol = this.sudoku.toStringMatrizSolucion();

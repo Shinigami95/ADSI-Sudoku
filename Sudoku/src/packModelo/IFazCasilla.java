@@ -12,6 +12,7 @@ public abstract class IFazCasilla extends Observable{
 	public abstract boolean esInicial();
 	public abstract String toStringValores();
 	
+	//Se modifica para que solo admita uno
 	@Override
 	public void addObserver(Observer pO){
 		super.deleteObservers();
@@ -19,6 +20,7 @@ public abstract class IFazCasilla extends Observable{
 		this.observ = pO;
 	}
 	
+	//Se necesitara si se cambia el tipo de la casilla
 	public Observer getObserver(){
 		return this.observ;
 	}

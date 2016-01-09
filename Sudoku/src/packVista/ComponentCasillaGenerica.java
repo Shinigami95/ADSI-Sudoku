@@ -33,6 +33,7 @@ public class ComponentCasillaGenerica extends JPanel implements Observer{
 	
 	public int getCorY(){return corY;}
 	
+	//Permite cambiar el tipo de casilla en el panel
 	public void setCasilla(ComponentCasillaGenerica pCas){
 		this.remove(mCasilla);
 		this.mCasilla = pCas;
@@ -43,10 +44,16 @@ public class ComponentCasillaGenerica extends JPanel implements Observer{
 		return this.mCasilla instanceof ComponentCasillaBorrador;
 	}
 	
+	//Escribira los numeros que aparecen en el modelo
+	//aprobechandose del polimorfismo de mCasilla
+	//(inicial, normal o borrador)
+	//mostrara los valores de un modo u otro
 	public void escribirTexto(String pTexto) {
 		if(this.mCasilla!=null)this.mCasilla.escribirTexto(pTexto);
 	}
 	
+	//Al observar la casilla del modelo tendra en cuenta si hay que
+	//cambiar el tipo de casilla en la vista.
 	@Override
 	public void update(Observable o, Object arg) {
 		if(o instanceof Casilla){

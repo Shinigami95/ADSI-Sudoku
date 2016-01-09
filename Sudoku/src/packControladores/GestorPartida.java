@@ -31,14 +31,6 @@ public class GestorPartida {
 	private void setPartida(Partida pGame){
 		this.game = pGame;
 	}
-	
-	public boolean estaPerfectoSudoku(){
-		return this.game.estaPerfecto();
-	}
-	
-	public boolean esCorrectoSudoku() {
-		return this.game.esCorrecto();
-	}
 
 	public int getIdSud(){
 		return this.game.getIdSud();
@@ -66,18 +58,23 @@ public class GestorPartida {
 		this.game.anadirNumero('0', pX, pY);
 	}
 	
+	//Get valor de la casilla de matriz partida 
+	//(en la que se juega)
 	public char getValorCasillaSudoku(int pX, int pY){
 		return this.game.getValor(pX, pY);
 	}
 	
+	//Obtener el valor de la solucion de una casilla
 	public char getValorCasillaSudokuSolucion(int pX, int pY){
 		return this.game.getValorSolucion(pX, pY);
 	}
 	
+	//Para observar el numero de ayudas y comprobaciones
 	public void addObserver(Observer pO){
 		this.game.addObserver(pO);
 	}
 	
+	//Para observar una casilla en particular
 	public void addObserver(Observer pO, int pX, int pY){
 		this.game.addObserver(pO, pX, pY);
 	}
