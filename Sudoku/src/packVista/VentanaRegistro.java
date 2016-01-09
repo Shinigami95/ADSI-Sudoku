@@ -21,6 +21,10 @@ import packExcepciones.ExcepcionConectarBD;
 
 public class VentanaRegistro extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblUsuario;
 	private JTextField textUsuario;
@@ -38,9 +42,6 @@ public class VentanaRegistro extends JDialog {
 	private JButton btnCancel;
 	private ControladorRegistro controlador;
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaRegistro() {
 		initialize();
 	}

@@ -2,7 +2,6 @@ package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -53,25 +52,6 @@ public class VentanaEstadisticasJugador extends JFrame {
 	private JPanel panelDatosSudoku;
 	private JScrollPane scrollPaneListSud;
 	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaEstadisticasJugador frame = VentanaEstadisticasJugador.getVentana();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	private VentanaEstadisticasJugador() {
 		initialize();
 	}
@@ -248,6 +228,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){
+				@SuppressWarnings("unchecked")
 				JList<String> list = (JList<String>)e.getSource();
 				selItem = list.getSelectedValue();
 			}

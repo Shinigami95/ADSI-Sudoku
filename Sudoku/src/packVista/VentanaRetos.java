@@ -2,7 +2,6 @@ package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -16,10 +15,7 @@ import javax.swing.event.ListSelectionListener;
 
 import packControladores.GestorPartida;
 import packControladores.GestorRetos;
-import packControladores.GestorSudokus;
 import packExcepciones.ExcepcionConectarBD;
-import packExcepciones.ExcepcionNoHaySudokuCargado;
-import packModelo.Sudoku;
 
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -59,22 +55,6 @@ public class VentanaRetos extends JFrame {
 	private JLabel lblIdSudoku;
 	private JLabel lblIdSudokuValor;
 	private DefaultListModel<String> defListModelRetos;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaRetos frame = new VentanaRetos();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	private VentanaRetos(){
 		initialize();
@@ -333,6 +313,7 @@ public class VentanaRetos extends JFrame {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){
+				@SuppressWarnings("unchecked")
 				JList<String> list = (JList<String>)e.getSource();
 				selItem = list.getSelectedValue();
 				actualizarValoresReto(selItem);

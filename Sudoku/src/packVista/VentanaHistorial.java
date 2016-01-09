@@ -13,7 +13,6 @@ import java.awt.GridLayout;
 import javax.swing.JTabbedPane;
 
 import java.awt.event.MouseListener;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.GroupLayout;
@@ -22,7 +21,6 @@ import javax.swing.JList;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
-import packControladores.ConexionBD;
 import packControladores.GestorHistorial;
 import packControladores.GestorLogros;
 import packControladores.GestorSesion;

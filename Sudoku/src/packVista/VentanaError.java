@@ -15,15 +15,16 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 
 public class VentanaError extends JDialog {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel panel;
 	private JPanel panel_1;
 	private JTextArea textError;
 	private JButton btnOK;
 	private Controlador controlador;
 
-	/**
-	 * Create the dialog.
-	 */
 	public VentanaError(String pError) {
 		initialize(pError);
 	}

@@ -9,7 +9,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.DefaultComboBoxModel;
@@ -25,13 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JList;
 
-
-
-
-import packControladores.ConexionBD;
 import packControladores.GestorLogros;
-
-
 import packExcepciones.ExcepcionConectarBD;
 
 import java.awt.event.ActionListener;

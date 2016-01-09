@@ -13,7 +13,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JButton;
 
 import packControladores.GestorJugadores;
@@ -21,6 +20,10 @@ import packExcepciones.ExcepcionConectarBD;
 
 public class VentanaRecuperarPass3 extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblPass;
 	private JPasswordField textPass;
@@ -33,9 +36,6 @@ public class VentanaRecuperarPass3 extends JDialog {
 	private ControladorRegistro controlador;
 	private String usuario;
 
-	/**
-	 * Create the frame.
-	 */
 	public VentanaRecuperarPass3(String pUsuario) {
 		usuario=pUsuario;
 		initialize();

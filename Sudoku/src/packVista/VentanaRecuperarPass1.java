@@ -18,6 +18,10 @@ import packControladores.GestorJugadores;
 
 public class VentanaRecuperarPass1 extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textUsuario;
 	private JLabel lblUsuario;
@@ -25,9 +29,7 @@ public class VentanaRecuperarPass1 extends JDialog {
 	private JButton btnCancel;
 	private ControladorRecuperar controlador;
 
-	/**
-	 * Create the dialog.
-	 */
+
 	public VentanaRecuperarPass1() {
 		initialize();
 	}

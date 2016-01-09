@@ -142,7 +142,7 @@ public class GestorPartida {
 				mS = result.getString("M_SOL");
 				try {
 					Sudoku sud = new Sudoku(idS, dif, mS, mI, true);
-					this.setPartida(new Partida(sud, null, 81, 5)); //TODO poner ayudas a 5
+					this.setPartida(new Partida(sud, null, 5, 5));
 					GestorTiempo.getGestor().setTiempo(0);
 					GestorTiempo.getGestor().reanudar();		
 				} catch (NoValidoException e) {

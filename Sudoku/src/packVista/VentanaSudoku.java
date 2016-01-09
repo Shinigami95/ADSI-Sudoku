@@ -2,7 +2,6 @@ package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.GridLayout;
 
 import javax.swing.JFrame;
@@ -73,30 +72,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 	private JLabel labelComprValor;
 	private JSeparator separator;
 	private JSeparator separator_1;
-	
-	/**
-	 * Launch 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GestorPartida.getGestor().cargarSudokuMANUAL();
-					VentanaSudoku frame = VentanaSudoku.getVentana();
-					frame.setVisible(true);
-					frame.repaint();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
 	private VentanaSudoku() {
 		initialize();
 	}

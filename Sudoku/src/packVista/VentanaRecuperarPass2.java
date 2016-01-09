@@ -23,6 +23,10 @@ import java.awt.Color;
 
 public class VentanaRecuperarPass2 extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField textRespuesta;
 	private JLabel lblRespuesta;
@@ -32,9 +36,7 @@ public class VentanaRecuperarPass2 extends JDialog {
 	private String usuario;
 	private JTextArea textPregunta;
 
-	/**
-	 * Create the dialog.
-	 */
+
 	public VentanaRecuperarPass2(String pPregunta, String pUsuario) {
 		usuario=pUsuario;
 		initialize(pPregunta);

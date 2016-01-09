@@ -3,7 +3,6 @@ package packVista;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -83,25 +82,6 @@ public class VentanaAdminSudoku extends JFrame {
 	private JLabel pmLblActivadoValor;
 	private JButton pmBtnActivardesactivar;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaAdminSudoku frame = VentanaAdminSudoku.getVentana();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
 	private VentanaAdminSudoku() {
 		initialize();
 	}
@@ -567,6 +547,7 @@ public class VentanaAdminSudoku extends JFrame {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){
+				@SuppressWarnings("unchecked")
 				JList<String> list = (JList<String>)e.getSource();
 				if(list.getName().equals("List_Sudokus_Modificar")){
 					selItemSudModificar = list.getSelectedValue();

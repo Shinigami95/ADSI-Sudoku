@@ -1,7 +1,6 @@
 package packVista;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -54,22 +53,6 @@ public class VentanaJugador extends JFrame {
 	private static VentanaJugador mVent;
 	private JButton btnVerRetos;
 	private JButton btnContinuar;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaJugador frame = VentanaJugador.getVentana();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.

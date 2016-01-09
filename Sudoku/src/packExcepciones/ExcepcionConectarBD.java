@@ -1,9 +1,15 @@
 package packExcepciones;
 
-import javax.swing.JOptionPane;
 
 public class ExcepcionConectarBD extends Exception{
 	
-	public ExcepcionConectarBD(){}
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public ExcepcionConectarBD(){
+		super();
+	}
 	
 }

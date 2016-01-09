@@ -2,7 +2,6 @@ package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -66,22 +65,6 @@ public class VentanaFinal extends JFrame {
 	private JButton btnCompartirLogro;
 	private Controlador controlador;
 	private JTextArea textAreaDescrLogro;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GestorPartida.getGestor().cargarSudokuMANUAL();
-					getVentana().setVisible(true);;
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -374,6 +357,7 @@ public class VentanaFinal extends JFrame {
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){
 				try {
+					@SuppressWarnings("unchecked")
 					JList<String> list = (JList<String>)e.getSource();
 					selItemLogro = list.getSelectedValue();
 					String descr = GestorLogros.getGestor().getDescripcionDe(selItemLogro);

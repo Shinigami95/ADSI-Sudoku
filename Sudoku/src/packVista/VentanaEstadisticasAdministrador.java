@@ -30,6 +30,7 @@ import javax.swing.JButton;
 
 import java.awt.event.ActionEvent;
 import java.awt.Font;
+
 import javax.swing.JScrollPane;
 
 public class VentanaEstadisticasAdministrador extends JFrame {
@@ -327,6 +328,7 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){
+				@SuppressWarnings("unchecked")
 				JList<String> list = (JList<String>)e.getSource();
 				if(list.getName().equals("List_Sudokus")){
 					selItemSud = list.getSelectedValue();

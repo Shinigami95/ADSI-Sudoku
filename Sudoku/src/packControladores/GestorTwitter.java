@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import javax.print.attribute.URISyntax;
-
 public class GestorTwitter {
 	private static GestorTwitter miGestorTwitter;
 	

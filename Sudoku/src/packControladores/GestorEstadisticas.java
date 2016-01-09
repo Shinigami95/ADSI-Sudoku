@@ -10,16 +10,6 @@ public class GestorEstadisticas {
 	
 	private GestorEstadisticas(){}
 	
-	public static void main(String[] args){
-		try {
-			String est = GestorEstadisticas.getGestor().getHTMLEstadisticasJugador("Jorge");
-			System.out.println(est);
-		} catch (ExcepcionConectarBD e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-	}
-	
 	public static GestorEstadisticas getGestor(){
 		if(mGestor==null){
 			mGestor = new GestorEstadisticas();
@@ -198,7 +188,7 @@ public class GestorEstadisticas {
 			count[0] = 0; // cuantos jugadores lo han completado
 			count[1] = 0; // cuantos jugadores se han rendido
 			String comp = "";
-			for(int i = 0; result.next(); i++){
+			while(result.next()){
 				comp = result.getString("COMP");
 				if(comp.equals("S")){
 					count[0] += result.getInt("NUM");

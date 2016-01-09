@@ -2,9 +2,7 @@ package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.event.WindowAdapter;
-import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,22 +45,6 @@ public class VentanaRetarUsuarios extends JFrame {
 	private JPanel panelDatos;
 	private JLabel lblSudoku;
 	private JLabel labelIdSud;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaRetarUsuarios frame = VentanaRetarUsuarios.getVentana();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	private VentanaRetarUsuarios(){
 		initialize();
@@ -223,6 +205,7 @@ public class VentanaRetarUsuarios extends JFrame {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			if(e.getSource() instanceof JList){
+				@SuppressWarnings("unchecked")
 				JList<String> list = (JList<String>)e.getSource();
 				selItemJugador = list.getSelectedValue();
 			}

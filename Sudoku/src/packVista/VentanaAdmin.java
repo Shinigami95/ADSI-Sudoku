@@ -1,8 +1,5 @@
 package packVista;
 
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -32,24 +29,7 @@ public class VentanaAdmin extends JFrame {
 	private JLabel lblHolaAdministrador;
 	private static VentanaAdmin ventana;
 	private Controlador controlador;
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					getVentana().setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
-	/**
-	 * Create the frame.
-	 */
 	public static VentanaAdmin getVentana(){
 		if(ventana==null){
 			ventana=new VentanaAdmin();
