@@ -84,20 +84,6 @@ public class VentanaAdminLogros extends JFrame {
 	private JList<String> list_2;
 	private static VentanaAdminLogros ventana;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					getVentana().setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
