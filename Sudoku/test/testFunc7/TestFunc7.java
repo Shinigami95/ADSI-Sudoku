@@ -23,7 +23,7 @@ public class TestFunc7 {
 	public void setUp() throws Exception {
 		jug2 = "Jorge";
 		jug2 = "asdf";
-		idS1 = "2";
+		idS2 = "2";
 		idS2 = "-1";
 	}
 
@@ -31,7 +31,7 @@ public class TestFunc7 {
 	public void tearDown() throws Exception {
 		jug2 = null;
 		jug2 = null;
-		idS1 = null;
+		idS2 = null;
 		idS2 = null;
 	}
 
@@ -57,11 +57,11 @@ public class TestFunc7 {
 	@Test
 	public void testTiempoMedioResolucionPorCategoriaDelJugador() {
 		try{
-			int[][] resul = GestorEstadisticas.getGestor().getTiempoMedioResolucionPorCategoriaDelJugador(jug1);
+			int[][] resul = GestorEstadisticas.getGestor().getTiempoMedioResolucionPorCategoriaDelJugador(jug2);
 			/*
 			 * [i][0] -> Dificultad ([0] es dificultad 1, [1] es 2, etc...)
 			 * [i][1] -> Tiempo medio
-			 * [i][2] -> Sudokus hechos en total
+			 * [i][2] -> Sudokus hechos en total de esa dificultad
 			 * siendo i las tuplas que el resultado da
 			 */
 			if(resul.length>0){
@@ -76,7 +76,7 @@ public class TestFunc7 {
 					System.out.println("Sudokus jugados: " + sudJugados);
 					System.out.println("-----------------");
 					//Obtenemos el tiempo total de los sudokus que el usuario ha jugado de la dificultad
-					int tiempoTotal = obtenerTiempoDeSudokusHechosPorDificultad(dif, jug1);
+					int tiempoTotal = obtenerTiempoDeSudokusHechosPorDificultad(dif, jug2);
 					//Dividimos el tiempo total entre los sudokus jugados y comprobamos si coincide con el valor de la BD
 					assertEquals(tiempoMedio, tiempoTotal/sudJugados);
 				}
@@ -92,22 +92,22 @@ public class TestFunc7 {
 	@Test
 	public void testInfoSudokusResueltosDelJugador() {
 		try{
-			int[] resul = GestorEstadisticas.getGestor().getInfoSudokusResueltosDelJugador(jug1);
+			int[] resul = GestorEstadisticas.getGestor().getInfoSudokusResueltosDelJugador(jug2);
 			/*
 			 * [0] -> totalSudokus
 			 * [1] -> sudCompletos
 			 * [2] -> sudIncompletos
 			 */
 			//Cogemos los sudokus totales, los completos y los incompletos a traves de consultas
-			ResultSet result1 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS TOTAL FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE NOMBRE_JUG='"+jug1+"';");
+			ResultSet result1 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS TOTAL FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE NOMBRE_JUG='"+jug2+"';");
 			result1.next();
 			int total = result1.getInt("TOTAL");
 			ConexionBD.getConexionBD().closeResult(result1);
-			ResultSet result2 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS COMPLETADOS FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE NOMBRE_JUG='"+jug1+"' AND JUGADO.COMPLETADO='S';");
+			ResultSet result2 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS COMPLETADOS FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE NOMBRE_JUG='"+jug2+"' AND JUGADO.COMPLETADO='S';");
 			result2.next();
 			int completos = result2.getInt("COMPLETADOS");
 			ConexionBD.getConexionBD().closeResult(result2);
-			ResultSet result3 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS INCOMPLETOS FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE NOMBRE_JUG='"+jug1+"' AND JUGADO.COMPLETADO='N';");
+			ResultSet result3 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS INCOMPLETOS FROM JUGADO INNER JOIN SUDOKU ON ID_SUDOKU=ID_S WHERE NOMBRE_JUG='"+jug2+"' AND JUGADO.COMPLETADO='N';");
 			result3.next();
 			int incompletos = result3.getInt("INCOMPLETOS");
 			ConexionBD.getConexionBD().closeResult(result3);
@@ -130,25 +130,25 @@ public class TestFunc7 {
 	@Test
 	public void testGetCuantosCompletadoYRendidoSudoku() {
 		try{
-			int[] resul = GestorEstadisticas.getGestor().getCuantosCompletadoYRendidoSudoku(idS1);
+			int[] resul = GestorEstadisticas.getGestor().getCuantosCompletadoYRendidoSudoku(idS2);
 			/*
 			 * [0] -> jugadores que lo han completado
 			 * [1] -> jugadores que se han rendido
 			 */
 			//Cogemos los numeros de cuantos usuarios han completado y se han rendido en este sudoku
-			ResultSet result1 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS COMPLETADOS FROM JUGADO WHERE ID_SUDOKU='"+idS1+"' AND COMPLETADO='S';");
+			ResultSet result1 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS COMPLETADOS FROM JUGADO WHERE ID_SUDOKU='"+idS2+"' AND COMPLETADO='S';");
 			result1.next();
 			int completados = result1.getInt("COMPLETADOS");
 			ConexionBD.getConexionBD().closeResult(result1);
-			ResultSet result2 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS RENDIDOS FROM JUGADO WHERE ID_SUDOKU='"+idS1+"' AND COMPLETADO='N';");
+			ResultSet result2 = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS RENDIDOS FROM JUGADO WHERE ID_SUDOKU='"+idS2+"' AND COMPLETADO='N';");
 			result2.next();
 			int rendidos = result2.getInt("RENDIDOS");
 			ConexionBD.getConexionBD().closeResult(result2);
 			//Hacemos la comparativa de las consultas con los resultados del metodo a probar
 			assertEquals(resul[0], completados);
 			assertEquals(resul[1], rendidos);
-			System.out.println("El sudoku " + idS1 + " lo ha(n) completado " + completados + " usuario(s)");
-			System.out.println("En el sudoku " + idS1 + " se ha(n) rendido " + rendidos + " usuario(s)");
+			System.out.println("El sudoku " + idS2 + " lo ha(n) completado " + completados + " usuario(s)");
+			System.out.println("En el sudoku " + idS2 + " se ha(n) rendido " + rendidos + " usuario(s)");
 		} catch (ExcepcionConectarBD e) {
 			e.printStackTrace();
 		} catch (SQLException e) {
@@ -159,19 +159,19 @@ public class TestFunc7 {
 	@Test
 	public void getTiempoMedioResolucionSudoku() {
 		try{
-			int resul = GestorEstadisticas.getGestor().getTiempoMedioResolucionSudoku(idS1);
+			int resul = GestorEstadisticas.getGestor().getTiempoMedioResolucionSudoku(idS2);
 			if(resul != 0){
 				//Cogemos los sudokus jugados y el tiempo total en los que se han jugado esos sudokus
-				ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS JUGADOS FROM JUGADO WHERE ID_SUDOKU='"+idS1+"' AND COMPLETADO='S';");
+				ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS JUGADOS FROM JUGADO WHERE ID_SUDOKU='"+idS2+"' AND COMPLETADO='S';");
 				result.next();
 				int jugados = result.getInt("JUGADOS");
 				ConexionBD.getConexionBD().closeResult(result);
-				ResultSet result1 = ConexionBD.getConexionBD().consultaBD("SELECT SUM(SEGUNDOS) AS TIEMPO FROM JUGADO WHERE ID_SUDOKU='"+idS1+"' AND COMPLETADO='S';");
+				ResultSet result1 = ConexionBD.getConexionBD().consultaBD("SELECT SUM(SEGUNDOS) AS TIEMPO FROM JUGADO WHERE ID_SUDOKU='"+idS2+"' AND COMPLETADO='S';");
 				result1.next();
 				int tiempoTotal = result1.getInt("TIEMPO");
 				//Comprobamos el resultado del metodo con el resultado de tiempoTotal/jugados
 				assertEquals(resul, tiempoTotal/jugados);
-				System.out.println("El sudoku " + idS1 + " se ha resuelto en una media de " + resul + " segundos");
+				System.out.println("El sudoku " + idS2 + " se ha resuelto en una media de " + resul + " segundos");
 				ConexionBD.getConexionBD().closeResult(result1);
 			}else{
 				System.out.println("Este sudoku no esta en la base de datos");
