@@ -35,7 +35,7 @@ public class TestFunc7 {
 		idS2 = null;
 	}
 
-	//Obtenemos el tiempo total que ha tardado el usuario en hacer sudokus de la dificultad que sea
+	//Obtenemos el tiempo total que ha tardado el usuario en hacer sudokus de una dificultad
 	private int obtenerTiempoDeSudokusHechosPorDificultad(int pDif, String pJugador){
 		int hechos = 0;
 		try {
