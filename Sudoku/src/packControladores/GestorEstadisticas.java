@@ -221,4 +221,21 @@ public class GestorEstadisticas {
 			return 0;
 		}
 	}
+	
+	//Solo para jUnit
+	public int[][] SOLOTESTgetTiempoMedioResolucionPorCategoriaDelJugador(String pJugador) throws ExcepcionConectarBD{
+		return getTiempoMedioResolucionPorCategoriaDelJugador(pJugador);
+	}
+	
+	public int[] SOLOTESTgetInfoSudokusResueltosDelJugador(String pJugador) throws ExcepcionConectarBD{
+		return getInfoSudokusResueltosDelJugador(pJugador);
+	}
+	
+	public int[] SOLOTESTgetCuantosCompletadoYRendidoSudoku(String pIdSud) throws ExcepcionConectarBD{
+		return getCuantosCompletadoYRendidoSudoku(pIdSud);
+	}
+	
+	public int SOLOTESTgetTiempoMedioResolucionSudoku(String pIdSud) throws ExcepcionConectarBD{
+		return getTiempoMedioResolucionSudoku(pIdSud);
+	}
 }

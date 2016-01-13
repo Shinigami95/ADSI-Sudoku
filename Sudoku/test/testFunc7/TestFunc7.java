@@ -15,7 +15,7 @@ import packExcepciones.ExcepcionConectarBD;
 
 public class TestFunc7 {
 	
-	//IMPORTANTE PONER LOS METODOS CORRESPONDIENTES DE LA CLASE GESTORESTADISTICAS PUBLICOS
+	//Se han creado los metodos SOLOTEST* en GestorEstadisticas publicos solo para hacer las pruebas
 	String jug1, jug2;
 	String idS1, idS2;
 	
@@ -57,7 +57,7 @@ public class TestFunc7 {
 	@Test
 	public void testTiempoMedioResolucionPorCategoriaDelJugador() {
 		try{
-			int[][] resul = GestorEstadisticas.getGestor().getTiempoMedioResolucionPorCategoriaDelJugador(jug2);
+			int[][] resul = GestorEstadisticas.getGestor().SOLOTESTgetTiempoMedioResolucionPorCategoriaDelJugador(jug2);
 			/*
 			 * [i][0] -> Dificultad ([0] es dificultad 1, [1] es 2, etc...)
 			 * [i][1] -> Tiempo medio
@@ -92,7 +92,7 @@ public class TestFunc7 {
 	@Test
 	public void testInfoSudokusResueltosDelJugador() {
 		try{
-			int[] resul = GestorEstadisticas.getGestor().getInfoSudokusResueltosDelJugador(jug2);
+			int[] resul = GestorEstadisticas.getGestor().SOLOTESTgetInfoSudokusResueltosDelJugador(jug2);
 			/*
 			 * [0] -> totalSudokus
 			 * [1] -> sudCompletos
@@ -130,7 +130,7 @@ public class TestFunc7 {
 	@Test
 	public void testGetCuantosCompletadoYRendidoSudoku() {
 		try{
-			int[] resul = GestorEstadisticas.getGestor().getCuantosCompletadoYRendidoSudoku(idS2);
+			int[] resul = GestorEstadisticas.getGestor().SOLOTESTgetCuantosCompletadoYRendidoSudoku(idS2);
 			/*
 			 * [0] -> jugadores que lo han completado
 			 * [1] -> jugadores que se han rendido
@@ -159,7 +159,7 @@ public class TestFunc7 {
 	@Test
 	public void getTiempoMedioResolucionSudoku() {
 		try{
-			int resul = GestorEstadisticas.getGestor().getTiempoMedioResolucionSudoku(idS2);
+			int resul = GestorEstadisticas.getGestor().SOLOTESTgetTiempoMedioResolucionSudoku(idS2);
 			if(resul != 0){
 				//Cogemos los sudokus jugados y el tiempo total en los que se han jugado esos sudokus
 				ResultSet result = ConexionBD.getConexionBD().consultaBD("SELECT COUNT(*) AS JUGADOS FROM JUGADO WHERE ID_SUDOKU='"+idS2+"' AND COMPLETADO='S';");
