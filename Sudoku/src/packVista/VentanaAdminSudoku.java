@@ -636,8 +636,10 @@ public class VentanaAdminSudoku extends JFrame {
 		String dif = (String) getPmComboBoxDificultad().getSelectedItem();
 		try {
 			GestorAdministrador.getGestor().modificarSudoku(Integer.parseInt(pId), mCompleta, mIncompleta, Integer.parseInt(dif));
+		} catch (YaExisteException e) {
+			JOptionPane.showMessageDialog(this, "Ya existe ese mismo sudoku");
 		} catch (NumberFormatException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(this, "El sudoku no est\u00E1 bien formado");;
 		} catch (NoValidoException e) {
 			JOptionPane.showMessageDialog(this, "El sudoku no est\u00E1 bien formado");
 		}

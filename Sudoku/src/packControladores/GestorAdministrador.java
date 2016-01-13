@@ -43,16 +43,22 @@ public class GestorAdministrador {
 		}
 	}
 	
-	public void modificarSudoku(int pCodigo,String mCompleta,String mIncompleta,int dificultad) throws NoValidoException{
+	public void modificarSudoku(int pCodigo,String mCompleta,String mIncompleta,int dificultad) throws NoValidoException, YaExisteException{
 		
 		// Si consigue crearlo seguira, si no lanzara NoValidoException
 		new Sudoku(pCodigo,dificultad,mCompleta,mIncompleta, true);
 		
-		String sql="UPDATE SUDOKU SET DIFICULTAD="+dificultad+", M_INIC='"+mIncompleta+"',M_SOL='"+mCompleta+"' WHERE ID_S="+pCodigo;
-		try {
-			ConexionBD.getConexionBD().actualizarBD(sql);
-		} catch (ExcepcionConectarBD e) {
-			e.printStackTrace();
+		boolean existeSudoku = GestorSudokus.getGestor().existeSudoku(mCompleta,mIncompleta);
+		if(!existeSudoku){
+			String sql="UPDATE SUDOKU SET DIFICULTAD="+dificultad+", M_INIC='"+mIncompleta+"',M_SOL='"+mCompleta+"' WHERE ID_S="+pCodigo;
+			try {
+				ConexionBD.getConexionBD().actualizarBD(sql);
+			} catch (ExcepcionConectarBD e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+			throw new YaExisteException();
 		}
 	}
 	
