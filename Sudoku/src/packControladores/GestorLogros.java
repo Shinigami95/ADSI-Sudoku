@@ -105,6 +105,9 @@ public class GestorLogros {
 		try{//Se cogen de la bd los logros asociados al sudoku que se ha hecho.
 			ResultSet lista=ConexionBD.getConexionBD().consultaBD("SELECT ID_L FROM LOGRO WHERE ID_SUDOKU='"+idSudoku+"';");
 			while(lista.next()){
+				ResultSet tiene=ConexionBD.getConexionBD().consultaBD("SELECT ID_LOGRO FROM TIENE WHERE ID_LOGRO='"+lista.getString(1)+"' AND NOMBRE_JUG='"+nick+"';");
+				if(tiene.next()){}
+				else{
 				//Dependiendo del ID del logro se hacen unas cosas u otras ya que los tipos de logro se diferencian en el ID del logro.
 				//Si el primer caracter del ID es una X el logro se consigue al llegar a x puntuacion en ese sudoku, si es Y el logro se consigue al
 				//ser de los y primeros en conseguir x puntos en el sudoku y R se le concede el logro a los x primeros en resolver el sudoku.
@@ -149,7 +152,7 @@ public class GestorLogros {
 						logros.addElement(lista.getString(1));
 					}
 					ConexionBD.getConexionBD().closeResult(r);
-				}
+				}}
 				//Por ultimo se cierran las conexiones y se devuele la lista con los IDs de los logros conseguidos.
 			}
 			ConexionBD.getConexionBD().closeResult(lista);
