@@ -105,6 +105,7 @@ public class GestorLogros {
 		try{//Se cogen de la bd los logros asociados al sudoku que se ha hecho.
 			ResultSet lista=ConexionBD.getConexionBD().consultaBD("SELECT ID_L FROM LOGRO WHERE ID_SUDOKU='"+idSudoku+"';");
 			while(lista.next()){
+				//Se mira si el usuario tiene el logro
 				ResultSet tiene=ConexionBD.getConexionBD().consultaBD("SELECT ID_LOGRO FROM TIENE WHERE ID_LOGRO='"+lista.getString(1)+"' AND NOMBRE_JUG='"+nick+"';");
 				if(tiene.next()){}
 				else{
