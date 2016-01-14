@@ -3,6 +3,7 @@ package packControladores;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DecimalFormat;
+
 import packExcepciones.ExcepcionConectarBD;
 
 public class GestorEstadisticas {
@@ -234,5 +235,22 @@ public class GestorEstadisticas {
 			System.out.println(e.getMessage());
 			return 0;
 		}
+	}
+
+	// Los siguientes metodos son para los test
+	public int[][] SOLOTESTgetTiempoMedioResolucionPorCategoriaDelJugador(String jug) throws ExcepcionConectarBD {
+		return getTiempoMedioResolucionPorCategoriaDelJugador(jug);
+	}
+
+	public int[] SOLOTESTgetInfoSudokusResueltosDelJugador(String jug) throws ExcepcionConectarBD {
+		return getInfoSudokusResueltosDelJugador(jug);
+	}
+
+	public int[] SOLOTESTgetCuantosCompletadoYRendidoSudoku(String idS) throws ExcepcionConectarBD {
+		return getCuantosCompletadoYRendidoSudoku(idS);
+	}
+
+	public int SOLOTESTgetTiempoMedioResolucionSudoku(String idS) throws ExcepcionConectarBD {
+		return getTiempoMedioResolucionSudoku(idS);
 	}
 }

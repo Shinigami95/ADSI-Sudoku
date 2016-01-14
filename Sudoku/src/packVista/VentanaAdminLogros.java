@@ -208,8 +208,6 @@ public class VentanaAdminLogros extends JFrame {
 						e.printStackTrace();
 					} catch (ExcepcionConectarBD e) {
 						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
 					}
 				}
 			});
@@ -543,9 +541,7 @@ public class VentanaAdminLogros extends JFrame {
 						e.printStackTrace();
 					} catch (ExcepcionConectarBD e) {
 						e.printStackTrace();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
+					} 
 				}
 			});
 		}
