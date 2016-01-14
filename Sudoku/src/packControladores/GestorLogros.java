@@ -84,18 +84,15 @@ public class GestorLogros {
 	/*Precondicion: Se le pasan los datos a comprobar.
 	 *Postcondicion:
 	 * */
-	public boolean datos(String iDLogro,String descripcion,String puntos,String jug) throws ExcepcionConectarBD, SQLException{
+	public boolean datos(String iDLogro,String descripcion,String puntos,String jug) {
 		boolean flag=false;
-		ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_L FROM LOGRO WHERE ID_L='"+iDLogro+"';");
-		if(res.next()){}
-		else{
 		if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 && puntos.length()>0 && jug.length()>0 ){
 			if (Integer.parseInt(puntos)==0 && Integer.parseInt(jug)==0){
 				JOptionPane.showMessageDialog(null, "Datos Incorrectos.");
 			}
 			else{flag=true;}
 		}
-		else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}}
+		else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
 		return flag;
 	}
 	//Este metodo devuelve una lista con los IDs de los logros que ha conseguido el usuario al terminar un sudoku.
@@ -209,7 +206,7 @@ public class GestorLogros {
 			return null;
 		}
 	}
-	
+	//Verifica que el logro no esté creado.
 	//POST: true si existe un logro con ese ID
 	public boolean estaLogro(String idLogro){
 		boolean esta=false;

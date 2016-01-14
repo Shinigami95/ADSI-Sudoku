@@ -30,8 +30,9 @@ public class Logros {
 			if(Integer.parseInt(numJug)<1){
 				//En tal caso hacemos que el ID del logro tenga un primer caracter X que me ayuda a clasificarlo en otros metodos.
 				log="X"+log;
-				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionX
+				//Se mira si el logro estaba creado
 				if(!GestorLogros.getGestor().estaLogro(log)){
+					//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionX
 					ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
 					LogrosPuntuacionX.getLogroX().logrosPuntuacionX(log, puntos);
 				}
@@ -40,8 +41,9 @@ public class Logros {
 			else{
 				//En tal caso hacemos que el ID del logro tenga un primer caracter Y que me ayuda a clasificarlo en otros metodos.
 				log="Y"+log;
-				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionXY
+				//Se mira si el logro estaba creado
 				if(!GestorLogros.getGestor().estaLogro(log)){
+					//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionXY
 					ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
 					LogrosPuntuacionXY.getLogroY().logrosPuntuacionXY(log, puntos, numJug);} 
 			}
@@ -50,8 +52,9 @@ public class Logros {
 		else{
 			//En tal caso hacemos que el ID del logro tenga un primer caracter R que me ayuda a clasificarlo en otros metodos.
 			log="R"+log;
-			//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroResolucion
+			//Se mira si el logro estaba creado
 			if(!GestorLogros.getGestor().estaLogro(log)){
+				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroResolucion
 				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
 				LogrosResolucion.getLogrosR().logrosResolucion(log, numJug);}
 		}
