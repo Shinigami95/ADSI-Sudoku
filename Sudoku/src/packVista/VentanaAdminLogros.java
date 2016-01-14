@@ -535,7 +535,7 @@ public class VentanaAdminLogros extends JFrame {
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						if(GestorLogros.getGestor().datos(list_2.getSelectedValue().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText())){
+						if(GestorLogros.getGestor().datos("hola", textField_8.getText(), textField_6.getText(), textField_7.getText())){
 								GestorLogros.getGestor().modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
 								JOptionPane.showMessageDialog(null, "Se ha modificado corectamente.");
 							}
