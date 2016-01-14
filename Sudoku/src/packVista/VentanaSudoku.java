@@ -569,7 +569,7 @@ public class VentanaSudoku extends JFrame implements Observer{
 	}
 	
 	//POST: se actualizara la BD con la informacion de la partida completada.
-	public void actualizarInfoJugador(){
+	private void actualizarInfoJugador(){
 		GestorPartida.getGestor().actualizarPartidaCompletadaUsuarioSesion();
 	}
 }

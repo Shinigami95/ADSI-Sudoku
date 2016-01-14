@@ -3,6 +3,7 @@ package packModelo;
 import javax.swing.JOptionPane;
 
 import packControladores.ConexionBD;
+import packControladores.GestorLogros;
 import packExcepciones.ExcepcionConectarBD;
 
 
@@ -30,16 +31,19 @@ public class Logros {
 				//En tal caso hacemos que el ID del logro tenga un primer caracter X que me ayuda a clasificarlo en otros metodos.
 				log="X"+log;
 				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionX
-				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
-				LogrosPuntuacionX.getLogroX().logrosPuntuacionX(log, puntos);
+				if(!GestorLogros.getGestor().estaLogro(log)){
+					ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
+					LogrosPuntuacionX.getLogroX().logrosPuntuacionX(log, puntos);
+				}
 			}
 			//Si el numero de jugadores que la pueden conseguir es mayor que 0 este logro se consigue al ser uno de los y primeros en llegar a una puntuacion x.
 			else{
 				//En tal caso hacemos que el ID del logro tenga un primer caracter Y que me ayuda a clasificarlo en otros metodos.
 				log="Y"+log;
 				//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroPuntuacionXY
-				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
-				LogrosPuntuacionXY.getLogroY().logrosPuntuacionXY(log, puntos, numJug); 
+				if(!GestorLogros.getGestor().estaLogro(log)){
+					ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
+					LogrosPuntuacionXY.getLogroY().logrosPuntuacionXY(log, puntos, numJug);} 
 			}
 		}
 		//Si la puntuacion que se nos de es 0 entoces es un logro que se consigue al ser uno de los x primeros en completar el sudoku.
@@ -47,8 +51,9 @@ public class Logros {
 			//En tal caso hacemos que el ID del logro tenga un primer caracter R que me ayuda a clasificarlo en otros metodos.
 			log="R"+log;
 			//Ahora se aÃ±ade a la bd en Logros y llamamos a un metodo que lo mete en la bd como un logro de tipo LogroResolucion
-			ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
-			LogrosResolucion.getLogrosR().logrosResolucion(log, numJug);
+			if(!GestorLogros.getGestor().estaLogro(log)){
+				ConexionBD.getConexionBD().actualizarBD("INSERT INTO LOGRO(ID_L,ID_SUDOKU,DESCRIPCION) VALUES('"+log+"','"+codS+"','"+descripcion+"');");
+				LogrosResolucion.getLogrosR().logrosResolucion(log, numJug);}
 		}
 	}
 	//Este metodo se encarga de modificar los datos de un logro. AVISO: No se puede cambiar el tipo de logro. Si es un logro de resolucion no se modifica para que sea de puntuacionx

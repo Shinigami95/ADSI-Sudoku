@@ -1,7 +1,5 @@
 package packControladores;
 
-
-import java.awt.HeadlessException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -210,5 +208,21 @@ public class GestorLogros {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	//POST: true si existe un logro con ese ID
+	public boolean estaLogro(String idLogro){
+		boolean esta=false;
+		String sql="SELECT * FROM LOGRO WHERE ID_L='"+idLogro+"';";
+		try{
+			ResultSet result= ConexionBD.getConexionBD().consultaBD(sql);
+			if(result.next()){
+				esta=true;
+			}
+			result.close();
+		}catch(Exception e){
+			System.out.println(e.getMessage());
+		}
+		return esta;
 	}
 }
