@@ -1,6 +1,7 @@
 package packControladores;
 
 
+import java.awt.HeadlessException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
@@ -85,14 +86,18 @@ public class GestorLogros {
 	/*Precondicion: Se le pasan los datos a comprobar.
 	 *Postcondicion:
 	 * */
-	public boolean datos(String iDLogro,String descripcion,String puntos,String jug){
+	public boolean datos(String iDLogro,String descripcion,String puntos,String jug) throws ExcepcionConectarBD, SQLException{
 		boolean flag=false;
+		ResultSet res=ConexionBD.getConexionBD().consultaBD("SELECT ID_L FROM LOGRO WHERE ID_L='"+iDLogro+"';");
+		if(res.next()){}
+		else{
 		if(iDLogro.length()<5 && iDLogro.length()>0 && descripcion.length()>0 && descripcion.length()<101 && puntos.length()>0 && jug.length()>0 ){
-			if (Integer.parseInt(puntos)<Integer.parseInt(jug) || Integer.parseInt(puntos)>Integer.parseInt(jug)){
-			flag=true;}
-			else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
+			if (Integer.parseInt(puntos)==0 && Integer.parseInt(jug)==0){
+				JOptionPane.showMessageDialog(null, "Datos Incorrectos.");
+			}
+			else{flag=true;}
 		}
-		else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}
+		else{JOptionPane.showMessageDialog(null, "Datos Incorrectos.");}}
 		return flag;
 	}
 	//Este metodo devuelve una lista con los IDs de los logros que ha conseguido el usuario al terminar un sudoku.

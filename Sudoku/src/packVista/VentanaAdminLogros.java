@@ -2,6 +2,7 @@ package packVista;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.HeadlessException;
 import java.awt.event.MouseListener;
 
 import javax.swing.JFrame;
@@ -196,15 +197,19 @@ public class VentanaAdminLogros extends JFrame {
 				/*Al hacer clic en el boton aÃƒÂ±adir se comprueban los datos que se han metido en los campos cumplan las especificaciones necesarias.
 				 * Si es asi se meten en la base de datos y junto con la actualizacion de las listas sale un mensaje que indica que todo ha ido bien.*/
 				public void actionPerformed(ActionEvent arg0) {
-					if(GestorLogros.getGestor().datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
-						try {
+					try {
+						if(GestorLogros.getGestor().datos(textField.getText(),textField_3.getText(),textField_1.getText(),textField_2.getText())){
 							GestorLogros.getGestor().anadirLogro(textField.getText(),comboBox.getSelectedItem().toString() , textField_3.getText(), textField_1.getText(), textField_2.getText());
 							getList_1();
 							getList_2();
 							JOptionPane.showMessageDialog(null, "Se ha a\u00F1adido corectamente.");
-						} catch (ExcepcionConectarBD e) {
-							e.printStackTrace();
 						}
+					} catch (HeadlessException e) {
+						e.printStackTrace();
+					} catch (ExcepcionConectarBD e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
 					}
 				}
 			});
@@ -529,13 +534,18 @@ public class VentanaAdminLogros extends JFrame {
 			btnModificar = new JButton("Modificar");
 			btnModificar.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(GestorLogros.getGestor().datos(list_2.getSelectedValue().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText())){
-						try {
-							GestorLogros.getGestor().modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
-							JOptionPane.showMessageDialog(null, "Se ha modificado corectamente.");
-						} catch (ExcepcionConectarBD e) {
-							e.printStackTrace();
-						}}
+					try {
+						if(GestorLogros.getGestor().datos(list_2.getSelectedValue().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText())){
+								GestorLogros.getGestor().modificarLogros(list_2.getSelectedValue().toString(), comboBox_5.getSelectedItem().toString(), textField_8.getText(), textField_6.getText(), textField_7.getText());
+								JOptionPane.showMessageDialog(null, "Se ha modificado corectamente.");
+							}
+					} catch (HeadlessException e) {
+						e.printStackTrace();
+					} catch (ExcepcionConectarBD e) {
+						e.printStackTrace();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
 				}
 			});
 		}
