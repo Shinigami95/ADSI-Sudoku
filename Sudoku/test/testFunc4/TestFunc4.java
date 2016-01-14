@@ -15,19 +15,22 @@ import packExcepciones.ExcepcionConectarBD;
 
 public class TestFunc4 {
 
-	/* POSIBLES FALLOS
-	 * asegurarse que los id de los logros referencian a un id sudoku que existe
-	 * asegurarse que los id sudokus no tengan ya logros asignados
+	String idSud1="7";
+	String idSud2="9";
+	
+	/* COMPROBACIONES
+	 * asegurarse que existen sudokus con idSud1 y idSud2
+	 * comprobar que el sudoku idSud1 y idSud2 no tengan ya logros asignados
 	 * asegurarse que el usuario PruebaLogros no tiene logros conseguidos
 	 */
 	
 	@Before
 	public void setUp() throws Exception {
-		//nos aseguramos que no tiene logros
-		borrarLogrosJugador("PruebaLogros");
 		//nos aseguramos que existe jugador
 		//registrarJugador comprueba si existe, para no add dos veces
 		GestorJugadores.getGestor().registrarJugador("PruebaLogros", "a", "a", "a");
+		//nos aseguramos que no tiene logros
+		borrarLogrosJugador("PruebaLogros");
 	}
 
 	@After
@@ -48,8 +51,6 @@ public class TestFunc4 {
 		if(GestorLogros.getGestor().estaLogro("YPRU1")){
 			GestorLogros.getGestor().eliminar("YPRU1");
 		}
-		//borramos todos los logros del jugador
-		borrarLogrosJugador("PruebaLogros");
 	}
 
 	@Test
@@ -59,25 +60,25 @@ public class TestFunc4 {
 			//nos aseguramos que existan logros con esos ID
 			if(!GestorLogros.getGestor().estaLogro("RPRU1")){
 				//los 100 primeros
-				GestorLogros.getGestor().anadirLogro("PRU1", "9", "prueba", "0", "100");
+				GestorLogros.getGestor().anadirLogro("PRU1", idSud2, "prueba", "0", "100");
 			}
 			if(!GestorLogros.getGestor().estaLogro("XPRU2")){
 				//hacer 100 ptos
-				GestorLogros.getGestor().anadirLogro("PRU2", "9", "prueba", "100", "0");
+				GestorLogros.getGestor().anadirLogro("PRU2", idSud2, "prueba", "100", "0");
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
 		//id 401: usuario logra un logro que no tiene
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==1);
 		
 		//id 402: usuario logra un logro que ya tiene
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==0);
 		
 		//id 403: usuario logra varios logros en el mismo sudoku
 		//nos aseguramos que no tiene logros
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "1000").size()==2);	
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "1000").size()==2);	
 	}
 	
 	@Test
@@ -86,24 +87,24 @@ public class TestFunc4 {
 		try{
 			if(!GestorLogros.getGestor().estaLogro("XPRU2")){
 				//hacer 100 ptos
-				GestorLogros.getGestor().anadirLogro("PRU2", "9", "prueba", "100", "0");
+				GestorLogros.getGestor().anadirLogro("PRU2", idSud2, "prueba", "100", "0");
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}
 		//id 404: usuario realiza mas de X puntos
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "101").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "101").size()==1);
 
 		//id 407: usuario realiza mas de X puntos y ya tiene ese logro
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "101").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "101").size()==0);
 		
 		//id 405: usuario realiza X puntos
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "100").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "100").size()==1);
 		
 		//id 406: usuario realiza menos de X puntos
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==0);
 	}
 	
 	@Test
@@ -112,24 +113,24 @@ public class TestFunc4 {
 		try{
 			if(!GestorLogros.getGestor().estaLogro("YPRU1")){
 				//hacer 100 ptos entre los 1 primeros
-				GestorLogros.getGestor().anadirLogro("PRU1", "7", "prueba", "100", "1");
+				GestorLogros.getGestor().anadirLogro("PRU1", idSud1, "prueba", "100", "1");
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}	
 		//id 411: usuario realiza menos de X puntos entre los Z primeros
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "7", "99").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud1, "99").size()==0);
 		
 		//id 408: usuario realiza mas de X puntos entre los Z primeros
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "7", "101").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud1, "101").size()==1);
 
 		//id 409: usuario realiza mas de X puntos entre los Z primeros y ya tiene ese logro
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "7", "101").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud1, "101").size()==0);
 		
 		//id 410: usuario realiza X puntos despues de los Z primeros
 		//borramos logros jugador, como antes lo ha conseguido el contador del logro ha disminuido
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "7", "101").size()==0);		
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud1, "101").size()==0);		
 	}
 	
 	@Test
@@ -138,30 +139,30 @@ public class TestFunc4 {
 		try{
 			if(!GestorLogros.getGestor().estaLogro("RPRU2")){
 				//los 100 primeros
-				GestorLogros.getGestor().anadirLogro("PRU1", "9", "prueba", "0", "3");
+				GestorLogros.getGestor().anadirLogro("PRU1", idSud2, "prueba", "0", "3");
 			}
 		}catch(Exception e){
 			System.out.println(e.getMessage());
 		}	
 		//id 412: usuario resuelve el primero
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==1);
 		
 		//id 415: usuario resuelve entre los Z primeros y ya tiene ese premio
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==0);
 		
 		//id 414: usuario resuelve entre los Z primeros (puesto 2)
 		//borramos logros jugador, como antes lo ha conseguido el contador del logro ha disminuido
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==1);
 		
 		//id 413: usuario resuelve en el puesto Z (puesto 3)
 		//borramos logros jugador, como antes lo ha conseguido el contador del logro ha disminuido
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==1);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==1);
 		
 		//id 416: usuario resuelve despues de los Z
 		borrarLogrosJugador("PruebaLogros");
-		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "99").size()==0);
+		assertTrue(GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "99").size()==0);
 	}
 	
 	@Test
@@ -175,14 +176,14 @@ public class TestFunc4 {
 			}
 			sizeAntiguo= sizeCatalogoLogros();
 			//id 417: add nuevo logro tipo "entre los x primeros" (parametro puntos=0)
-			GestorLogros.getGestor().anadirLogro("PRUE", "9", "prueba", "0", "100");
+			GestorLogros.getGestor().anadirLogro("PRUE", idSud2, "prueba", "0", "100");
 			//comprobamos que el size aumenta en uno
 			assertTrue((sizeAntiguo+1)==sizeCatalogoLogros());
 			//comprobamos que se encuentra en el catalogo
 			assertTrue(GestorLogros.getGestor().estaLogro("RPRUE"));
 			
 			//id 418: add de nuevo
-			GestorLogros.getGestor().anadirLogro("PRUE", "3", "prueba", "0", "100");
+			GestorLogros.getGestor().anadirLogro("PRUE", idSud2, "prueba", "0", "100");
 			//comprobamos que el size sigue como antes
 			assertTrue((sizeAntiguo+1)==sizeCatalogoLogros());
 		}catch(ExcepcionConectarBD e){
@@ -197,10 +198,10 @@ public class TestFunc4 {
 		try{
 			//nos aseguramos que exista un logro con ese ID
 			if(!GestorLogros.getGestor().estaLogro("RPRUE")){
-				GestorLogros.getGestor().anadirLogro("PRUE", "9", "prueba", "0", "100");
+				GestorLogros.getGestor().anadirLogro("PRUE", idSud2, "prueba", "0", "100");
 			}
 			//nos aseguramos que un usuario logre ese logro
-			GestorLogros.getGestor().logrosConseguidos("PruebaLogros", "9", "101").size();
+			GestorLogros.getGestor().logrosConseguidos("PruebaLogros", idSud2, "101").size();
 			//id 419: comprobamos que se borra del catalogo
 			sizeAntiguo= sizeCatalogoLogros();
 			GestorLogros.getGestor().eliminar("RPRUE");
@@ -220,10 +221,10 @@ public class TestFunc4 {
 		try{
 			//nos aseguramos que exista un logro con ese ID
 			if(!GestorLogros.getGestor().estaLogro("RPRUE")){
-				GestorLogros.getGestor().anadirLogro("PRUE", "9", "prueba", "0", "100");
+				GestorLogros.getGestor().anadirLogro("PRUE", idSud2, "prueba", "0", "100");
 			}
 			//id 420: modificamos el valor numJug
-			GestorLogros.getGestor().modificarLogros("RPRUE", "9", "prueba", "0", "50");
+			GestorLogros.getGestor().modificarLogros("RPRUE", idSud2, "prueba", "0", "50");
 			//comprobamos que el valor ha sido modificado
 			result=ConexionBD.getConexionBD().consultaBD("SELECT NUM_JUG FROM LOGRO_RES WHERE ID_L='RPRUE';");
 			numJug=0;
