@@ -60,22 +60,6 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 	private JScrollPane scrollPaneListSud;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaEstadisticasAdministrador frame = VentanaEstadisticasAdministrador.getVentana();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	private VentanaEstadisticasAdministrador() {
@@ -100,6 +84,8 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		}
 	}
 	
+	//desde el gestor de jugadores se anaden en una lista todos los jugadores
+	//del sistema
 	private void cargarJugadoresEnLista() throws ExcepcionConectarBD{
 		String[] lista = GestorJugadores.getGestor().getJugadores();
 		for(int i = 0; i<lista.length; i++){
@@ -108,6 +94,8 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		getListJugadores().setSelectedIndex(0);
 	}
 	
+	//desde el gestor de sudokus se anaden en una lista todos los sudokus
+	//del sistema
 	private void cargarSudokusEnLista() throws ExcepcionConectarBD{
 		String[] lista = GestorSudokus.getGestor().getSudokus();
 		for(int i = 0; i<lista.length; i++){
@@ -116,6 +104,7 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		getListSudokus().setSelectedIndex(0);
 	}
 	
+	//se calculan las estadisticas de un sudoku mediante el GestorEstadisticas
 	private void cargarDatosSudoku(String pIdSudoku){
 		try {
 			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasSudoku(pIdSudoku);
@@ -125,10 +114,11 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		}
 	}
 	
+	//se calculan las estadisticas de un jugador mediante el GestorEstadisticas
 	private void cargarDatosJugador(String pNombre){
 		try {
-			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasJugador(pNombre);
-			this.getTextPaneDatosJugador().setText(datosSud);
+			String datosJug = GestorEstadisticas.getGestor().getHTMLEstadisticasJugador(pNombre);
+			this.getTextPaneDatosJugador().setText(datosJug);
 		} catch (ExcepcionConectarBD e) {
 			e.printStackTrace();
 		}
@@ -306,6 +296,7 @@ public class VentanaEstadisticasAdministrador extends JFrame {
 		return scrollPaneListSud;
 	}
 	
+	//desde esta clase se controlaran todos los botones y sus acciones
 	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
 		private String selItemSud = "";
 		private String selItemJug = "";

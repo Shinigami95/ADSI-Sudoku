@@ -17,10 +17,14 @@ public class GestorEstadisticas {
 		return mGestor;
 	}
 	
+	//devuelve en un string las estadisticas del jugador con la sesion iniciada
 	public String getHTMLEstadisticasJugadorSesion() throws ExcepcionConectarBD{
 		return this.getHTMLEstadisticasJugador(GestorSesion.getGestor().getUserSesion());
 	}
 	
+	//devuelve en un string con formato html el nombre del jugador, con el tiempo medio de
+	//resolucion por categoria de los sudokus que ha jugado y el numero de sudokus que ha
+	//jugado, resuelto y dejado incompletos
 	public String getHTMLEstadisticasJugador(String pJugador) throws ExcepcionConectarBD{
 		String res = "<html>"; 
 		res += "<h1>Jugador: "+pJugador+"</h1>";
@@ -31,8 +35,7 @@ public class GestorEstadisticas {
 	}
 	
 	/**
-	 * @param pJugador - nombre del jugador del que se quieren 
-	 * saber las estadísticas
+	 * @param pJugador - nombre del jugador del que se quieren saber las estadísticas
 	 * @return El resultado de la select en una matriz de enteros<br>
 	 * [Dificultad sudoku, Media tiempo, Sudokus completados de esa dificultad]
 	 * @throws ExcepcionConectarBD
@@ -61,6 +64,9 @@ public class GestorEstadisticas {
 		}
 	}
 	
+	//devuelve en un string con formato html formando una tabla el tiempo medio
+	//de resolucion por categoria de los sudokus que ha jugado un jugador
+	//mostrando la dificultad, el tiempo medio y el numero de sudokus realizados
 	private String getHTMLTiempoMedioResolucionPorCategoriaDelJugador(String pJugador) throws ExcepcionConectarBD{
 		int[][] tablaRes = this.getTiempoMedioResolucionPorCategoriaDelJugador(pJugador);
 		String data = "<h2>Tiempo medio por categor&iacute;a:</h2>";
@@ -79,12 +85,10 @@ public class GestorEstadisticas {
 	}
 	
 	/**
-	 * @param pJugador - nombre del jugador del que se quieren 
-	 * saber las estad&iacute;sticas
+	 * @param pJugador - nombre del jugador del que se quieren saber las estad&iacute;sticas
 	 * @return El resultado de la select en una lista de enteros<br>
 	 * [Total sudokus, Resueltos, Incompletos]<br>
-	 * si el usuario no ha hecho ning&uacute;n sudoku devolver&aacute; 0
-	 * en los tres valores
+	 * si el usuario no ha hecho ning&uacute;n sudoku devolver&aacute; 0 en los tres valores
 	 * @throws ExcepcionConectarBD
 	 */
 	private int[] getInfoSudokusResueltosDelJugador(String pJugador) throws ExcepcionConectarBD{
@@ -123,6 +127,9 @@ public class GestorEstadisticas {
 		}
 	}
 	
+	//devuelve en un string con formato html los datos de los sudokus que
+	//ha jugado un jugador, es decir, el numero de sudokus que ha jugado,
+	//completado, dejado incompletos y un porcentaje de exito
 	private String getHTMLInfoSudokusResueltosDelJugador(String pJugador) throws ExcepcionConectarBD{
 		int[] tablaRes = this.getInfoSudokusResueltosDelJugador(pJugador);
 		String data = "<h2>Info. sudokus realizados: </h2>";
@@ -156,6 +163,9 @@ public class GestorEstadisticas {
 		return th +":"+ tm +":"+ ts;
 	}
 	
+	//devuelve en un string con formato html las estadisticas de un sudoku dado
+	//mostrando su identificador, cuantos lo han jugado, superado y rendido,
+	//ademas del indice de exito del propio sudoku y el tiempo medio de resolucion
 	public String getHTMLEstadisticasSudoku(String pIdSud) throws ExcepcionConectarBD{
 		String data = "<html><h1>ID sudoku: "+pIdSud+"</h1>";
 		int[] compYrend = this.getCuantosCompletadoYRendidoSudoku(pIdSud);
@@ -178,6 +188,8 @@ public class GestorEstadisticas {
 		return data;
 	}
 	
+	//devuelve un array de enteros con el numero de jugadores que han han completado y se han rendido
+	//un sudoku a partir de su identificador conectando con la BD
 	private int[] getCuantosCompletadoYRendidoSudoku(String pIdSud) throws ExcepcionConectarBD{
 		try{
 			String sql = "SELECT COMPLETADO AS COMP, COUNT(*) AS NUM "
@@ -204,6 +216,8 @@ public class GestorEstadisticas {
 		}
 	}
 	
+	//calcula el tiempo medio de resolucion de un sudoku a partir de su identificador
+	//conectando con la BD y obteniendo los tiempos de los que estan completados
 	private int getTiempoMedioResolucionSudoku(String pIdSud) throws ExcepcionConectarBD{
 		try{
 			String sql = "SELECT AVG(SEGUNDOS) AS MEDIA "
@@ -220,22 +234,5 @@ public class GestorEstadisticas {
 			System.out.println(e.getMessage());
 			return 0;
 		}
-	}
-	
-	//Solo para jUnit
-	public int[][] SOLOTESTgetTiempoMedioResolucionPorCategoriaDelJugador(String pJugador) throws ExcepcionConectarBD{
-		return getTiempoMedioResolucionPorCategoriaDelJugador(pJugador);
-	}
-	
-	public int[] SOLOTESTgetInfoSudokusResueltosDelJugador(String pJugador) throws ExcepcionConectarBD{
-		return getInfoSudokusResueltosDelJugador(pJugador);
-	}
-	
-	public int[] SOLOTESTgetCuantosCompletadoYRendidoSudoku(String pIdSud) throws ExcepcionConectarBD{
-		return getCuantosCompletadoYRendidoSudoku(pIdSud);
-	}
-	
-	public int SOLOTESTgetTiempoMedioResolucionSudoku(String pIdSud) throws ExcepcionConectarBD{
-		return getTiempoMedioResolucionSudoku(pIdSud);
 	}
 }

@@ -74,6 +74,8 @@ public class VentanaEstadisticasJugador extends JFrame {
 		}
 	}
 	
+	//desde el gestor de sudokus se anaden en una lista todos los sudokus
+	//que ha jugado el usuario
 	private void cargarSudokusEnLista() throws ExcepcionConectarBD{
 		String[] lista = GestorSudokus.getGestor().getSudokusUsuarioSesion();
 		for(int i = 0; i<lista.length; i++){
@@ -82,6 +84,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 		getListSudokus().setSelectedIndex(0);
 	}
 	
+	//se calculan las estadisticas de un sudoku mediante el GestorEstadisticas
 	private void cargarDatosSudoku(String pIdSudoku){
 		try {
 			String datosSud = GestorEstadisticas.getGestor().getHTMLEstadisticasSudoku(pIdSudoku);
@@ -208,6 +211,7 @@ public class VentanaEstadisticasJugador extends JFrame {
 		return scrollPaneListSud;
 	}
 	
+	//desde esta clase se controlaran todos los botones y sus acciones
 	private class Controlador extends WindowAdapter implements ActionListener,ListSelectionListener{
 		private String selItem = "";
 		
