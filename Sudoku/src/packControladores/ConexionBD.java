@@ -10,11 +10,11 @@ import com.mysql.jdbc.Statement;
 import packExcepciones.ExcepcionConectarBD;
 //https://www.youtube.com/watch?v=OyN1Uocw2AU
 public class ConexionBD {
-	private static String driver;
+	private static ConexionBD miConexion;
+	private String driver;
 	private String url;
 	private String user;
 	private String pass;
-	public static ConexionBD miConexion;
 	
 	//Rellena las varibles con los datos para conectarse a la bd
 	/*Precondicion:
@@ -27,7 +27,7 @@ public class ConexionBD {
 		pass="mqDNfeYCa";
 	}
 	
-	//Singelton
+	//Singleton
 	/*Precondicion:
 	 *Postcondicion:
 	 * */

@@ -3,12 +3,11 @@ package packModelo;
 import packControladores.ConexionBD;
 import packExcepciones.ExcepcionConectarBD;
 
-
 public class LogrosPuntuacionXY extends Logros {
 	private static LogrosPuntuacionXY logroy;
 	
 	private LogrosPuntuacionXY(){}
-	//Singelton
+	//Singleton
 	public static LogrosPuntuacionXY getLogroY(){
 		if (logroy==null){
 			logroy=new LogrosPuntuacionXY();

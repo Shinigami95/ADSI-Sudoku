@@ -9,9 +9,7 @@ public class GestorRanking {
 	
 	private static GestorRanking miGestorRanking;
 
-	private GestorRanking() {
-		// TODO Auto-generated constructor stub
-	}
+	private GestorRanking() {}
 
 	public static GestorRanking getGestorRanking(){
 		if(miGestorRanking == null){

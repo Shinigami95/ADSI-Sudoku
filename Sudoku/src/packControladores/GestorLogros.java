@@ -80,7 +80,7 @@ public class GestorLogros {
 		}catch(Exception e){e.printStackTrace();}
 		return vec;
 	}
-	//Comprueba que los datos que se introducen cumpen unas caracteristicas para luego asi meterlos en la bd.
+	//Comprueba que los datos que se introducen cumplen unas caracteristicas para luego asi meterlos en la bd.
 	/*Precondicion: Se le pasan los datos a comprobar.
 	 *Postcondicion:
 	 * */

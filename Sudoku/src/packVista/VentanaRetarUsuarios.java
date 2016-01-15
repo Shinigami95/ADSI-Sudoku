@@ -194,7 +194,7 @@ public class VentanaRetarUsuarios extends JFrame {
 		public void actionPerformed(ActionEvent arg0) {
 			if(arg0.getActionCommand().equals("PRESS_btnRetar")){
 				try {
-					GestorRetos.retarJugadorAlSudokuHechoPorUsuarioSesion(selItemJugador);
+					GestorRetos.getGestor().retarJugadorAlSudokuHechoPorUsuarioSesion(selItemJugador);
 					VentanaRetarUsuarios.getVentana().actualizarListaUsuarios();
 				} catch (ExcepcionConectarBD e) {
 					e.printStackTrace();

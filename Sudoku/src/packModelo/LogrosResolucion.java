@@ -3,12 +3,11 @@ package packModelo;
 import packControladores.ConexionBD;
 import packExcepciones.ExcepcionConectarBD;
 
-
 public class LogrosResolucion extends Logros{
 	
 	private static LogrosResolucion logror;
 	private LogrosResolucion(){}
-	//Singelton
+	//Singleton
 	public static LogrosResolucion getLogrosR(){
 		if (logror==null){
 			logror=new LogrosResolucion();

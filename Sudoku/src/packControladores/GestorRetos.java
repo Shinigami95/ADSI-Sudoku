@@ -47,7 +47,7 @@ public class GestorRetos {
 		return null;
 	}
 
-	public static void retarJugadorAlSudokuHechoPorUsuarioSesion(String pJugador) throws ExcepcionConectarBD {
+	public void retarJugadorAlSudokuHechoPorUsuarioSesion(String pJugador) throws ExcepcionConectarBD {
 		String userSesion = GestorSesion.getGestor().getUserSesion();
 		int idSud = GestorPartida.getGestor().getIdSud();
 		String sql = "INSERT INTO RETO(NOMBRE_RETADOR, NOMBRE_RETADO, ID_SUDOKU, ESTADO) "
